@@ -10,6 +10,8 @@ from tqdm import tqdm
 import json
 import os
 import nltk
+from multiprocessing import Pool
+
 stem = nltk.stem.PorterStemmer().stem
 lts = lambda x: [stem(t) for t in nltk.word_tokenize(x.lower())]
 ltsj = lambda x: ' '.join(map(stem, nltk.word_tokenize(x.lower())))
@@ -66,9 +68,6 @@ def tsj_input(jsonl_file):
     return data
 
 
-from multiprocessing import Pool
-
-
 def split_abs_prs_one(args):
     k, doc_cand, og_doc = args
     pres = [[v for v in kp if ltsj(v) in og_doc] for kp in doc_cand]
@@ -95,35 +94,18 @@ def split_abs_prs(candidates, og_data, process=6):
     return pres, abse
 
 
-def split_corpus(input_file, method):
-    doc_path = '/home/gallina/ir-using-kg/data/docs/'
-    docs = ['ntc1-e1', 'ntc2-e1g', 'ntc2-e1k']
-    docs = [(os.path.join(doc_path, d), d) for d in docs]
-
-    with open(input_file) as f:
-        all_cand = json.load(f)
-
-    for p, d in docs:
-        print(d)
-        with open(p) as f:
-            doc_cand = {line[6:-8]: all_cand[line[6:-8]] for line in f if line.startswith('<ACCN>')}
-
-        out_file = '.'.join([d, 'gz', method, 'all', 'json'])
-        with open(out_file, 'w') as f:
-            json.dump(doc_cand, f, indent=2)
-
-
-def process_split_abs_prs():
+def process_split_abs_prs(methods):
     global ntcir_datasets
-    global methods
     global data
+    root_dir = '/home/gallina/ir-using-kg/data/keyphrases/beam200/'
+
     for dataset_name in ntcir_datasets:
         print(dataset_name)
         dataset_file = '/home/gallina/data/datasets/{}.test.jsonl'.format(dataset_name)
         if dataset_file not in data:
             data[dataset_file] = tsj_input(dataset_file)
         for method in methods:
-            cand_file = '/home/gallina/ir-using-kg/data/keyphrases/beam200/{}.gz.{}.beam200.json'.format(dataset_name, method)
+            cand_file = root_dir + '{}.gz.{}.beam200.json'.format(dataset_name, method)
             print(cand_file)
             with open(cand_file) as f:
                 candidates = json.load(f)
@@ -136,7 +118,7 @@ def process_split_abs_prs():
             pres = {k: v[:20] for k, v in pres.items()}
             abse = {k: v[:20] for k, v in abse.items()}
 
-            out_file = '/home/gallina/ir-using-kg/data/keyphrases/beam200/processed/{}.gz.{}.{{}}.json'.format(dataset_name, method)
+            out_file = root_dir + 'processed/{}.gz.{}.{{}}.json'.format(dataset_name, method)
 
             all_out_file = out_file.format('all')
             pres_out_file = out_file.format('pres')
@@ -150,8 +132,6 @@ def process_split_abs_prs():
 
             with open(abs_out_file, 'w') as f:
                 json.dump(abse, f, indent=2)
-
-
 
 
 def print_sup10(d):
@@ -181,6 +161,24 @@ def compute_lessthan10elemts(cand_file, corpusname):
     print_sup10(candidates)
     print_sup10(pres)
     print_sup10(abse)
+
+
+def split_corpus(input_file, method):
+    doc_path = '/home/gallina/ir-using-kg/data/docs/'
+    docs = ['ntc1-e1', 'ntc2-e1g', 'ntc2-e1k']
+    docs = [(os.path.join(doc_path, d), d) for d in docs]
+
+    with open(input_file) as f:
+        all_cand = json.load(f)
+
+    for p, d in docs:
+        print(d)
+        with open(p) as f:
+            doc_cand = {line[6:-8]: all_cand[line[6:-8]] for line in f if line.startswith('<ACCN>')}
+
+        out_file = '.'.join([d, 'gz', method, 'all', 'json'])
+        with open(out_file, 'w') as f:
+            json.dump(doc_cand, f, indent=2)
 
 
 def process_split_corpus():

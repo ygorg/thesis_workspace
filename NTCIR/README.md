@@ -74,7 +74,7 @@
 | 17,1 | 29,6 | 21,1 | 20,1 | CopyRNN | beam50 |
 | 17,1 | 29,6 | 21,1 | **20,6** | CopyRNN | beam200 |
 
-![](Beam_diffs.png)
+![Difference indexes frequence](Beam_diffs.png)
 
 Les différences entre la sortie du beam 200 et du beam 50 apparraissent en majorité entre les rangs 30 et 50.
 
