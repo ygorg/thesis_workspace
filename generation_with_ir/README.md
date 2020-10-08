@@ -6,32 +6,41 @@ Si un article A (citant) cite un article B (cité).
 J'ai besoin de la notice de l'article B (cité) et du contexte de citation de l'article A (citant).
 
 ### Acl Anthology Network [AAN](http://aan.how/)
-Source: ACL Anthology
-Domaine: Natural Language Processing
-Document: 23,595
-Liens: 604,090
-Document avec CS (nb doc avec inbound): 5,914 (13,674 en théorie)
+- Source: ACL Anthology
+- Domaine: Natural Language Processing
+- Documents: 23,595
+- Liens: 604,090
+- Doc avec arc entrant: 13,674
+- Keyword: fulltext ?
+
+- Doc avec citation summary (précalculé): 5,914
 
 ### [RefSeerX](https://github.com/tebesu/NeuralCitationNetwork)
-Source: CiteSeerX
-Domaine: -
-Document: 5,334,095 (4,510,727 cluster)
-Liens: 25,302,904 (21%) (105,337,269 contextes de citation)
-Document avec CS: a calculer ??
+- Source: CiteSeerX
+- Domaine: -
+- Documents: 5,334,095 (4,510,727 cluster)
+- Liens: 25,302,904 (21% de la table chargée pour l'instant)
+- Document avec arc entrant: ?
+- Keyword: non
+- Contextes de citation: 105,337,269
 
 Notice citante + contexte de citation citant + Notice article cité
+
 ```sql
 SELECT P.cluster, P.id, CC.id, P.year, P.title, P.abstract, CC.context
 FROM citations C INNER JOIN papers P ON C.cluster = P.cluster
 			  	 INNER JOIN citationContexts CC on C.id = CC.citationid
 LIMIT 10;
 ```
-SELECT C.id, C.cluster, C.citationId FROM citations C;
 
 ### Semantic Scholar [s2orc](https://github.com/allenai/s2orc/)
-Source: SemanticScholar
-Domaine: -
-12M de doc (a voir)
+- Source: SemanticScholar
+- Domaine: -
+- Documents: ~12M de doc full text
+- Liens: ?
+- Doc avec arc entrant: ?
+- Keyword: full_text ?
+
 ```python
 with open('metadata.jsonl') as f:
     meta_ids = []
@@ -49,11 +58,12 @@ for p in papers:
 ```
 
 ### [htp-th](https://research.cs.cornell.edu/kddcup/datasets.html)
-Source: ArXiV
-Domaine : high-energy physics theory
-Document: 29,555
-Liens: 352,807
-Document avec CS: 23,180 (en théorie)
+- Source: ArXiV
+- Domaine : high-energy physics theory
+- Documents: 29,555
+- Liens: 352,807
+- Doc avec arc entrant: 23,180
+- Keyword: full-text ?
 
 Articles plein + lien de citation + notices
 Bibliographie
@@ -83,11 +93,32 @@ with open('hep-th-citations') as f:
 	        full_text_citing[match.begin-100:match_end+100]
 ```
 
-### [ISTEX](https://api.istex.fr/ark:/67375/GT4-FJLCPBW9-Q/fulltext.tei)
-Article plein + bibliographie
+### [dblp](https://www.aminer.org/citation)
+- Source: dblp
+- Domaine: -
+- Documents: 4,894,081
+- Liens: 45,564,149
+- Doc avec arc entrant: ?
+- Keyword: 7,196
 
-### dblp
-Notice
+Notice + id reference + lien 
+
+```python
+with open('dblp.v12.json') as f:
+    for line in tqdm(f):
+        line = line.strip()
+        if len(line) == 1:
+            continue
+        if line[0] == ',':
+            line = line[1:]
+        if line[-1] == ',':
+            line = line[:-1]
+        line = json.loads(line)
+```
+
+### [ISTEX](https://api.istex.fr/ark:/67375/GT4-FJLCPBW9-Q/fulltext.tei)
+- Manque Identifiant pour les papiers cités.
+- Article plein + contexte de citation + bibliographie
 
 ### Bibliographic Citation Recommandation Dataset [BCR](https://www.isical.ac.in/~irlab/bcr.html)
 Notice citante + contexte de citation citant + Nom article cité
