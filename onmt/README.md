@@ -1,5 +1,3 @@
-
-
 # OpenNMT
 
 
@@ -146,12 +144,12 @@ Lancer la commande `onmt_translate` qui écrit les TC de sortie dans le même fo
 # n_best dit combien de sequence sont écrite dans l'output
 BEAMSIZE=50
 INPUT_=../data/datasets/KP20k.test.txt
-MODEL=model_step_200000
+MODEL=model_step_300000
 OUTPUTNAME=$(echo $INPUT_ | sed 's!.*/\(.*\).txt!\1!g')
 onmt_translate \
     --model $ROOT/$MODEL.pt --src $INPUT_ \
     --output $ROOT/predictions/$OUTPUTNAME.$EXPNAME.$BEAMSIZE.$MODEL.txt \
-    --beam $BEAMSIZE --max_length 6 --n_best $BEAMSIZE --batch_size 20 --gpu 0
+    --beam $BEAMSIZE --max_length 6 --n_best $BEAMSIZE --batch_size 18 --gpu 0
 ```
 
 
@@ -163,7 +161,8 @@ import re
 import nltk
 import json
 from tqdm import tqdm
-
+import argparse
+import os
 
 stem = nltk.stem.PorterStemmer().stem
 
@@ -176,21 +175,35 @@ def clean_output(lines):
              if s not in stemmed[:i]]
     return [k for k, s in lines], [s for k, s in lines]
 
-exp_name = 'copyRNN'
-predictions_dir = f'experiments/{exp_name}/predictions'
-txt_prediction = f'{predictions_dir}/KP20k.test.{exp_name}.50.txt'
+if __name__ == '__main__':
+    def arguments():
+        parser = argparse.ArgumentParser()
+        parser.add_argument('file', type=argparse.FileType('r'), help='Prediction file in jsonl format')
+        parser.add_argument('--no-stem', action='store_true',
+                            help='Output non stemmed keyphrases')
+        return parser.parse_args()
 
-res, res_s = {}, {}
-with open('../data/datasets/KP20k.test.jsonl') as f:
-    with open(txt_prediction) as g:
-        for doc in map(json.loads, tqdm(f)):
-            lines = [g.readline() for _ in range(50)]
-            kps, kps_s = clean_output(lines)
-            res[doc['id']] = kps
-            res_s[doc['id']] = kps_s
+    args = arguments()
 
-with open(txt_prediction.replace('.txt', '.stem.json'), 'w') as f:
-    json.dump(res_s, f)
+    here_path = os.path.dirname(__file__) or '.'
+    input_file = args.file.name
+    output_file = input_file.replace('.txt', '.json' if args.no_stem else '.stem.json')
+    if os.path.isfile(output_file):
+        resp = input(f'Output file already exist. Enter [Y/y] to overwrite ({output_file})\n')
+        if resp.lower() != 'y':
+            print('Exitng...')
+            exit()
 
-#tokens = set(' '.join(map(str.strip, lines)).split(' ')
+    corpus, split, _ = os.path.basename(input_file).split('.', maxsplit=2)
+
+    res = {}
+    with open(f'{here_path}/../data/datasets/{corpus}.{split}.jsonl') as f:
+        with open(input_file) as g:
+            for doc in map(json.loads, tqdm(f)):
+                lines = [g.readline() for _ in range(50)]
+                kps, kps_s = clean_output(lines)
+                res[doc['id']] = kps if args.no_stem else kps_s
+
+    with open(output_file, 'w') as f:
+        json.dump(res, f)
 ```
