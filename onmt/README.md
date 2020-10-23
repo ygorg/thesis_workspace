@@ -15,95 +15,174 @@ Pour le KPE chaque document crée N exemples (N est le nombre de TC du doc). Com
 
 
 ```python
+import os
 import re
 import json
 from tqdm import tqdm
 from collections import Counter
+import nltk
+from multiprocessing import Pool
+from more_itertools import grouper
 
+# Stolen from https://github.com/kenchan0226/keyphrase-generation-rl/blob/1a3b20be236732fa20137690ce463cabc4b527e3/integrated_data_preprocess.py#L307
 
-def replace_digit(string):
-    string = re.sub(r'(\d*[.,])?\d+', ' <digit> ', string)
-    string = re.sub(r' +', ' ', string).strip()
-    return string
+digit = re.compile(r'^[+-]?((\d+(\.\d*)?)|(\.\d+))$')
+
+def replace_digit(tokens):
+    return ['<digit>' if digit.match(t) else t
+            for t in tokens]
 
 
 def doc2voc(line):
+    # Create a list of tokens to be counted for the vocabulary.
     doc = json.loads(line)
 
-    # Chargement du document
-    src = ' '.join([doc['title'], doc['abstract']])
-    src = ' '.join(nltk.word_tokenize(src))
-    tgt_lst = doc['keyword'].split(';')
+    # Document loading
+    src = doc['title'] + ' . ' + doc['abstract']
+    src_tokens = nltk.word_tokenize(src)
+    # Chargement des termes-clés
+    tgt_lst = doc['keyword']
+    if type(['keyword']) is str:
+        tgt_lst = tgt_lst.split(';')
+    tgt_tokens = map(nltk.word_tokenize, tgt_lst)
 
     # Prétraitement des mots pour le vocabulaire
-    src = ' '.join((src, ' '.join(tgt_lst)))
+    src = src_tokens + sum(tgt_tokens, [])
     src = replace_digit(src)
-    return src.split(' ')
+    return src
 
 
-dir_path = 'data/datasets/KP20k/full'
+def batch_doc2voc(b):
+    return [doc2voc(d) for d in b if d]
+
+
+def compute_voc(input_file, output_file, voc_size, n_thread=None):
+    voc = Counter()
+    with open(input_file) as f:
+        f = tqdm(f)
+        if not n_thread or n_thread < 2:
+            data = map(doc2voc, f)
+            for doc in data:
+                voc.update(doc)
+        else:
+            with Pool(n_thread) as p:
+                batch = grouper(f, 50)
+                batch = p.imap_unordered(batch_doc2voc, batch)
+                data = chain.from_iterable(batch)
+                for doc in data:
+                    voc.update(doc)
+    with open(output_file, 'w') as f:
+        for t, _ in voc.most_common(voc_size):
+            f.write(f'{t}\n')
+
+voc_size = 50000
+dataset = 'RefSeerX'
 split = 'train'
-voc = Counter()
-with open(f'{dir_path}/kp20k.{split}.json') as f:
-    data = map(doc2voc, tqdm(f))
-    for doc in data:
-        voc.update(doc)
-sorted(w for w, n in voc.most_common(50000))
+
+in_path = f'data/datasets/{dataset}'
+out_dir = in_path
+
+input_file = os.path.join(in_path, f'{dataset}.{split}.jsonl')
+output_file = os.path.join(out_dir, f'{dataset}.{split}.voc')
+
+compute_voc(input_file, output_file, voc_size)
 ```
 
 
 #### Creer les fichiers alignés source
 
 ```python
+import os
+import re
 from itertools import chain
+import nltk
+import json
+from tqdm import tqdm
+from multiprocessing import Pool
+from more_itertools import grouper
 
+# Stolen from https://github.com/kenchan0226/keyphrase-generation-rl/blob/1a3b20be236732fa20137690ce463cabc4b527e3/integrated_data_preprocess.py#L307
+
+digit = re.compile(r'^[+-]?((\d+(\.\d*)?)|(\.\d+))$')
+
+def replace_digit(tokens):
+    return ['<digit>' if digit.match(t) else t
+            for t in tokens]
 
 def doc2src_tgt_o2o(line):
     # Pour chaque document on crée autant d'instance que de TC
     doc = json.loads(line)
 
     # Chargement du document
-    src = ' '.join([doc['title'], doc['abstract']])
-    src = ' '.join(nltk.word_tokenize(src))
-    tgt_lst = doc['keyword'].split(';')
+    src = ' . '.join([doc['title'], doc['abstract']])
+    src = nltk.word_tokenize(src)
+    tgt_lst = doc['keyword']
+    if type(tgt_lst) is str:
+        tgt_lst = tgt_lst.split(';')
+    tgt_lst = map(nltk.word_tokenize, tgt_lst)
 
     # Prétraitement de la source et des TC
-    src = replace_digit(src)
-    tgt_lst = [replace_digit(k) for k in tgt_lst]
+    src = ' '.join(replace_digit(src))
+    tgt_lst = map(replace_digit, tgt_lst)
+    tgt_lst = map(' '.join, tgt_lst)
     for tgt in tgt_lst:
         yield src, tgt
 
+def batch_doc2src_tgt_o2o(batch):
+    return [res for line in batch if line
+            for res in doc2src_tgt_o2o(line)]
 
-def file2instance(file):
-    return chain.from_iterable(map(doc2src_tgt_o2o, f))
+def compute_src_trg(input_file, output_file, n_thread=None):
+    with open(input_file) as f:
+        src_file = open(output_file + '.src', 'w')
+        tgt_file = open(output_file + '.tgt', 'w')
+        f = tqdm(f)
+        if not n_thread or n_thread < 2:
+            data = map(doc2src_tgt_o2o, f)
+            data = chain.from_iterable(data)
+            for src, tgt in data:
+                src_file.write(src + '\n')
+                tgt_file.write(tgt + '\n')
+        else:
+            with Pool(n_thread) as p:
+                batch = grouper(f, 50)
+                batch = p.imap(batch_doc2src_tgt_o2o, batch)
+                data = chain.from_iterable(batch)
+                for src, tgt in data:
+                    src_file.write(src + '\n')
+                    tgt_file.write(tgt + '\n')
+        src_file.close()
+        tgt_file.close()
 
 
-dir_path = 'data/datasets/KP20k/full'
-split = 'valid'
-with open(f'{dir_path}/kp20k.{split}.json') as f:
-    src_file = open(f'src.{split}', 'w')
-    tgt_file = open(f'tgt.{split}', 'w')
-    for src, tgt in file2instance(tqdm(f)):
-            src_file.write(src + '\n')
-            tgt_file.write(tgt + '\n')
-    src_file.close()
-    tgt_file.close()
+dataset = 'RefSeerX'
+in_path = f'data/datasets/{dataset}'
+out_path = in_path
+
+for split in ('test', ):
+    input_file = os.path.join(in_path, f'{dataset}.{split}.jsonl')
+    output_file = os.path.join(out_path, f'{dataset}.{split}')
+    n_thread = 0
+    if split == 'train':
+        n_thread = 4
+    compute_src_trg(input_file, output_file, n_thread=n_thread)
 ```
 
 
 ### Preprocess
 
-Indexe les exempels d'entrainement/validation avec le vocabulaire.
+Indexe les exemples d'entrainement/validation avec le vocabulaire.
 
 
 ```bash
-DATA_DIR="../data/datasets/KP20k/full_less_corenlp"
-DATA_PREFIX="data/kp20k_full_less_corenlp"
+DATASET="RefSeerX"
+DATA_DIR="../data/datasets/${DATASET}/min"
+DATA_PREFIX="data/${DATASET}/min"
 # --dynamic_dict in order to use copy
 onmt_preprocess \
-    --train_src $DATA_DIR/src.train --train_tgt $DATA_DIR/tgt.train \
-    --valid_src $DATA_DIR/src.valid --valid_tgt $DATA_DIR/tgt.valid \
-    --src_vocab $DATA_DIR/src_tgt.voc --tgt_vocab $DATA_DIR/src_tgt.voc \
+    --train_src $DATA_DIR/${DATASET}.train.src --train_tgt $DATA_DIR/${DATASET}.train.tgt \
+    --valid_src $DATA_DIR/${DATASET}.valid.src --valid_tgt $DATA_DIR/${DATASET}.valid.tgt \
+    --src_vocab $DATA_DIR/../${DATASET}.train.voc --tgt_vocab $DATA_DIR/../${DATASET}.train.voc \
     --share_vocab --dynamic_dict --src_seq_length 400 --tgt_seq_length 10 --filter_valid \
     --save_data $DATA_PREFIX  --shard_size 100000 --num_threads 5 --report_every 5000
 ```
@@ -111,15 +190,15 @@ onmt_preprocess \
 ## Entraînement
 
 ```bash
-DATA_PREFIX="data/kp20k_full_less_corenlp"
+DATA_PREFIX="data/${DATASET}/min"
 
-EXPNAME="copyRNN"
+EXPNAME="copyRNN_${DATASET}"
 ROOT="experiments/$EXPNAME"
 mkdir -p $ROOT
 # Pour entrainer 10 epochs il faut connaitre la taille du corpus de train
 #  et passer à train_steps `len(train) / batch_size * 10`
 onmt_train \
-    --word_vec_size 150 --encoder_type brnn --decoder_type rnn --layers 1 --rnn_size 300 --rnn_type GRU \
+    --word_vec_size 150 --encoder_type brnn --decoder_type rnn --layers 2 --rnn_size 300 --rnn_type GRU \
     --global_attention mlp --copy_attn \
     --early_stopping 4 --optim adam --max_grad_norm 0.1 --dropout 0.5 --learning_rate 0.0001 \
     --batch_size 128 --save_checkpoint_steps 20000 --valid_steps 20000 --train_steps 200000 --report_every 500 \

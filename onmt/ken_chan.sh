@@ -14,9 +14,15 @@ python3 train.py
 
 python3 integrated_data_preprocess.py -json_home ../data/datasets/SemEval-2010-abstract.test.jsonl -dataset SemEval-2010-abstract -data_type testing -saved_home data/SemEval-2010 -dups_info_home data/SemEval-2010/dups_info
 
-python3 integrated_data_preprocess.py -json_home ../data/datasets/NTCIR1+2.test.jsonl -dataset NTCIR1+2 -data_type testing -saved_home data/NTCIR1+2 -dups_info_home data/NTCIR1+2/dups_info
+DATASET="RefSeerX"
+python3 integrated_data_preprocess.py -json_home ../data/datasets/${DATASET}.test.jsonl -data_type testing -saved_home data/${DATASET} -dups_info_home data/${DATASET}/dups_info -dataset ${DATASET} -fine_grad -fine_grad_digit_matching -use_corenlp -corenlp_home $PATH_CORENLP
 
 DATASET=KP20k
+
+# CopyRNN
+python3 train.py -data data/${DATASET}/ -vocab data/${DATASET}/ -exp_path "exp/CopyRNN_${DATASET}" -exp "CopyRNN$_${DATASET}" \
+	-train_ml -copy_attention \
+	-epochs 30 -batch_size 60 -seed 9527
 
 # catSeqCorr
 python3 train.py -data data/kp20k_sorted/ -vocab data/kp20k_sorted/ -exp_path exp/%s.%s -exp kp20k
@@ -29,9 +35,13 @@ python3 interactive_predict.py \
 	-pred_path pred/kp20k.ml.one2many.cat.copy.coverage.review.bi-directional.20200930-112944 -remove_title_eos -replace_unk -max_eos_per_output_seq 1 -max_length 60 -batch_size 20 -n_best 1 -beam_size 1
 
 # catSeqTG
-python3 train.py -data data/kp20k_tg_sorted/ -vocab data/kp20k_tg_sorted/ -exp_path exp/%s.%s -exp kp20k
-	-train_ml -copy_attention -title_guided -one2many -one2many_mode 1
-	-epochs 20 -batch_size 12 -batch_workers 3 -seed 9527
+DATASET='RefSeerX'
+DATA_DIR="data/${DATASET}/data_for_corenlp/"
+METHOD="catSeqTG"
+EXP="${METHOD}_${DATASET}_medium"
+python3 train.py -data "${DATA_DIR}" -vocab "${DATA_DIR}" -exp_path "exp/${EXP}" -exp "$EXP" \
+	-train_ml -copy_attention -title_guided -one2many -one2many_mode 1 \
+	-epochs 20 -batch_size 20 -batch_workers 3 -seed 9527
 
 DATASET="KDD"
 python3 interactive_predict.py \
@@ -40,7 +50,9 @@ python3 interactive_predict.py \
 	-pred_path pred/kp20k.ml.tg.one2many.cat.copy.bi-directional.20200930-112752 -remove_title_eos -replace_unk -max_eos_per_output_seq 1 -max_length 60 -batch_size 15 -n_best 1 -beam_size 1
 
 # TGNet
-python3 train.py -data data/kp20k_tg_sorted/ -vocab data/kp20k_tg_sorted/ -exp_path exp/%s.%s -exp kp20k
+DATASET='RefSeerX'
+DATA_DIR="data/$DATASET/data_for_corenlp/"
+python3 train.py -data "${DATA_DIR}" -vocab "${DATA_DIR}" -exp_path exp/TGNet_${DATASET} -exp TGNet_${DATASET}
 	-train_ml -copy_attention -title_guided
 	-epochs 20 -batch_size 12 -batch_workers 3 -seed 9527
 

@@ -5,6 +5,14 @@ Chercher des graphes de citation pour avoir les identifiants de l'article cité 
 Si un article A (citant) cite un article B (cité).
 J'ai besoin de la notice de l'article B (cité) et du contexte de citation de l'article A (citant).
 
+Manque termes-clés
+Littéralement ce dont j'ai besoin [scite_](https://scite.ai/)
+
+Parse scientific articles:
+https://github.com/allenai/science-parse
+https://github.com/allenai/spv2
+https://github.com/kermitt2/grobid
+
 ### Acl Anthology Network [AAN](http://aan.how/)
 - Source: ACL Anthology
 - Domaine: Natural Language Processing
@@ -27,11 +35,33 @@ J'ai besoin de la notice de l'article B (cité) et du contexte de citation de l'
 Notice citante + contexte de citation citant + Notice article cité
 
 ```sql
+set autocommit=0; set unique_checks=0; set foreign_key_checks=0; SET GLOBAL innodb_flush_log_at_trx_commit = 2; SET GLOBAL query_cache_type = 0; SET GLOBAL query_cache_size = 0;
+
 SELECT P.cluster, P.id, CC.id, P.year, P.title, P.abstract, CC.context
-FROM citations C INNER JOIN papers P ON C.cluster = P.cluster
-			  	 INNER JOIN citationContexts CC on C.id = CC.citationid
+FROM citations C INNER JOIN (SELECT * FROM papers WHERE id IN (
+  SELECT MAX(id) FROM (
+    SELECT P.cluster, P.id
+      FROM citations C INNER JOIN papers P ON C.cluster = P.cluster
+                       INNER JOIN citationContexts CC on C.id = CC.citationid
+      WHERE C.cluster <> 0
+      GROUP BY P.cluster, P.id
+      HAVING COUNT(CC.id) >= 5) AS tmp
+	GROUP BY cluster)) AS P ON C.cluster = P.cluster
+                 INNER JOIN citationContexts CC on C.id = CC.citationid
 LIMIT 10;
+
+# Les documents qui sont ok
+SELECT MAX(id) FROM
+	(SELECT P.cluster, P.id
+	 FROM citations C INNER JOIN papers P ON C.cluster = P.cluster
+					  INNER JOIN citationContexts CC on C.id = CC.citationid
+	 WHERE C.cluster <> 0
+	 GROUP BY P.cluster, P.id
+	 HAVING COUNT(CC.id) >= 5) AS tmp
+GROUP BY cluster
 ```
+
+https://www.sciencedirect.com/science/article/pii/S0375947405001788/pdfft
 
 ### Semantic Scholar [s2orc](https://github.com/allenai/s2orc/)
 - Source: SemanticScholar
@@ -40,6 +70,8 @@ LIMIT 10;
 - Liens: ?
 - Doc avec arc entrant: ?
 - Keyword: full_text ?
+
+- API: [non parsé](http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/corpus/)
 
 ```python
 with open('metadata.jsonl') as f:
@@ -93,6 +125,19 @@ with open('hep-th-citations') as f:
 	        full_text_citing[match.begin-100:match_end+100]
 ```
 
+### [OAG](https://www.openacademic.ai/oag/)
+- Source: AMiner / MAG
+- Domaine: -
+- Documents: 208M+172M
+- Liens: 91M
+- Doc avec arc entrant: ?
+- Keyword: AMiner 9Go / 139Go : 50% de couverture (total ?)
+
+- Full-text: AMiner 9Go/139Go : 0.3%
+
+[MAG - table references](https://docs.microsoft.com/en-us/academic-services/graph/reference-data-schema)
+
+
 ### [dblp](https://www.aminer.org/citation)
 - Source: dblp
 - Domaine: -
@@ -122,3 +167,61 @@ with open('dblp.v12.json') as f:
 
 ### Bibliographic Citation Recommandation Dataset [BCR](https://www.isical.ac.in/~irlab/bcr.html)
 Notice citante + contexte de citation citant + Nom article cité
+
+
+
+
+
+
+with open('data.csv', 'rb') as f: 
+    weird_shit = [] 
+    g = open('data.jsonl', 'w') 
+    columns = f.readline().encode('utf-8').strip().split('\t') 
+    columns[1] = 'papers_id' 
+    columns[2] = 'citationcontext_id' 
+    #f = map(lambda l: l.strip().split('\t'), f) 
+    line = next(f, None).encode('utf-8') 
+    line_acc = line.replace('\n', ' ') 
+    cur_j = None 
+    cur_c = None 
+    ctx_acc = [] 
+    i = 1 
+    while line: 
+        line = next(f, None).encode('utf-8') 
+        i += 1 
+        if not re.match(r'\d+\t\d+(\.\d+)+\t\d+\t', line): 
+            # Not a new row :'( 
+            line_acc += line.replace('\n', ' ') 
+            continue 
+        # New row !! 
+        l = line_acc.strip().split('\t', 4) 
+        if '=-=' not in l[-1]: 
+            print(i, l) 
+        lc, rc = l[-1].split('=-=') 
+        a, lc = lc.rsplit('\t', 1) 
+        l = l[:-1] + a.split('\t') + [lc + '=-=' + rc] 
+         
+        line_acc = line 
+        if len(l) != len(columns): 
+            # Row with extra \t :'( 
+            weird_shit.append(l) 
+            print(l) 
+            print(i, len(l), len(columns)); input() 
+            continue 
+        if cur_c is None: 
+            cur_c = l[0] 
+        if cur_j is None: 
+            cur_j = {columns[i]: l[i] for i in [0,1,3,4,5]} 
+         
+        if cur_c == l[0]: 
+            # Same cluster :'( 
+            acc.append((l[2], l[-1])) 
+            continue 
+        # New cluster ! 
+        if cur_c is not None: 
+            cur_j['ctxt'] = acc 
+            g.write(json.dumps(cur_j) + '\n') 
+        acc = [(l[2], l[-1])] 
+        cur_j = {columns[i]: l[i] for i in [0,1,3,4,5]} 
+        cur_c = l[0] 
+    g.close()
