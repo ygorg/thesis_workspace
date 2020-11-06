@@ -8,4 +8,9 @@
   * Evaluer les modèles entrainées de manière intrinsèque
   * Réfléchir et appliquer des stratégies de filtrage des mots-clés synthétiques
 - Ecriture
-  *
+  * Créer un chapitre pour les méthodes neuronales
+    + faire des images pour le one2one et one2many et je sais pas quoi
+    + faire une image pour le seq2seq / copy / attn
+    + uniformise ta notation mathématique
+  * Corriger les fautes et les problèmes Latex sur tout le document
+  * Check des références / prendre le fichier bib de l'ACL anthology
