@@ -1,5 +1,8 @@
 # TODO 4 Ygor
 
+- Etat de l'art
+  * faire les tour des conférences *ACL de cette année et aussi SIGIR/IEEE truc et lister les papiers sur ake avec mini résumé en points des contributions
+
 - Expérimentations
   * Trouve/lire/décrire les papiers sur citation-context + keyphrase extraction (or summarization)
   * Decrire proprement la création de ton dataset CiteSeerX
