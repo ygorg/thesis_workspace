@@ -8,6 +8,50 @@ from collections import Counter
 import spacy
 import re
 
+
+
+def merge_compounds(d):
+    """ Merge compounds to be one token
+
+    A compound is two tokens separated by a hyphen when the tokens are right next to the hyphen
+
+    d (spacy.Doc): Document
+    Returns: spacy.Doc
+
+    > [t.text for t in nlp('peer-to-peer-to-peer')]
+    ['peer', '-', 'to', '-', 'peer', 'to', '-', 'peer']
+    > [t.text for t in merge_compounds(nlp('peer-to-peer-to-peer'))]
+    ['peer-to-peer-to-peer']
+    """
+    # Returns beginning and end offset of spacy.Token
+    offsets = lambda t: (t.idx, t.idx+len(t))
+
+    # Identify the hyphens
+    # for each token is it a hyphen and the next and preceding token are right next to the hyphen
+    spans = [(i-1, i+1) for i in range(len(d))
+             if i != 0 and i != len(d) and d[i].text == '-' and \
+                offsets(d[i-1])[1] == offsets(d[i])[0] and \
+                offsets(d[i+1])[0] == offsets(d[i])[1]
+            ]
+    # merging spans to account for multi-compound terms
+    merged = []
+    for i, (b, e) in enumerate(spans):
+        # if the last spans ends when the current span begins,
+        # merge those
+        if merged and b == merged[-1][1]:
+            merged[-1] = (merged[-1][0], e)
+        else:
+            merged.append((b, e))
+
+    # Merge the spacy Doc compute the span beforehand as merging changes the indexation
+    to_merge = [d[b:e+1] for b, e in merged]
+    for span in to_merge:
+        # also computing the lemma (but it will be overwritten)
+        span.merge(lemma=''.join(t.lemma_ for t in span))
+    return d
+
+
+
 def grammar_selection(doc, chunker):
     # initialize chunker
     tuples = [(e.text, e.pos_) for e in doc]
@@ -59,6 +103,8 @@ def process_one(line, nlp, chunker):
     ctxt = filter(None, ctxt)
     ctxt = nlp.pipe(ctxt, batch_size=50)
     kws = map(lambda x: grammar_selection(x, chunker), ctxt)
+    kws = list(map(set, kws))
+    kws = Counter(k for s in kws for k in s)
     break  # count in how many ctxt a kws appear !!!!!!! (so compute df instead of frequency)
     kws = Counter(k for c in kws for k in c)
 
@@ -82,6 +128,7 @@ def process_many(lines):
 def init_worker():
     global nlp, chunker
     nlp = spacy.load('en', disable=['ner', 'textcat', 'parser'])
+    nlp.add_pipe(merge_compounds)
     chunker = RegexpParser(r"""
         NBAR:
             {<NOUN|PROPN|ADJ>*<NOUN|PROPN>}

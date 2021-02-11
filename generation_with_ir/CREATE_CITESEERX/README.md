@@ -45,3 +45,37 @@ FROM citations C INNER JOIN (SELECT * FROM papers WHERE id IN (
 python3 csv2jsonl.py
 
 ## Extracting keyphrases from citation contexts
+
+python3 extract_kw_from_cit.py
+
+## Statistics
+
+From database (head citations.sql -n 10000): at least 5 citation context
+Remove any row with empty citationid or citation context or no begining of citation marker.
+
+To choose keywords:
+- Select candidate using grammar (??)
+- Keep the candidates appearing in at least 2 contexts (to do ptdr grose conne)
+- Filter documents where >70% of punctuation char
+- Filter candidates on (small words, punctutation/letter ratio, is citation str, special char, )
+
+Train: 330,092
+Valid: 10,000
+Test: 10,000
+On all with author:
+- doc w/author kw : 39,245 (11.2%)
+- cov of author kw using synthetic: 19.31 (15.52 test)
+- cov of present author kw using present synthetic : 25.69 (21.25 test)
+- cov of absent author kw using absent synthetic :  7.11 (4.87 test)
+- nombre de mots en commun
+
+On test :
+- kw / doc: 26.8
+- abs / kw : 79.53
+- w / kws : 1.8 (author), 1.5 (synth)
+
+train sur 10,000 documents:
+      synth  author 
+F@10  11.12    9.34
+F@26  12.05
+F@7            8.87
