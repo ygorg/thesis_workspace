@@ -21,7 +21,7 @@ I split the citationContexts and citations file into smaller 10,000 lines file t
 
 ## SQl Query
 
-First : select papers that are cited at least 5 times and that have a cluster.
+First : select papers that are cited at least 5 times and that have a cluster (a cluster implies having citation contexts).
 Second: join thoses papers with the citation contexts and output
 
 It takes quite a while appr. 1 hour.
@@ -33,24 +33,26 @@ FROM citations C INNER JOIN (SELECT * FROM papers WHERE id IN (
     SELECT P.cluster, P.id
       FROM citations C INNER JOIN papers P ON C.cluster = P.cluster
                        INNER JOIN citationContexts CC on C.id = CC.citationid
-      WHERE C.cluster <> 0
+      WHERE C.cluster <> 0 and CC.context <> ""
       GROUP BY P.cluster, P.id
       HAVING COUNT(CC.id) >= 5) AS tmp
 	GROUP BY cluster)) AS P ON C.cluster = P.cluster
                  INNER JOIN citationContexts CC on C.id = CC.citationid
 ```
 
+mysql -u admin -p citeseerx < la_requete.sql > data.csv
+
 ## Cleaning / Mapping title to search for keyword
 
 From csv sql output to jsonl with contexts and author_keyword if available.
 
-python3 citeseer_csv2jsonl.py
+cat data.csv | python3 citeseer_csv2jsonl.py > data.jsonl
 
 ## Extracting keyphrases from citation contexts
 
 From jsonl with contexts to jsonl with synth keywords
 
-python3 extract_kw_from_cit.py
+cat data.jsonl | python3 extract_kw_from_cit.py > 
 
 ## Statistics
 
