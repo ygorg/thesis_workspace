@@ -23,6 +23,14 @@ https://github.com/kermitt2/grobid
 
 - Doc avec citation summary (précalculé): 5,914
 
+### The [unarXive](https://github.com/IllDepence/unarXive)
+- Source: arXiv
+- Domaine: ?
+- Documents: ?
+- Liens: ?
+- Doc avec arc entrant: ?
+- Keyword: ?
+
 ### [RefSeerX](https://github.com/tebesu/NeuralCitationNetwork)
 - Source: CiteSeerX
 - Domaine: -
@@ -61,7 +69,6 @@ SELECT MAX(id) FROM
 GROUP BY cluster
 ```
 
-https://www.sciencedirect.com/science/article/pii/S0375947405001788/pdfft
 
 ### Semantic Scholar [s2orc](https://github.com/allenai/s2orc/)
 - Source: SemanticScholar
@@ -169,10 +176,8 @@ with open('dblp.v12.json') as f:
 Notice citante + contexte de citation citant + Nom article cité
 
 
-
-
-
-
+```python
+# What is this refering to ?
 with open('data.csv', 'rb') as f: 
     weird_shit = [] 
     g = open('data.jsonl', 'w') 
@@ -225,3 +230,4 @@ with open('data.csv', 'rb') as f:
         cur_j = {columns[i]: l[i] for i in [0,1,3,4,5]} 
         cur_c = l[0] 
     g.close()
+```

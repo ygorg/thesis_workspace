@@ -42,9 +42,13 @@ FROM citations C INNER JOIN (SELECT * FROM papers WHERE id IN (
 
 ## Cleaning / Mapping title to search for keyword
 
-python3 csv2jsonl.py
+From csv sql output to jsonl with contexts and author_keyword if available.
+
+python3 citeseer_csv2jsonl.py
 
 ## Extracting keyphrases from citation contexts
+
+From jsonl with contexts to jsonl with synth keywords
 
 python3 extract_kw_from_cit.py
 

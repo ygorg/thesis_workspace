@@ -4,15 +4,33 @@ from collections import Counter, defaultdict
 import spacy
 from tqdm import tqdm
 
-nlp = spacy.load('en')
+def preproc_spacy(kws, lang):
+    nlp = spacy.load(lang)
 
-with open(util.get_ref('KP20k')) as f:
+    sp_out = list(tqdm(nlp.pipe(kws, as_tuples=True, n_threads=5, disable=['ner', 'parser'])))
+    preproc = [(tuple(t.pos_ for t in r[0]), r[0].text, r[1]) for r in sp_out]
+    return preproc
+
+def preproc_corenlp(kws, lang):
+    res = []
+    with CoreNLPClient(properties=lang, be_quiet=True, annotators=['tokenize', 'ssplit', 'pos']) as nlp:
+        for k, c in tqdm(kws):
+            tmp = [(t.word, t.pos) for s in nlp.annotate(k).sentence for t in s.token]
+            tmp = (tuple(e[1] for e in tmp), ' '.join(e[0] for e in tmp), c)
+            if lang == 'en':
+                # Map penntreebank ppostag to UD
+                pp, t, c = tmp
+                tmp = (tuple(nlp.map_tag('en-ptb', 'universal', e) for e in pp), t, c, pp)
+            res.append(tmp)
+    return res
+
+
+with open(util.get_ref('TermITH-Eval')) as f:
     ref = json.load(f)
     kws = Counter(v for d in ref.values() for k in d for v in k)
     kws = [(k, v) for k, v in kws.items() if k]
 
-sp_out = list(tqdm(nlp.pipe(kws, as_tuples=True, n_threads=5, disable=['ner', 'parser'])))
-preproc = [(tuple(t.pos_ for t in r[0]), r[0].text, r[1]) for r in sp_out]
+preproc = preproc_spacy(kws, 'fr')
 
 pattern = defaultdict(list)
 for p in preproc:
@@ -20,23 +38,53 @@ for p in preproc:
 
 pattern_count = sorted((sum(p[2] for p in v), k) for k, v in pattern.items())
 
-pattern_count[-10:][::-1]
-"""
-[(25532, ('NOUN',)),
- (21143, ('NOUN', 'NOUN')),
- (16976, ('ADJ', 'NOUN')),
- ( 5184, ('ADJ', 'NOUN', 'NOUN')),
- ( 3280, ('VERB',)),
- ( 3115, ('VERB', 'NOUN')),
- ( 3108, ('NOUN', 'NOUN', 'NOUN')),
- ( 1717, ('ADJ',)),
- ( 1704, ('ADJ', 'ADJ', 'NOUN')),
- ( 1153, ('NOUN', 'VERB'))]
+nb_top_5 = sum(o[0] for o in pattern_count[-5:])
+nb_total = sum(o[0] for o in pattern_count)
+print(nb_top_5, nb_total, round(nb_top_5/nb_total*100, 2))
+
+print([(round(n/nb_total*100,2), list(p)) for n, p in pattern_count[-5:][::-1]])
+
+
+""" KP20k (en) corenlp 4.1
+77946 105560 73.84
+
+[(27.46, ['NOUN']),
+ (21.36, ['NOUN', 'NOUN']),
+ (16.91, ['ADJ', 'NOUN']),
+ (4.92, ['ADJ', 'NOUN', 'NOUN']),
+ (3.2, ['NOUN', 'NOUN', 'NOUN'])]
 """
 
-(sum(o[0] for o in pattern_count[-10:]),
- sum(o[0] for o in pattern_count))
-# (82912, 107446)
+""" KP20k (en) spacy
+(82912, 107446)
+
+[(25532, 23.76, ('NOM',)),
+ (21143, 19.68, ('NOM', 'NOM')),
+ (16976, 15.8, ('ADJ', 'NOM')),
+ (5184, 4.82, ('ADJ', 'NOM', 'NOM')),
+ (3280, 3.05, ('VERB',)),
+ (3115, 2.9, ('VERB', 'NOM')),
+ (3108, 2.89, ('NOM', 'NOM', 'NOM')),
+ (1717, 1.6, ('ADJ',)),
+ (1704, 1.59, ('ADJ', 'ADJ', 'NOM')),
+ (1153, 1.07, ('NOM', 'VERB'))]
+"""
+
+""" TermITH-Eval (fr) spacy
+3995 4713
+
+[(1721, 36.52, ('NOM',)),
+ (888, 18.84, ('NOM', 'ADJ')),
+ (483, 10.25, ('ADJ',)),
+ (256, 5.43, ('NOM', 'NOM')),
+ (194, 4.12, ('VERB',)),
+ (132, 2.8, ('ADJ', 'ADJ')),
+ (107, 2.27, ('NOM', 'ADP', 'NOM')),
+ (85, 1.8, ('NOM', 'DET', 'NOM')),
+ (68, 1.44, ('ADJ', 'NOM')),
+ (61, 1.29, ('VERB', 'ADJ'))]
+"""
+
 
 
 length = Counter(len(p[0]) for p in preproc)
