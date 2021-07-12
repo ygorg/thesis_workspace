@@ -60,9 +60,9 @@ for path in dataset_files:
 # (annnotation with the most keyword doesn't seem to match author keyphrases)
 kws = {}
 for k, v in title_mapping.items(): 
-    matches = sorted(v['matches'], key=lambda x: ('acm-dl' in x['file'], x['keyword'].count(';')), reverse=True)
+    matches = sorted(v, key=lambda x: ('acm-dl' in x[2], x[3].count(';')), reverse=True)
     # You can keep other info such as 
-    kws[k] = matches[0]['keyword']
+    kws[k] = matches[0][3]
 
 
 with open('data.csv', 'rb') as f:

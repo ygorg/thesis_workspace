@@ -1,0 +1,6 @@
+#\\textcolor\{blue\}	 
+\\textcolor\{\w*[^}]\}	 
+oe	œ
+#\\todo\[inline,size=\\tiny\]	 
+\\todo\[.*\]\{.*\}	 
+#~	 

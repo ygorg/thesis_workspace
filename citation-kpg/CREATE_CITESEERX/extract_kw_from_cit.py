@@ -5,7 +5,6 @@ import nltk
 import argparse
 import itertools
 from itertools import chain
-from collections import Counter
 from multiprocessing import Pool
 
 import spacy
@@ -17,7 +16,8 @@ from more_itertools import grouper
 def merge_compounds(d):
     """ Merge compounds to be one token
 
-    A compound is two tokens separated by a hyphen when the tokens are right next to the hyphen
+    A compound is two tokens separated by a hyphen when the tokens are right
+    next to the hyphen
 
     d (spacy.Doc): Document
     Returns: spacy.Doc
@@ -28,14 +28,14 @@ def merge_compounds(d):
     ['peer-to-peer-to-peer']
     """
     # Returns beginning and end offset of spacy.Token
-    offsets = lambda t: (t.idx, t.idx+len(t))
+    offsets = lambda t: (t.idx, t.idx + len(t))
 
-    # Identify the hyphens
-    # for each token is it a hyphen and the next and preceding token are right next to the hyphen
-    spans = [(i-1, i+1) for i in range(len(d))
-             if i != 0 and i < len(d) - 1 and d[i].text == '-' and \
-                offsets(d[i-1])[1] == offsets(d[i])[0] and \
-                offsets(d[i+1])[0] == offsets(d[i])[1]
+    # Identify the hyphens : for each token is it a hyphen and the next and
+    #  preceding token are right next to the hyphen
+    spans = [(i - 1, i + 1) for i in range(len(d))
+             if i != 0 and i < len(d) - 1 and d[i].text == '-'
+                       and offsets(d[i - 1])[1] == offsets(d[i])[0]
+                       and offsets(d[i + 1])[0] == offsets(d[i])[1]
             ]
     # merging spans to account for multi-compound terms
     merged = []
@@ -47,12 +47,14 @@ def merge_compounds(d):
         else:
             merged.append((b, e))
 
-    # Merge the spacy Doc compute the span beforehand as merging changes the indexation
-    to_merge = [d[b:e+1] for b, e in merged]
+    # Merge the spacy Doc compute the span beforehand as merging changes
+    #  the indexation
+    to_merge = [d[b:e + 1] for b, e in merged]
     for span in to_merge:
         # also computing the lemma (but it will be overwritten)
         span.merge(lemma=''.join(t.lemma_ for t in span))
     return d
+
 
 def grammar_selection(doc, chunker):
     # initialize chunker
@@ -62,7 +64,10 @@ def grammar_selection(doc, chunker):
     # find candidates
     for subtree in tree.subtrees():
         if subtree.label() == 'NP':
-            acc.append((subtree.leaves()[0][0][0], ' '.join(l[0][1] for l in subtree.leaves())))
+            acc.append((
+                subtree.leaves()[0][0][0],
+                ' '.join(l[0][1] for l in subtree.leaves())
+            ))
     return acc
 
 
@@ -89,7 +94,6 @@ def pretreat_ctxt(ctxt):
     return doc, marker_offset
 
 
-
 # Keep if all words are not one character
 word_len = lambda k: not all(len(t) == 1 for t in k.split(' '))
 # Keep if at least 70% of char are letters (if 3 or less char, keep if at least one letter)
@@ -108,6 +112,7 @@ def groupby(iterable, key=lambda x: x[0]):
     iterable = sorted(iterable, key=key)
     iterable = itertools.groupby(iterable, key=key)
     return [(k, list(v)) for k, v in iterable]
+
 
 def process_one(line, nlp, chunker):
     d = json.loads(line)
@@ -133,9 +138,12 @@ def process_one(line, nlp, chunker):
         cands = [(k, min(e[1] for e in v)) for k, v in groupby(cands)]
         kws.append(cands)
 
-    kws = [k for c in kws for k in c]  # Flatten kw list
-    kws = ((k, min(e[1] for e in v), len(v)) for k, v in groupby(kws))  # Count keyword
-    kws = [(k, p, f) for k, p, f in kws if f > 1]  # Remove keyword occuring once
+    # Flatten kw list
+    kws = [k for c in kws for k in c]
+    # Count keyword
+    kws = ((k, min(e[1] for e in v), len(v)) for k, v in groupby(kws))
+    # Remove keyword occuring once
+    kws = [(k, p, f) for k, p, f in kws if f > 1]
     # Filter out noisy keywords
     for filt in all_filt:
         kws = filter(lambda x: filt(x[0]), kws)
@@ -143,10 +151,10 @@ def process_one(line, nlp, chunker):
     kws = list(kws)
     kept_kws = []
     indexes = sorted(set(e[2] for e in kws), reverse=True)
-    # Add keywords starting with the closer to the marker, with 10 maximum
+    # Add keywords starting with the higher DF, with 10 maximum
     for i in indexes:
         to_add = {k: p for k, p, f in kws if f == i}
-        #to_add = to_add.keys()
+        # to_add = to_add.keys()
         to_add = sorted(to_add, key=to_add.get)
         if len(to_add) > 10:
             to_add = to_add[:10]
@@ -164,7 +172,6 @@ def process_one(line, nlp, chunker):
 def process_many(lines):
     global nlp, chunker
     return [process_one(l, nlp, chunker) for l in lines if l]
-    
 
 
 def init_worker():
@@ -180,9 +187,12 @@ def init_worker():
             {<NBAR><ADP><NBAR>}
     """)
 
+
 if __name__ == '__main__':
     def arguments():
-        parser = argparse.ArgumentParser(description='Extract synthetic keyphrases from "ctxt" in jsonl file. Outputs a jsonl file with "keyword".')
+        parser = argparse.ArgumentParser(
+            description='Extract synthetic keyphrases from "ctxt" in jsonl '
+                        'file. Outputs a jsonl file with "keyword".')
         parser.add_argument('data', type=str,
             help='Data file.')
         parser.add_argument('--parallel', type=int,
@@ -201,12 +211,12 @@ if __name__ == '__main__':
     batch_size = args.batch_size
 
     with open(input_file) as f:
-        #nb_lines = sum(True for l in f)
-        #f.seek(0)
+        # nb_lines = sum(True for l in f)
+        # f.seek(0)
         nb_lines = 355869
         f = tqdm(f, total=nb_lines)
         f = grouper(f, batch_size)
-        
+
         ctxts = []
         with open(output_file, 'w') as g:
             if parallel >= 2:
@@ -221,4 +231,3 @@ if __name__ == '__main__':
                 g.write(d)
             if parallel >= 2:
                 p.close()
-
