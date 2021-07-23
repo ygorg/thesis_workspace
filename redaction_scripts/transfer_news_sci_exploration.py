@@ -28,7 +28,7 @@ KPTimes CopyRNN.json
 KP20k CopyRNN_News.json
 [('computers and the internet', 8341), ('science and technology', 5741), ('research', 4653), ('tech industry', 2935), ('computer and video games', 2493), ('nyc', 2137), ('music', 1453), ('medicine and health', 1207), ('space', 1055), ('photography', 743)]
 
-KPTimes KPTimes.CopyRNN_News.json
+KPTimes CopyRNN_News.json
 [('japan', 3556), ('donald trump', 1359), ('china', 1325), ('computers and the internet', 975), ('us foreign policy', 909), ('shinzo abe', 733), ('us politics', 631), ('international trade', 571), ('russia', 570), ('baseball', 534)]
 """
 

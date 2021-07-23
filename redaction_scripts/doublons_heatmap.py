@@ -5,7 +5,8 @@ from itertools import combinations
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+from collections import Counter
+from itertools import combinations
 
 # title_mapping.json provient de ../citation-kpg/README.md
 #  "Match titles with other datasets"

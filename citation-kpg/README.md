@@ -7,7 +7,7 @@
 
 ## Todo with unarXive
 
-[x] Create usable id: context data. Selection of contexts which cited paper is in arxiv. (arxiv_cited_id != None)
+[x] Create usable id: context data. Selection of contexts which cited paper is in arxiv. (Docs where `arxiv_cited_id != None`)
 	- `python3 src/extract-citation-contexts.py data/unarXive-2020/contexts/extracted_contexts.csv > data/in_arxiv_contexts.json`
 [x] Match cited ids with title and abstract
 ```python
@@ -59,7 +59,7 @@ def preproc(title):
 # `jsonl` files with ['id', 'title', 'keyword']
 dataset_files = [
     'KP20k.test.jsonl', 'KP20k/full/kp20k.valid.json', 'ACM-abstract.test.jsonl',
-    'tmp/Inspec.test.jsonl', 'tmp/Inspec.dev.jsonl', 'tmp/Inspec.train.jsonl', 'KDD.test.jsonl',
+    'tmp/Inspec.test.jsonl', 'tmp/Inspec.dev.jsonl', 'tmp/Inspec.train.jsonl', 'KDD.test.jsonl', 'NUS.test.jsonl',
     'tmp/PubMed-titles.test.jsonl', 'SemEval-2010-abstract.test.jsonl', 'WWW.test.jsonl', 'tmp/acm-dl.test.jsonl',
     'KP20k/full/kp20k.train.json', 'NTCIR1+2.test.jsonl'
 ]
@@ -67,7 +67,7 @@ dataset_files = [
 # Build a Dict[title,Tuple[info]]
 title_mapping = {}
 for path in dataset_files:
-    with open('../data/datasets/' + path) as g:
+    with open(path) as g:
         # Load the data
         g = map(json.loads, g)
         # Filter out doc w/o keywords
@@ -104,9 +104,8 @@ with open('data/data_with_context_autkw.jsonl', 'w') as f:
 	- refseerx: select nounphrases adn then based on DF (number of context in which it appears) take the 10 best
 	- this process is based on two steps:
 		- select candidates in context
-		- rank candidates from diff contexts
+		- rank candidates from diff contexts (or what I could do is concat all contexts )
 
-		- or what I can do is concat all contexts 
 ```python
 import json
 with open('data/data_with_context_autkw.jsonl') as f:

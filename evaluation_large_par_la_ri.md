@@ -10,18 +10,18 @@ Si non pk ?
 
 
 1ere étape : obtenir les sortie des modèles
-[x] lister les papiers avec du code disponible
+[x] lister les papiers avec du code disponibl
 
 KP20k
 | papier      | Arx | F@5 P | F@10 P | lien |
-| chen 2018   |     |       | 21.8   |  |
-|bahuleyan 2020|    | 26.9  |        |  | @M ALL
+| chen 2018   |     |       | 21.8   | XXXhttps://github.com/nanfeng1101/s2s-kg |
+|bahuleyan 2020|    | 26.9  |        | https://github.com/BorealisAI/keyphrase-generation | @M ALL
 | chen 2020   |     | 31.1  |        | https://github.com/Chen-Wang-CUHK/ExHiRD-DKG |
-| chen 2019   |     | 31.7  | 28.2   |  | ALL
-| chan 2019   |     | 32.1  |        |  |
-| meng 2017   |     | 33.3  | 26.2   |  |
-| yuan 2020   |     | 34.8  | 29.8   |  |
-| ye 2021     |  ?  | 35.8  |        |  |
+| chen 2019   |     | 31.7  | 28.2   | https://github.com/Chen-Wang-CUHK/KG-KE-KR-M | ALL
+| chan 2019   |     | 32.1  |        | https://github.com/kenchan0226/keyphrase-generation-rl |
+| meng 2017   |     | 33.3  | 26.2   | https://github.com/memray/OpenNMT-kpg-release |
+| yuan 2020   |     | 34.8  | 29.8   | https://github.com/memray/OpenNMT-kpg-release |
+| ye 2021     |     | 35.8  |        | https://github.com/jiacheng-ye/kg_one2set |
 | diao 2020   |  X  | 38.1  | 32.4   | https://github.com/SVAIGBA/CDKGen |
 
 | martinc 2020|  X  | 28.38 | 28.7   | X |
