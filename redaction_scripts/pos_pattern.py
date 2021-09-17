@@ -4,14 +4,17 @@ from collections import Counter, defaultdict
 import spacy
 from tqdm import tqdm
 
-nlp = spacy.load('fr')
+#l, c = 'fr_core_web_sm', 'TermITH-Eval'
+l, c = 'en_core_wbe_sm', 'KP20k'
 
-with open(util.get_ref('TermITH-Eval')) as f:
+nlp = spacy.load(l)
+
+with open(util.get_ref(c)) as f:
     ref = json.load(f)
     kws = Counter(v for d in ref.values() for k in d for v in k)
     kws = [(k, v) for k, v in kws.items() if k]
 
-sp_out = list(tqdm(nlp.pipe(kws, as_tuples=True, n_threads=5, disable=['ner', 'parser'])))
+sp_out = list(tqdm(nlp.pipe(kws, as_tuples=True, n_process=5, disable=['ner', 'parser'])))
 preproc = [(tuple(t.pos_ for t in r[0]), r[0].text, r[1]) for r in sp_out]
 
 pattern = defaultdict(list)
