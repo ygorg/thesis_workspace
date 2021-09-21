@@ -277,3 +277,48 @@ for mod in ['', '-MultipartiteRank', '-KeaOneModel', '-CorrRNN', '-CopyRNN']:
 			acc.append(score)
 	print(mod[1:] + ' & ' + ' & '.join(acc) + '\\\\')
 ```
+
+## Créer référence par domaine
+
+```python
+import json
+from collections import defaultdict
+ROOT='/home/gallina/'
+with open(ROOT + '/ir-using-kg/data/topics/domains.json') as f:
+    domains = json.load(f)
+qrel = load_qrel(f'{ROOT}/redefining-absent-keyphrases/data/ntcir-2/qrels/rel1_ntc2-e2_0101-0149.qrels')
+path_ake_datasets = ROOT + '/ake-datasets/datasets/'
+with open(path_ake_datasets+'NCTRI1+2/references/test.author.stem.json') as f:
+    ref = json.load(f)
+in_domain_ref = {}
+out_domain_ref = {}
+
+for k in domains:
+    if domains[k] == [1]:
+        for doc_id in qrel[k]:
+            if doc_id in ref:
+                in_domain_ref[doc_id] = ref[doc_id]
+    elif domains[k] == [2]:
+        for doc_id in qrel[k]:
+            if doc_id in redf:
+                out_domain_ref[doc_id] = ref[doc_id]
+
+with open(path_ake_datasets+'NTCIR1+2/references/test.author_in.stem.json', 'w') as f:
+    json.dump(in_domain_ref, f)
+with open(path_ake_datasets+'NTCIR1+2/references/test.author_out.stem.json', 'w') as f:
+    json.dump(out_domain_ref, f)
+```
+
+```bash
+cd /home/gallina/ake-benchmarking
+for DOM in "in" "out"
+do
+    echo ${DOM}
+    for METH in "MultipartiteRank" "CorrRNN" "CopyRNN"
+    do
+        python3 eval.py -n 5 -i "output/NTCIR1+2/NTCIR1+2.${METH}.stem.json" -r "../ake-datasets/datasets/NTCIR1+2/references/test.indexer_${DOM}.stem.json"
+    done
+done
+
+rm /home/gallina/ake-datasets/datasets/NTCIR1+2/references/test.indexer_*.stem.json
+```
