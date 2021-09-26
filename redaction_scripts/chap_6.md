@@ -31,7 +31,6 @@ def load_scores(p):
 COLLECTION="ntcir-2"
 TOPICFIELD="description"
 MODEL="qld+rm3"
-
 sc_ta = load_scores(f"data/{COLLECTION}/output/run.{COLLECTION}-t+a.description.{MODEL}.results")
 sc_co = load_scores(f"data/{COLLECTION}/output/run.{COLLECTION}-t+a-CorrRNN.description.{MODEL}.results")
 diff = sorted([(round(v-sc_ta[k], 3), round(v, 3), round(sc_ta[k], 3), k) for k, v in sc_co.items()])
@@ -252,30 +251,58 @@ df[df['metric'] != 'recall_1000'][df['kw'].isin(['', 'all'])].groupby(['kw', 'kw
 ## Tableau ir_per_domain
 ```python
 from scipy import stats
-print('      & \\multicolumn{2}{c}{T+A} & \\multicolumn{2}{c}{T+A+K} \\\\')
-print('model &    I &    O &    I &    O \\\\')
-for mod in ['', '-MultipartiteRank', '-KeaOneModel', '-CorrRNN', '-CopyRNN']:
-	acc = []
-	for kps in ['', '-all']:
-		for domain in [1, 2]:
 
-			# The baseline is the same system but without predicted keywords
-			baseline = load_scores(f'data/ntcir-2/output/run.ntcir-2-t+a{kps}.description.bm25+rm3.results')
-			baseline = [v for k, v in baseline.items() if domains.get(k, []) == [domain]]
+def add_latex_command(command, value):
+    return f'\\{command}{{{value}}}'
 
-			system_ = load_scores(f'data/ntcir-2/output/run.ntcir-2-t+a{kps}{mod}.description.bm25+rm3.results')
-			system_ = [v for k, v in system_.items() if domains.get(k, []) == [domain]]
 
-			ttest = stats.ttest_rel(a=baseline, b=system_)[1]
-			sign = ttest < .05
+def stylee(v, sign, best, diff):
+    if diff > 0:
+        v = add_latex_command('good', v)
+    elif diff < 0:
+        v = add_latex_command('bad', v)
+    com = ''
+    if best:
+        com = 'best'
+        if sign:
+            com += 's'
+    elif sign:
+        com = 'sign'
+    if com:
+        return add_latex_command(com, v)
+    else:
+        return f'{v}'
 
-			score = round(sum(system_) / len(system_) * 100, 1)
-			score = str(score)
-			if sign:
-				score = f'\\sign{{{score}}}'
 
-			acc.append(score)
-	print(mod[1:] + ' & ' + ' & '.join(acc) + '\\\\')
+data = []
+for meth in ['', '-MultipartiteRank', '-KeaOneModel', '-CorrRNN', '-CopyRNN']:
+    acc = []
+    for kps in ['', '-all']:
+        for domain in [1, 2]:
+            model = 'bm25'
+            # The baseline is the same system but without predicted keywords
+            baseline = load_scores(f'data/ntcir-2/output/run.ntcir-2-t+a{kps}.description.{model}.results')
+            baseline = [v for k, v in baseline.items() if domains.get(k, []) == [domain]]
+            baseline_score = sum(baseline) / len(baseline)
+
+            system_ = load_scores(f'data/ntcir-2/output/run.ntcir-2-t+a{kps}{meth}.description.{model}.results')
+            system_ = [v for k, v in system_.items() if domains.get(k, []) == [domain]]
+            system_score = sum(system_) / len(system_)
+
+            ttest = stats.ttest_rel(a=baseline, b=system_)[1]
+            sign = ttest < .05
+
+            diff_score = system_score - baseline_score
+
+            tmp_d = 'I' if domain == 1 else 'O'
+            tmp_k = 'tak' if kps[1:] else 'ta'
+            data.append((meth[1:], tmp_k, tmp_d, system_score, diff_score, sign))
+
+df = pd.DataFrame(data, columns=['m', 'k', 'd', 's', 'diff', 'sign'])
+df['is_max'] = df.groupby(['k', 'd'])['s'].transform('max') == df['s']
+df['print_s'] = df.apply(lambda x: stylee(round(x['s']*100, 1), x['sign'], x['is_max'], x['diff']) + (' ' +
+                                   add_latex_command('ddiff', round(x['diff']*100, 1)) if round(x['diff'], 3) else ''), axis=1)
+
 ```
 
 ## Créer référence par domaine
@@ -326,4 +353,48 @@ do
 done
 
 rm /home/gallina/ake-datasets/datasets/NTCIR1+2/references/test.indexer_*.stem.json
+```
+
+## N vs perf
+
+````python
+import os
+import pandas as pd
+from glob import glob
+
+data = {}
+for METHOD in ['CopyRNN', 'CorrRNN', 'KeaOneModel', 'MultipartiteRank']:
+    tmp = []
+    for p in glob(f'../data/{COLLECTION}/output/run.{COLLECTION}-t+a-{METHOD}-*.description.bm25+rm3.results'):
+        print(p)
+        n = os.path.basename(p).split('.')[-4].split('-')[4]
+        s = load_scores(p)
+        s.pop('all')
+        tmp.append((n, 100*mean(s.values())))
+    tmp = sorted(tmp, key=lambda x: x[0])
+    print("\\addplot+[smooth] plot coordinates {")
+    print(',\n'.join([f'({n}, {v:.2f})' for n, v in tmp]))
+    print(f"}};\n\\addlegendentry{{{METHOD}}}")
+    print()
+
+
+data = []
+for f in files:
+	exp, _, sys_ = os.path.basename(f).split('.')[1:4]
+	exp_ = exp.split('-')[3:]
+	if not exp_:
+		exp_ = [''] * 4
+	elif exp_[0][0].islower():
+		# there are reference keyphrases
+		exp_ += [''] * (4 - len(exp_))
+	else:
+		# there are reference keyphrases
+		exp_ = [''] + exp_ + [''] * (3 - len(exp_))
+	s = load_scores(f)
+	s.pop('all')
+	data.append([*exp_, sys_, mean(s.values())*100])
+
+df = pd.DataFrame(data, columns=['ref', 'pred', 'n', 'prmu', 'system', 'score'])
+
+
 ```
