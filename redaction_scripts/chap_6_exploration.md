@@ -19,34 +19,54 @@ La 131
 ```python
 from typing import Dict, List, Tuple
 from collections import defaultdict
+from glob import glob
+import gzip
+
+
+def exp_to_param(exp):
+    """{coll}-t+a{tmp}"""
+    exp_ = exp.split('-')[3:]
+    if not exp_:
+        exp_ = [None] * 4
+    elif exp_[0][0].islower():
+        # there are reference keyphrases
+        exp_ += [None] * (4 - len(exp_))
+    else:
+        # there are reference keyphrases
+        exp_ = [None] + exp_ + [None] * (3 - len(exp_))
+    return exp_
+
+
+def file_to_param(f):
+    """/home/gallina/redefining-absent-keyphrases/data/{coll}/output/run.{coll}-t+a{tmp}.description.{sys_}.results"""
+    coll = f.split(os.sep)[-3]
+    exp, _, sys_ = os.path.basename(f).split('.')[1:4]
+    r, m, n, p = exp_to_param(exp)
+    return coll, sys_, r, m, n, p
 
 
 def param_to_file(coll, sys_, r, m, n, p, out):
     if m and not n or p and not m:
         raise ArgumentError()
-    n = str(n)
-    tmp = []
-    if r:
-        tmp += [r]
-    if m:
-        tmp += [m, n]
-        if p:
-            tmp += [p]
+    if n is not None:
+        n = str(n)
+    tmp = list(filter(None, [r, m, n, p]))
     if tmp:
         tmp = '-' + '-'.join(tmp)
     else:
         tmp = ''
 
-    if out == 'req':
-        return f'/home/gallina/redefining-absent-keyphrases/data/{coll}/output/run.{coll}-t+a{tmp}.description.{sys_}.req'
-    elif out == 'res':
-        return f'/home/gallina/redefining-absent-keyphrases/data/{coll}/output/run.{coll}-t+a{tmp}.description.{sys_}.results'
-    elif out == 'txt':
-        return f'/home/gallina/redefining-absent-keyphrases/data/{coll}/output/run.{coll}-t+a{tmp}.description.{sys_}.txt'
-    elif out == None:
-        return f'/home/gallina/redefining-absent-keyphrases/data/{coll}/output/run.{coll}-t+a{tmp}.description.{sys_}'
-    elif out == 'col':
-        return glob(f'/home/gallina/redefining-absent-keyphrases/data/{coll}/collections/{coll}-t+a{tmp}/*.gz')[0]
+    exp_ = f'{coll}-t+a{tmp}'
+    home_ = '/home/gallina/redefining-absent-keyphrases'
+    output_ = f'{home_}/data/{coll}/output/run.{exp_}.description.{sys_}'
+
+    out_dict = {'req': output_+'.req',
+     None: output_,
+     'res': output_ + '.results',
+     'txt': output_ + '.txt',
+     'col': glob(f'{home_}/data/{coll}/collections/{exp_}/*.gz')[0]
+    }
+    return out_dict[out]
     
 
 def load_scores(p) -> Dict[str, float]:
@@ -116,10 +136,10 @@ REQ = '131'
 
 qrel = load_qrel(f'data/ntcir-2/qrels/rel1_ntc2-e2_0101-0149.qrels')
 
-path_a = param_to_file(COLLECTION, MODEL, None, 'CopyRNN', 5 ,None)
-path_b = param_to_file(COLLECTION, MODEL, None, 'CorrRNN', 5 ,None)
+path_a = param_to_file(COLLECTION, MODEL, 'all', None, None ,None, 'res')
+path_b = param_to_file(COLLECTION, MODEL, 'all', 'CorrRNN', 5 ,None, 'res')
 sc_a, sc_b = load_scores(path_a), load_scores(path_b)
-res_a, res_b = load_scores(path_a.replace('.results', '.txt')), load_scores(path_b.replace('.results', '.txt'))
+res_a, res_b = load_res(path_a.replace('.results', '.txt')), load_res(path_b.replace('.results', '.txt'))
 
 # Différence de score entre les requêtes
 diff = sorted([(round(v-sc_b[k], 3), round(v, 3), round(sc_b[k], 3), k) for k, v in sc_a.items()])
@@ -145,45 +165,107 @@ print(sum(tmp) / len(tmp))
 
 OK le vrai test est ici:
 ```python
-qrel = load_qrel(f'data/ntcir-2/qrels/rel1_ntc2-e2_0101-0149.qrels')
-with open('data/ntcir-2/topics/topic-e0101-0149.title+desc+narr.trec') as f:
-    query_data = f.read().split()
 
-path_clean = param_to_file('ntcir-2', 'bm25+rm3', None, None, None ,None, out=None)
-path_kw = param_to_file('ntcir-2', 'bm25+rm3', None, 'CopyRNN', 5 ,None, out=None)
-path_col_clean = param_to_file('ntcir-2', 'bm25+rm3', None, None, None ,None, out='col')
-path_col_kw = param_to_file('ntcir-2', 'bm25+rm3', None, 'CopyRNN', 5 ,None, out='col')
+## Trouver une requête qui baisse
+# 1. Quelle est la requête qui baisse le plus dans toutes les expériences ?
+diff = []
+for path in glob('data/ntcir-2/output/*.results'):
+    a = load_scores(path)
+    coll, sys_, r, m, n, p = file_to_param(path)
+    b = load_scores(param_to_file(coll, sys_, r if r != 'none' else None, None, None, None, out='res'))
+    diff += [(path, round(a[req] - b[req], 3), round(a[req], 3), round(b[req], 3), req) for req in a]
+diff = sorted(diff, key=lambda x: x[1])
 
-with gzip.open(path_col_kw) as f:
-    doc_data = f.read().split()
+# og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-all-CorrRNN-5.description.qld+rm3.results'
 
-# Je cherche une requête qui baisse quand on ajoute des mots-clés.
+og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-CopyRNN-5-mu.description.bm25+rm3.results'
+coll, sys_, ref, meth, top_n, prmu = file_to_param(og_path)
+path_clean = param_to_file(coll, sys_, ref, None, None ,None, out=None)
+path_kw = param_to_file(coll, sys_, ref, meth, top_n ,prmu, out=None)
+
+req = '146'
+
+# 2. Je cherche une requête qui baisse quand on ajoute des mots-clés.
+og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-CopyRNN-5-mu.description.bm25+rm3.results'
+og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-all-MultipartiteRank-1.description.bm25+rm3.results'
+og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-all-CorrRNN-1.description.bm25+rm3.results'
+coll, sys_, ref, meth, top_n, prmu = file_to_param(og_path)
+path_clean = param_to_file(coll, sys_, ref, None, None ,None, out=None)
+path_kw = param_to_file(coll, sys_, ref, meth, top_n ,prmu, out=None)
+
 sc_clean, sc_kw = load_scores(path_clean + '.results'), load_scores(path_kw + '.results')
-diff = sorted([(round(sc_kw[req] - sc_clean[req], 3), round(sc_kw[req], 3), round(sc_clean[req], 3), k) for req in sc_clean])
-print(diff[:-4])
+diff = sorted([(round(sc_kw[req]*100 - sc_clean[req]*100, 1), round(sc_kw[req]*100, 1), round(sc_clean[req]*100, 1), req) for req in sc_clean])
+req = diff[0][-1]
 
-# Je cherche si les termes ajoutés ont un rapport avec la requête
+## Regarder les termes ajoutés par RM3
+
+with open('data/ntcir-2/topics/topic-e0101-0149.title+desc+narr.trec') as f:
+    query_data = f.read().split('\n')
+idx = query_data.index(f'<num> Number: {req}')
+print('\n'.join(query_data[idx:idx+8]))
+
 qu_kw = load_query(path_kw + '.req')
-for _, _, _, req in diff[-4]:
-    # Pour chaque requête la requête et le RM3
-    idx = query_data.index(f'<num> Number: {req}\n')
-    print(''.join(query_data[idx:idx+7]))
-    print(qu_kw[REQ])
-    input()
+print([e[0] for e in qu_kw[req][0]])
+print([e[0] for e in qu_kw[req][1]])
+input()
 
-# Quels sont les 10 documents qui ont servis a étendre la requête ?
+
+
+req = '146'
+og_path = 'data/ntcir-2/output/run.ntcir-2-t+a-all-CorrRNN-5.description.qld+rm3.results'
+coll, sys_, ref, meth, top_n, prmu = file_to_param(og_path)
+path_clean = param_to_file(coll, sys_, ref, None, None ,None, out=None)
+path_kw = param_to_file(coll, sys_, ref, meth, top_n ,prmu, out=None)
+## Regarder les documents utilisé par RM3
+
+path_col_kw = param_to_file(coll, sys_, ref, meth, top_n ,prmu, out='col')
+with gzip.open(path_col_kw, 'rt') as f:
+    doc_data = f.read().split('\n')
+
+qrel = load_qrel(f'data/ntcir-2/qrels/rel1_ntc2-e2_0101-0149.qrels')
 res_kw_norm = load_res(path_kw.replace('+rm3', '') + '.txt')
-for _, _, _, req in diff[:-4]:
-    first_docs = [d for d, (r, v) in res_kw_norm[req].items() if r < 10]
-    nb_rel = len(d for d in first_docs if d in qrel[req])
-    print(f'{nb_rel / len(first_docs) * 100:.1f}% relevant')
-    for d in first_docs:
-        # là il faut afficher les mots-clés
-        # est-ce que les mots-clés sont dans les termmes ajoutés par RM3 ?
-        # est-ce que les mots-clés sont pertinent pour le document
-        idx = doc_data.index(f'<DOCNO>{d}</DOCNO>\n')
-        print(doc_data[idx:idx+10])
-        input()
+first_docs = sorted(res_kw_norm[req], key=lambda x: res_kw_norm[req][x][0])[:10]
+
+nb_rel = sum(1 for d in first_docs if d in qrel[req])
+print(f'{nb_rel / len(first_docs) * 100:.1f}% relevant')
+
+kws_first_docs = []
+for d in first_docs:
+    idx = doc_data.index(f'<DOCNO>{d}</DOCNO>')
+    title = doc_data[idx+1][7:-8]
+    abstract = doc_data[idx+2][6:-7]
+    kw_ref = doc_data[idx+3][6:-7].lower().split(' // ')
+    kw_pred = doc_data[idx+4][6:-7].lower().split(' // ')
+    kws_first_docs.append([title, abstract, kw_ref, kw_pred])
+    #print('\n'.join([title, kw_ref, kw_pred]))
+    #input()
+
+
+# Si je n'ajoute pas de mots-clés: quel sont les termes ajotués grâce à RM3 ?
+# Je cherche si les termes ajoutés ont un rapport avec la requête
+qu_clean = load_query(path_clean + '.req')
+# Pour chaque requête la requête et le RM3
+idx = query_data.index(f'<num> Number: {req}')
+print('\n'.join(query_data[idx:idx+8]))
+print([e[0] for e in qu_clean[req][0]])
+print([e[0] for e in qu_clean[req][1]])
+input()
+
+# Quels sont les 10 documents qui ont servis a étendre cette requête ?
+res_clean_norm = load_res(path_clean.replace('+rm3', '') + '.txt')
+first_docs = [d for d, (r, v) in res_clean_norm[req].items() if r <= 10]
+nb_rel = sum(1 for d in first_docs if d in qrel[req])
+print(f'{nb_rel / len(first_docs) * 100:.1f}% relevant')
+clean_first_docs = []
+for d in first_docs:
+    # est-ce que les mots-clés sont dans les termes ajoutés par RM3 ?
+    # est-ce que les mots-clés sont pertinent pour le document
+    idx = doc_data.index(f'<DOCNO>{d}</DOCNO>')
+    title = doc_data[idx+1][7:-8]
+    abstract = doc_data[idx+2][6:-7]
+    kw_ref = doc_data[idx+3][6:-7].lower().split(' // ')
+    clean_first_docs.append([title, abstract, kw_ref, []])
+
 ```
 
 
@@ -255,62 +337,4 @@ sh anserini/target/appassembler/bin/SearchCollection \
    -topics data/${COLLECTION}/topics/topic-e0101-0149.title+desc+narr.trec \
    -${MODEL} -rm3 -rm3.outputQuery \
    -topicfield ${TOPICFIELD} -output /dev/null | grep 'QID' -A 2 | sed 's/.* - //g' > ${EXP}.${MODEL}+rm3.txt 2>&1
-```
-
-
-## Regarder la modification de la requête
-```python
-def alignn(la, lb, k=(lambda x: x), def_e=''):
-    kla = [k(x) for x in la]
-    klb = [k(x) for x in lb]
-    aa, bb = [], []
-    for e in la:
-        if k(e) in klb:
-            aa += [e]
-            bb += [e]
-        else:
-            aa += [e]
-            bb += [def_e]
-    for e in lb:
-        if k(e) in kla:
-            continue
-        else:
-            aa += [def_e]
-            bb += [e]
-    return [(a, b) for a, b in zip(aa, bb)]
-
-
-def load_query(p):
-    data = {}
-    with open(p) as f:
-        file = [l.strip() for l in f]
-    i = 0
-    while i < len(file):
-        l = file[i]
-        qid = l.split(' ')[-1]
-        i += 1
-        l = file[i]
-        #old = [e.split('^')[0][1:-1] for e in l.split('uery: ')[1].split(' ')]
-        old = [e.split('^') for e in l.split('uery: ')[1].split(' ')]
-        old = [(w[1:-1], round(float(s)*100)) for w, s in old]
-        old = sorted(old, key=lambda x: x[0])
-
-        i += 1
-        l = file[i]
-        #new = [e.split('^')[0][1:-1] for e in l.split('uery: ')[1].split(' ')]
-        new = [e.split('^') for e in l.split('uery: ')[1].split(' ')]
-        new = [(w[1:-1], round(float(s)*100)) for w, s in new]
-        new = sorted(new, key=lambda x: x[0])
-        old_words = [p[0] for p in old]
-        #new = sorted(enumerate(new), key=lambda i, x: old_words.index(x[0]) if x[0] in old_words else len(old_words) + i)
-        new = sorted(new, reverse=True, key=lambda x: x[0] in old_words)
-        #data[qid] = (old, [e for e in new if e[0] not in [o[1] for o in old]])
-        data[qid] = (new[:len(old)], new[len(old):])
-
-        i+=1
-    return data
-
-qu_ta = load_query("ntcir-2-t+a.qld+rm3.txt")
-qu_co = load_query("ntcir-2-t+a-CorrRNN.qld+rm3.txt")
-alignn(qu_ta['131'][1], qu_co['131'][1], k=lambda x: x[0], def_e=('', 0))
 ```

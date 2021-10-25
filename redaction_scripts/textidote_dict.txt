@@ -1,16 +1,19 @@
 ArXiV
 MESH
-NewYorkTimes
-Japan Times
+Japan
+Times
 
 indexeurs
+morphosyntaxiques
+PRMN
+anserini
 
 embedding
 embeddings
 perceptron
 perceptrons
-classifieurs
 classifieur
+classifieurs
 sigmoïde
 ReLU
 XOR
@@ -25,8 +28,15 @@ TermITH-Eval
 KDD
 PubMed
 KP20k
+110-PT-BN-KP
+PerKey
 Inspec
 KPTimes
+NYTimes
+JPTimes
+KPCrowd
+NTCIR-2
+ACM-CR
 MSMarco
 SemEval-2010
 MeSH
@@ -42,24 +52,39 @@ Doc2Vec
 fasttext
 
 PageRank
-Positionrank
+PositionRank
 TopicRank
 SingleRank
 NaiveBayes
+CollabRank
+ExpandRank
+CiteTextRank
+TopicalPageRank
 Kea
 EmbedRank
-FirstPhrase
+FirstPhrases
 TopicCoRank
+MultipartiteRank
+MPRank
 
 LDA
+BM25
+TEXTTT
+RM3
+QL
+Query
+Likelihood
+Student
+TF-IDF
 
 CopyRNN
+CopySci
+CopyNews
 TGNet
 KG-KE-KR-M
 catSeq
 catSeqD
 CorrRNN
-Tf-Idf
 TextRank
 ExHirD
 DivGraphPointer

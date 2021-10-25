@@ -1,6 +1,15 @@
-#\\textcolor\{blue\}	 
 \\textcolor\{\w*[^}]\}	 
 oe	œ
-#\\todo\[inline,size=\\tiny\]	 
-\\todo\[.*\]\{.*\}	 
-#~	 
+#\\todo\[.*\]\{.*\}	 
+\\todo\{.*\}	 
+#\\foreign\{.*\}	TEXTTT
+#\\texttt\{.*\}	TEXTTT
+\\citet	\cite
+\\map\{\}	métrique
+\\bm\{\}	BM25
+\\bmrm\{\}	BM25
+\\tr\{\}	Titre
+\\trc\{\}	Titre
+\\trm\{\}	Titre
+\\trmc\{\}	Titre
+\\tfidf\{\}	TF-IDF
