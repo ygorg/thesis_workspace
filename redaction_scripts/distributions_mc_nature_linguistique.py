@@ -1,100 +1,90 @@
 import util
 import json
 from collections import Counter, defaultdict
-import spacy
 from tqdm import tqdm
 
+
 def preproc_spacy(kws, lang):
+    import spacy
     nlp = spacy.load(lang)
 
-    sp_out = list(tqdm(nlp.pipe(kws, as_tuples=True, n_threads=5, disable=['ner', 'parser'])))
+    sp_out = tqdm(nlp.pipe(kws, as_tuples=True, n_process=5,
+                           disable=['ner', 'parser']))
     preproc = [(tuple(t.pos_ for t in r[0]), r[0].text, r[1]) for r in sp_out]
     return preproc
 
+
 def preproc_corenlp(kws, lang):
+    from stanza import CoreNLPClient
     res = []
-    with CoreNLPClient(properties=lang, be_quiet=True, annotators=['tokenize', 'ssplit', 'pos']) as nlp:
+    with CoreNLPClient(properties=lang, be_quiet=True,
+                       annotators=['tokenize', 'ssplit', 'pos']) as nlp:
         for k, c in tqdm(kws):
-            tmp = [(t.word, t.pos) for s in nlp.annotate(k).sentence for t in s.token]
+            tmp = [(t.word, t.pos)
+                   for s in nlp.annotate(k).sentence
+                   for t in s.token]
             tmp = (tuple(e[1] for e in tmp), ' '.join(e[0] for e in tmp), c)
-            if lang == 'en':
+            if lang == 'en_core_web_sm':
                 # Map penntreebank ppostag to UD
                 pp, t, c = tmp
-                tmp = (tuple(nlp.map_tag('en-ptb', 'universal', e) for e in pp), t, c, pp)
+                pp = tuple(nlp.map_tag('en-ptb', 'universal', e) for e in pp)
+                tmp = (pp, t, c, pp)
             res.append(tmp)
     return res
 
 
-with open(util.get_ref('TermITH-Eval')) as f:
-    ref = json.load(f)
-    kws = Counter(v for d in ref.values() for k in d for v in k)
-    kws = [(k, v) for k, v in kws.items() if k]
+lang2spacy = {'en': 'en_core_web_sm', 'fr': 'fr_core_news_sm'}
+dataset2lang = {'KP20k': 'en', 'TermITH-Eval': 'fr', 'Inspec': 'en'}
 
-preproc = preproc_spacy(kws, 'fr')
+preproc = {}
+for d_name in dataset2lang:
+    with open(util.get_ref(d_name)) as f:
+        ref = json.load(f)
+        kws = Counter(v for d in ref.values() for k in d for v in k)
+        kws = [(k, v) for k, v in kws.items() if k]
+
+    preproc[d_name] = preproc_spacy(kws, lang2spacy[dataset2lang[d_name]])
+    # preproc = preproc_corenlp(kws, dataset2lang[d_name])
+
+dataset = 'Inspec'
 
 pattern = defaultdict(list)
-for p in preproc:
+for p in preproc[dataset]:
     pattern[p[0]].append(p)
 
 pattern_count = sorted((sum(p[2] for p in v), k) for k, v in pattern.items())
 
 nb_top_5 = sum(o[0] for o in pattern_count[-5:])
 nb_total = sum(o[0] for o in pattern_count)
-print(nb_top_5, nb_total, round(nb_top_5/nb_total*100, 2))
+print(nb_top_5, nb_total, round(nb_top_5 / nb_total * 100, 2))
 
-print([(round(n/nb_total*100,2), list(p)) for n, p in pattern_count[-5:][::-1]])
+print('\\\\\n'.join([f'{round(n / nb_total * 100,2)} & {" & ".join(p)}'
+                     for n, p in pattern_count[-5:][::-1]]))
 
 
-""" KP20k (en) corenlp 4.1
-77946 105560 73.84
+""" KP20k (en) spacy 3.1.0
 
-[(27.46, ['NOUN']),
- (21.36, ['NOUN', 'NOUN']),
- (16.91, ['ADJ', 'NOUN']),
- (4.92, ['ADJ', 'NOUN', 'NOUN']),
- (3.2, ['NOUN', 'NOUN', 'NOUN'])]
 """
 
-""" KP20k (en) spacy
-(82912, 107446)
+""" TermITH-Eval (fr) spacy 3.1.0
 
-[(25532, 23.76, ('NOM',)),
- (21143, 19.68, ('NOM', 'NOM')),
- (16976, 15.8, ('ADJ', 'NOM')),
- (5184, 4.82, ('ADJ', 'NOM', 'NOM')),
- (3280, 3.05, ('VERB',)),
- (3115, 2.9, ('VERB', 'NOM')),
- (3108, 2.89, ('NOM', 'NOM', 'NOM')),
- (1717, 1.6, ('ADJ',)),
- (1704, 1.59, ('ADJ', 'ADJ', 'NOM')),
- (1153, 1.07, ('NOM', 'VERB'))]
-"""
-
-""" TermITH-Eval (fr) spacy
-3995 4713
-
-[(1721, 36.52, ('NOM',)),
- (888, 18.84, ('NOM', 'ADJ')),
- (483, 10.25, ('ADJ',)),
- (256, 5.43, ('NOM', 'NOM')),
- (194, 4.12, ('VERB',)),
- (132, 2.8, ('ADJ', 'ADJ')),
- (107, 2.27, ('NOM', 'ADP', 'NOM')),
- (85, 1.8, ('NOM', 'DET', 'NOM')),
- (68, 1.44, ('ADJ', 'NOM')),
- (61, 1.29, ('VERB', 'ADJ'))]
 """
 
 
+length = {}
+for d, pre in preproc.items():
+    tmp = Counter(len(p[0]) for p in pre)
+    length[d] = sorted(map(tuple, tmp.items()), key=lambda x: x[0])
+# {'KP20k': [(1, 8427), (2, 25835), (3, 12211), (4, 6199), (5, 2252), (6, 1275), (7, 586), (8, 279), (9, 142), (10, 69), (11, 42), (12, 21), (13, 18), (14, 6), (15, 13), (16, 7), (17, 4), (18, 7), (19, 3), (20, 1), (21, 1), (22, 2), (23, 1), (26, 1), (27, 2), (30, 1), (78, 1)], 'TermITH-Eval': [(1, 1159), (2, 892), (3, 282), (4, 62), (5, 21), (6, 10), (7, 5), (8, 3), (9, 1), (10, 1), (11, 1), (15, 1)], 'Inspec': [(1, 519), (2, 2143), (3, 1063), (4, 521), (5, 215), (6, 98), (7, 35), (8, 20), (9, 7), (10, 2), (11, 1), (12, 1), (13, 1)]}
+{d: [(n, round(100 * v / sum(e[1] for e in t), 3)) for n, v in t] for d, t in length.items()}
 
-length = Counter(len(p[0]) for p in preproc)
-# {"3": 12196, "2": 25913, "1": 8499, "4": 6154, "5": 2234, "7": 581, "8": 275, "6": 1260, "13": 20, "14": 5, "15": 12, "9": 131, "12": 23, "16": 5, "10": 64, "27": 1, "78": 1, "19": 2, "23": 1, "11": 43, "17": 2, "18": 4, "30": 2, "22": 3, "20": 1, "21": 1}
-length = sorted(map(tuple, length.items()), key=lambda x: x[0])
+import seaborn as sns
 sns.plot(length)
 
 
 def dist_kp_per_doc(ref):
     return Counter(len(v) for v in ref.items())
+
 
 dist_datasets = {}
 for d in util.reference:

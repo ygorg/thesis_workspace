@@ -18,28 +18,33 @@
 
 | Model/F@5 | All  | Pres | Abs  |
 |:--------- | ----:| ----:| ----:|
-| CopySci   | 27.6 | 33.0 |  4.8 |
+| CopySci   | 27.6 | 33.0 |  4.8 |
 | CopySci_p | 27.4 | 32.7 |  1.2 |
 | CopySci_a |  8.5 | 21.7 |  4.9 |
 
-| Model/P@5 | All  | Pres | Abs  |
-|:--------- | ----:| ----:| ----:|
-| CopySci   | 28.2 | 28.2 |  3.7 |
-| CopySci_p | 28.1 | 28.0 |  1.0 |
-| CopySci_a |  8.5 | 20.5 |  3.7 |
+Nb de PRMU générés par les modèles
+| Model     | P    | R    | M    | U    |
+|:--------- | ----:| ----:| ----:| ----:|
+| CopySci   | 60.8 | 13.8 | 11.1 | 14.1 |
+| CopySci_p | 83.7 |  5.9 |  2.5 |  7.9 |
+| CopySci_a | 11.6 | 29.9 | 30.0 | 28.6 |
 
-| Model/R@5 | All  | Pres | Abs  |
-|:--------- | ----:| ----:| ----:|
-| CopySci   | 29.6 | 48.9 |  8.5 |
-| CopySci_p | 29.3 | 48.5 |  1.9 |
-| CopySci_a |  9.3 | 29.0 |  8.6 |
+Nb de PRMU @5 générés par les modèles
+| Model@5   | P    | R    | M    | U    |
+|:--------- | ----:| ----:| ----:| ----:|
+| CopySci   | 92.0 |  3.0 |  2.9 |  2.2 |
+| CopySci_p | 99.4 |  0.2 |  0.2 |  0.2 |
+| CopySci_a | 16.7 | 28.6 | 28.1 | 26.7 |
+
 
 
 | Model/F@5  | All  | Pres | Abs  |
 |:---------- | ----:| ----:| ----:|
-| CopyNews   | 46.3 | 40.7 | 30.1 |
+| CopyNews   | 46.3 | 40.7 | 30.1 |
 | CopyNews_p | 33.0 | 40.7 |  0.8 |
 | CopyNews_a | 28.2 |  4.4 | 30.6 |
+
+
 
 
 ## Comment
@@ -60,8 +65,8 @@
 
 
 ## KPTimes
-The scores semm to always be lower than the original model
-The original assumption was that given a "better" reference the pres and absent models would be better than the original. This is not the case.
+The scores seem to always be lower than the original model
+The original assumption was that given a "better" reference, thus KPTimes beign better than KP20k the pres and absent models would be better than the original. This is not the case.
 The generation is therefore limited by the model !
 
 Pres model : best valid epoch : 2
@@ -72,32 +77,32 @@ Abs model : best valid epoch : 0
 ## All metrics for every model
 
 ### All CopySci
-| P@5  | R@5  | F@5  | MAP  | Model |
+| P@5  | R@5  | F@5  | MAP  | Model |
 | 28.2 | 29.6 | 27.6 | 28.5 | All     KP20k.test.stem.json |
 | 28.2 | 48.9 | 33.0 | 43.5 | Present KP20k.test.stem.json |
 |  3.7 |  8.5 |  4.8 |  6.0 | Absent  KP20k.test.stem.json |
 
 ### Absent CopySci_a La tâche consiste a prédire des séquences qui n'apparaissent pas dans l'entrée en générant un mot ou en copiant un mot de l'entrée.
-| P@5  | R@5  | F@5  | MAP  | Model |
+| P@5  | R@5  | F@5  | MAP  | Model |
 |  8.5 |  9.3 |  8.5 |  7.7 | All     KP20k.7.test.stem.json |
 | 20.5 | 29.0 | 21.7 | 20.3 | Present KP20k.7.test.stem.json |
 |  3.7 |  8.6 |  4.9 |  6.3 | Absent  KP20k.7.test.stem.json | 
 
 ### Present CopySci_p
-| P@5  | R@5  | F@5  | MAP  | Model |
+| P@5  | R@5  | F@5  | MAP  | Model |
 | 28.1 | 29.3 | 27.4 | 27.8 | All     KP20k.test.stem.json |
 | 28.0 | 48.5 | 32.7 | 43.4 | Present KP20k.test.stem.json |
 |  1.0 |  1.9 |  1.2 |  1.4 | Absent  KP20k.test.stem.json |
 
 
 ### All CopyNews
-| P@5  | R@5  | F@5  | MAP  | TopN | Model |
+| P@5  | R@5  | F@5  | MAP  | TopN | Model |
 | 46.5 | 49.5 | 46.3 | 50.9 |    5 | All	NYTime.test.stem |
 | 24.6 | 46.3 | 30.1 | 40.7 |    5 | Present	NYTime.test.stem |
 | 33.1 | 64.3 | 40.7 | 58.9 |    5 | Absent	NYTime.test.stem |
 
 ### Absent CopyNews_a
-| P@5  | R@5  | F@5  | MAP  | TopN | Model |
+| P@5  | R@5  | F@5  | MAP  | TopN | Model |
 | 18.6 | 20.3 | 18.7 | 18.1 |    5 | All		NYTime.Copy_News_Abs.0.stem.json | X Valid
 |  2.3 |  4.9 |  2.9 |  3.5 |    5 | Present	NYTime.Copy_News_Abs.0.stem.json | X Valid
 | 16.4 | 31.4 | 20.2 | 26.6 |    5 | Absent	NYTime.Copy_News_Abs.0.stem.json | X Valid
@@ -107,7 +112,7 @@ Abs model : best valid epoch : 0
 | 24.8 | 47.7 | 30.6 | 41.7 |    5 | Absent	NYTime.Copy_News_Abs.7.stem.json | X
 
 ### Present CopyNews_p
-| P@5  | R@5  | F@5  | MAP  | TopN | Model |
+| P@5  | R@5  | F@5  | MAP  | TopN | Model |
 | 32.5 | 33.3 | 31.8 | 32.4 |    5 | All		NYTime.Copy_News_Prs.2.stem.json | X Valid
 | 32.0 | 62.1 | 39.4 | 57.6 |    5 | Present	NYTime.Copy_News_Prs.2.stem.json | X Valid
 |  0.5 |  1.0 |  0.6 |  0.8 |    5 | Absent		NYTime.Copy_News_Prs.2.stem.json | X Valid
@@ -117,10 +122,10 @@ Abs model : best valid epoch : 0
 |  0.7 |  1.3 |  0.8 |  1.1 |    5 | Absent		NYTime.Copy_News_Prs.7.stem.json | X
 
 
-## Evaluating Present and Absent models for each epoch
+## Evaluating Present and Absent models for **each epoch**
 
 ### Absent CopySci_a
-#### All
+#### Reference All
 | 8.7 | 9.7 | 8.9 | 7.9 |  5 | KP20k.0.test.jsonl.stem.json |
 | 8.5 | 9.4 | 8.6 | 7.7 |  5 | KP20k.1.test.jsonl.stem.json |
 | 8.1 | 8.9 | 8.2 | 7.4 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -136,7 +141,7 @@ Abs model : best valid epoch : 0
 | 8.0 | 8.8 | 8.1 | 7.1 |  5 | KP20k.12.test.jsonl.stem.json |
 | 7.8 | 8.6 | 7.9 | 6.9 |  5 | KP20k.13.test.jsonl.stem.json |
 | 7.7 | 8.4 | 7.7 | 6.8 |  5 | KP20k.14.test.jsonl.stem.json |
-#### Absent
+#### Reference Absent
 | 2.2 | 5.0 | 2.9 | 3.6 |  5 | KP20k.0.test.jsonl.stem.json |
 | 2.7 | 6.3 | 3.6 | 4.6 |  5 | KP20k.1.test.jsonl.stem.json |
 | 3.2 | 7.3 | 4.2 | 5.4 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -152,7 +157,7 @@ Abs model : best valid epoch : 0
 | 3.6 | 8.4 | 4.8 | 6.3 |  5 | KP20k.12.test.jsonl.stem.json |
 | 3.6 | 8.5 | 4.8 | 6.3 |  5 | KP20k.13.test.jsonl.stem.json |
 | 3.5 | 8.2 | 4.7 | 6.1 |  5 | KP20k.14.test.jsonl.stem.json |
-#### Present
+#### Reference Present
 | 20.4 | 33.0 | 23.2 | 23.2 |  5 | KP20k.0.test.jsonl.stem.json | X
 | 20.3 | 31.9 | 22.7 | 22.3 |  5 | KP20k.1.test.jsonl.stem.json |
 | 21.2 | 30.9 | 22.8 | 21.5 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -170,7 +175,7 @@ Abs model : best valid epoch : 0
 | 20.2 | 24.7 | 19.8 | 17.4 |  5 | KP20k.14.test.jsonl.stem.json |
 
 ### Present CopySci_p
-#### All
+#### Reference All
 | 26.9 | 28.0 | 26.2 | 26.5 |  5 | KP20k.0.test.jsonl.stem.json |
 | 27.8 | 29.1 | 27.2 | 27.5 |  5 | KP20k.1.test.jsonl.stem.json |
 | 28.0 | 29.3 | 27.4 | 27.8 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -181,7 +186,7 @@ Abs model : best valid epoch : 0
 | 28.2 | 29.7 | 27.7 | 27.9 |  5 | KP20k.7.test.jsonl.stem.json | X
 | 28.1 | 29.6 | 27.6 | 27.9 |  5 | KP20k.8.test.jsonl.stem.json |
 | 27.6 | 28.6 | 26.8 | 27.2 |  5 | KP20k.9.test.jsonl.stem.json |
-#### Absent
+#### Reference Absent
 |  0.7 |  1.3 |  0.8 |  1.0 |  5 | KP20k.0.test.jsonl.stem.json |
 |  0.9 |  1.7 |  1.0 |  1.2 |  5 | KP20k.1.test.jsonl.stem.json |
 |  1.0 |  1.8 |  1.1 |  1.3 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -192,7 +197,7 @@ Abs model : best valid epoch : 0
 |  1.1 |  2.0 |  1.3 |  1.4 |  5 | KP20k.7.test.jsonl.stem.json |
 |  1.1 |  2.1 |  1.3 |  1.5 |  5 | KP20k.8.test.jsonl.stem.json | X
 |  1.0 |  2.0 |  1.3 |  1.4 |  5 | KP20k.9.test.jsonl.stem.json |
-#### Present
+#### Reference Present
 | 26.9 | 46.2 | 31.3 | 41.3 |  5 | KP20k.0.test.jsonl.stem.json |
 | 27.8 | 48.1 | 32.5 | 43.0 |  5 | KP20k.1.test.jsonl.stem.json |
 | 28.0 | 48.4 | 32.7 | 43.4 |  5 | KP20k.2.test.jsonl.stem.json |
@@ -204,8 +209,10 @@ Abs model : best valid epoch : 0
 | 28.1 | 49.0 | 33.0 | 43.6 |  5 | KP20k.8.test.jsonl.stem.json |
 | 27.6 | 47.4 | 32.1 | 42.5 |  5 | KP20k.9.test.jsonl.stem.json |
 
+
+
 ### Absent CopyNews_a
-#### All
+#### Reference All
 | 18.63 | 20.28 | 18.71 | 18.12 |  5 | NYTime.Copy_News_Abs.0.stem.json | X Valid
 | 23.85 | 25.74 | 23.86 | 23.91 |  5 | NYTime.Copy_News_Abs.1.stem.json |
 | 26.33 | 28.18 | 26.24 | 26.03 |  5 | NYTime.Copy_News_Abs.2.stem.json |
@@ -214,7 +221,7 @@ Abs model : best valid epoch : 0
 | 27.84 | 29.56 | 27.64 | 27.73 |  5 | NYTime.Copy_News_Abs.5.stem.json |
 | 28.18 | 29.97 | 28.00 | 28.06 |  5 | NYTime.Copy_News_Abs.6.stem.json |
 | 28.36 | 30.16 | 28.18 | 28.23 |  5 | NYTime.Copy_News_Abs.7.stem.json | X
-#### Abs
+#### Reference Abs
 | 16.38 | 31.41 | 20.15 | 26.55 |  5 | NYTime.Copy_News_Abs.0.stem.json | X Valid
 | 21.21 | 40.16 | 25.95 | 34.77 |  5 | NYTime.Copy_News_Abs.1.stem.json |
 | 23.00 | 44.24 | 28.31 | 38.30 |  5 | NYTime.Copy_News_Abs.2.stem.json |
@@ -223,7 +230,7 @@ Abs model : best valid epoch : 0
 | 24.60 | 46.60 | 30.11 | 40.88 |  5 | NYTime.Copy_News_Abs.5.stem.json |
 | 24.63 | 46.67 | 30.16 | 41.05 |  5 | NYTime.Copy_News_Abs.6.stem.json |
 | 24.83 | 47.70 | 30.56 | 41.74 |  5 | NYTime.Copy_News_Abs.7.stem.json | X
-#### Prs
+#### Reference Prs
 |  2.26 |  4.87 |  2.85 |  3.49 |  5 | NYTime.Copy_News_Abs.0.stem.json | X Valid
 |  2.70 |  5.65 |  3.37 |  3.97 |  5 | NYTime.Copy_News_Abs.1.stem.json |
 |  3.40 |  6.77 |  4.19 |  4.51 |  5 | NYTime.Copy_News_Abs.2.stem.json |
@@ -233,8 +240,8 @@ Abs model : best valid epoch : 0
 |  3.64 |  7.10 |  4.44 |  4.65 |  5 | NYTime.Copy_News_Abs.6.stem.json | X
 |  3.65 |  6.85 |  4.41 |  4.63 |  5 | NYTime.Copy_News_Abs.7.stem.json |
 
-### Present CopyNews_a
-#### All
+### Present CopyNews_p
+#### Reference All
 | 29.47 | 30.25 | 28.83 | 28.84 |  5 | NYTime.Copy_News_Prs.0.stem.json |
 | 31.45 | 32.20 | 30.74 | 31.15 |  5 | NYTime.Copy_News_Prs.1.stem.json |
 | 32.47 | 33.32 | 31.77 | 32.39 |  5 | NYTime.Copy_News_Prs.2.stem.json | X Valid
@@ -245,7 +252,7 @@ Abs model : best valid epoch : 0
 | 33.69 | 34.55 | 32.95 | 33.78 |  5 | NYTime.Copy_News_Prs.7.stem.json | X
 | 33.34 | 34.17 | 32.59 | 33.42 |  5 | NYTime.Copy_News_Prs.8.stem.json |
 | 33.40 | 34.27 | 32.68 | 33.36 |  5 | NYTime.Copy_News_Prs.9.stem.json |
-#### Abs
+#### Reference Abs
 |  0.09 |  0.20 |  0.12 |  0.27 |  5 | NYTime.Copy_News_Prs.0.stem.json |
 |  0.20 |  0.39 |  0.25 |  0.40 |  5 | NYTime.Copy_News_Prs.1.stem.json |
 |  0.50 |  1.04 |  0.63 |  0.81 |  5 | NYTime.Copy_News_Prs.2.stem.json | X Valid
@@ -256,7 +263,7 @@ Abs model : best valid epoch : 0
 |  0.65 |  1.33 |  0.81 |  1.06 |  5 | NYTime.Copy_News_Prs.7.stem.json | X
 |  0.44 |  0.81 |  0.53 |  0.77 |  5 | NYTime.Copy_News_Prs.8.stem.json |
 |  0.64 |  1.29 |  0.80 |  1.04 |  5 | NYTime.Copy_News_Prs.9.stem.json |
-#### Prs
+#### Reference Prs
 | 29.38 | 56.97 | 36.10 | 51.81 |  5 | NYTime.Copy_News_Prs.0.stem.json |
 | 31.25 | 60.55 | 38.39 | 55.81 |  5 | NYTime.Copy_News_Prs.1.stem.json |
 | 31.99 | 62.14 | 39.35 | 57.58 |  5 | NYTime.Copy_News_Prs.2.stem.json | X Valid

@@ -134,3 +134,41 @@ for f in glob(glob_path_files):
 # filter them
 refs = {k: v for k, v in res.items() if all(map(bool, v.values()))}
 """
+
+"""
+# Diplsay document along with its predictions
+from glob import glob
+import json
+import os
+import random
+
+dataset = 'DUC-2001'
+
+kws = {}
+for fp in glob(f'ake-benchmarking/output/{dataset}/*.json'):
+    #if 'stem' in fp:
+    #   continue
+
+    with open(fp) as f:
+        tmp_content = json.load(f)
+    key = os.path.basename(fp).split('.')[1]
+    kws[key] = tmp_content
+
+kws_keys = ['MultipartiteRank', 'CopyRNN_News']
+
+annot = {}
+for i in random.sample(range(len(data)), 50):
+    d = data[i]
+    if 50 < d['title'].count(' ') + d['abstract'].count(' ') > 500:
+        continue
+    print(d['title'], d['id'])
+    print(d['abstract'])
+    print(f'{"ref":<17}', d['keyword'].split(';'))
+    for k in kws_keys:
+        tp = len(set(v for kws in kws[k][d['id']][:5] for v in kws) & set(d['keyword'].split(';')))
+        print(f'{k:<17} {tp}', [v for kws in kws[k][d['id']][:5] for v in kws])
+    label = input()
+    annot[d['id']] = label
+
+
+"""
