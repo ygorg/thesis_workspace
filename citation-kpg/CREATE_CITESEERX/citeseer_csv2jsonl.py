@@ -32,9 +32,9 @@ def read_until(f):
 # `jsonl` files with ['id', 'title', 'keyword']
 dataset_files = [
     'KP20k.test.jsonl', 'KP20k/full/kp20k.valid.json', 'ACM-abstract.test.jsonl',
-    'tmp/Inspec.test.jsonl', 'tmp/Inspec.dev.jsonl', 'tmp/Inspec.train.jsonl', 'KDD.test.jsonl',
-    'tmp/PubMed-titles.test.jsonl', 'SemEval-2010-abstract.test.jsonl', 'WWW.test.jsonl', 'tmp/acm-dl.test.jsonl',
-    'KP20k/full/kp20k.train.json', 'NTCIR1+2.test.jsonl'
+    'Inspec.test.jsonl', 'Inspec/Inspec.dev.jsonl', 'Inspec/Inspec.train.jsonl', 'KDD.test.jsonl',
+    'PubMed-titles.test.jsonl', 'SemEval-2010-abstract.test.jsonl', 'WWW.test.jsonl', 'acm-dl.test.jsonl',
+    'acm-cr102k.test.jsonl', 'KP20k/full/kp20k.train.json', 'NTCIR1+2.test.jsonl'
 ]
 
 # Build a Dict[title,Tuple[info]]
@@ -51,9 +51,9 @@ for path in dataset_files:
         for id_, og_title, pr_title, k in g:
             # Fill the dict
             if pr_title in title_mapping:
-                title_mapping[pr_title].append((id_, og_title, fp, k))
+                title_mapping[pr_title].append((id_, og_title, path, k))
             else:
-                title_mapping[pr_title] = [(id_, og_title, fp, k)]
+                title_mapping[pr_title] = [(id_, og_title, path, k)]
 
 
 # Choose mapping from acm-dl if exists else with the least kw
@@ -70,7 +70,7 @@ with open('data.csv', 'rb') as f:
     columns[1] = 'id'
     columns[2] = 'citationcontext_id'
     not_processed = []
-    f= tqdm(f, total=12296856)
+    f= tqdm(f, total=18265974)
     f = read_until(f)
     g = open('data.jsonl', 'w')
     for lines in f:

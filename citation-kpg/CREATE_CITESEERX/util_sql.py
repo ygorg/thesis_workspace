@@ -1,90 +1,113 @@
-cdef int count_matching_parenthesis(unsigned char[:] z):
-    cdef int acc = 0;
-    cdef int open_count = 0
-    cdef bint in_str = False
-    cdef bint escape = False
-    for c in z:
-        if escape:
-            escape = False
-        else:
-            if in_str:
-                if c == '\'':
-                    in_str = not in_str
-                elif c == '\\':
-                    escape = True
-            else:
-                if c == '(':
-                    open_count += 1
-                elif c == ')':
-                    open_count -= 1
-                    if open_count == 0:
-                        acc += 1
-                elif c == '\'':
-                    in_str = not in_str
-                elif c == '\\':
-                    escape = True
-        #print(c, open_count, str(in_str)[0], str(escape)[0], acc)
-    return acc
+# Verification du succès de l'import dans la BDD
 
-paren_parity("('lal\\ala'), ('la(lo'), (), ('l\\'abeille est (moche).')")
-
-
-# Count number of rows to be inserted
-from tqdm import tqdm
-with open('papers.sql') as f:
-    acc = []
-    for l in tqdm(f, miniters=2000):
-        if 'INSERT' not in l:
-            continue
-        acc.append(count_matching_parenthesis(l))
-        #acc.append(l.count("),('") + 1)
-        if len(acc) % 2000 == 0:
-            print(len(acc), sum(acc))
-    print(len(acc), sum(acc))
-
-# Find missing ids
-from tqdm import tqdm
-from collections import Counter
-
-with open('papers_id.txt') as f:
-    l_got_ids = [l.strip() for l in f]
-got_ids = set(l_got_ids)
-assert len(l_got_ids) == len(got_ids)
-
-missing_ids = set()
-with open('papers.sql') as f:
-    for l in tqdm(f, miniters=2000):
-        if 'INSERT' not in l:
-            continue
-        # Split line into insert tuples
-        rows = l.replace('INSERT INTO `papers` VALUES (', '').split('),(')
-        # Extract ids (1st element)
-        l_row_ids = [r.replace("'", '').split(',')[0] for r in rows]
-        row_ids = set(l_row_ids)
-        if len(l_row_ids) != len(row_ids):
-            print(Counter(l_row_ids).most_common(3))
-            print(l)
-            input('Appuyez sur une touche')
-
-        missing_ids |= row_ids - got_ids
-        got_ids -= row_ids
-
-
-# Split file in multiple files
-n_split = 10000
+import re
+import json
+regex = re.compile(r'\),\((\d+),(\d+|NULL),\'')
+data = []
 with open('citations.sql') as f:
-    g = open('citations.{}-{}.sql'.format(0, n_split), 'w')
-    g.write('LOCK TABLES `citations` WRITE;\n')
-    i = 0
-    for l in f:
-        if 'INSERT' in l:
-            g.write(l)
-            i += 1
-        if i % n_split == 0 and i != 0:
-            g.write('UNLOCK TABLES;\n')
-            g.close()
-            g = open('citations.{}-{}.sql'.format(i, i+n_split), 'w')
-    g.write('UNLOCK TABLES;\n')
-    g.close()
+    for i, line in enumerate(tqdm(f)):
+        if not line.startswith('INSERT'):
+            continue
+        tmp = [int(e.group(1)) for e in regex.finditer(line)]
+        tmp = [line[32:60].split(',', 1)[0]] + tmp
+        if tmp:
+            data.append((i, tmp))
 
-# pv citations.0-10000.sql | mysql -u root -p citeseerx
+with open('ref_id_citations.json', 'w') as f:
+    json.dump(data, f)
+
+#---------------------------------------------
+
+import json
+from tqdm import tqdm
+from marisa_trie import Trie
+
+with open('ref_id_citations.json') as f:
+    data = json.load(f)
+data = [(i, [int(e) for e in v]) for i, v in data]
+
+with open('tmp/ids_citations.csv') as f:
+    bdd = Trie([l.strip() for l in f if l.strip()])
+
+found = open('tmp/ids_citations_found.tmp', 'w')
+not_found = []
+for line_n, line_ids in tqdm(data):
+    new_line_ids = []
+    for id_ in line_ids:
+        if str(id_) in bdd:
+            found.write(f'{id_}\n')
+        else:
+            new_line_ids.append(id_)
+    if new_line_ids:
+        not_found.append((line_n, new_line_ids))
+found.close()
+
+# not_found: il faut importer ces lignes dans mysql
+# Lignes de 46968 à 47013
+not_found2 = {e[0]: e[1] for e in not_found}
+data2 = {e[0]: e[1] for e in data}
+[k for k in not_found2 if set(not_found2[k]) != set(data2[k])]
+# VIDE
+
+# found: bdd - found = les ID qui sont dans la BDD mais pas
+#   dans les fichiers (le code qui extrait les ID a un soucis)
+# comm -23 ids_citations.csv ids_citations_found.tmp
+# VIDE
+
+
+import re
+import json
+from tqdm import tqdm
+from marisa_trie import Trie
+
+regex = re.compile(r'\),\((\d+),\d+,\'')
+data = []
+with open('citationContexts.sql') as f:
+    for i, line in enumerate(tqdm(f)):
+        if not line.startswith('INSERT'):
+            continue
+        tmp = [int(e.group(1)) for e in regex.finditer(line)]
+        tmp = [int(line[39:60].split(',', 1)[0])] + tmp
+        if tmp:
+            data.append((i, tmp))
+
+with open('ref_id_citationContexts.json', 'w') as f:
+    json.dump(data, f)
+
+#----------------------------------
+
+import json
+from tqdm import tqdm
+from marisa_trie import Trie
+
+with open('ref_id_citationContexts.json') as f:
+    data = json.load(f)
+data = [(i, [int(e) for e in v]) for i, v in data]
+
+with open('tmp/ids_citationContexts.csv') as f:
+    bdd = Trie([l.strip() for l in f if l.strip()])
+
+found = open('tmp/ids_citationContexts_found.tmp', 'w')
+not_found = []
+for line_n, line_ids in tqdm(data):
+    new_line_ids = []
+    for id_ in line_ids:
+        if str(id_) in bdd:
+            found.write(f'{id_}\n')
+        else:
+            new_line_ids.append(id_)
+    if new_line_ids:
+        not_found.append((line_n, new_line_ids))
+found.close()
+
+# not_found: il faut importer ces lignes dans mysql
+not_found2 = {e[0]: e[1] for e in not_found}
+data2 = {e[0]: e[1] for e in data}
+# Est-ce qu'il y a des lignes chargées de manière incomplète ?
+[k for k in not_found2 if set(not_found2[k]) != set(data2[k])]
+# Non # Erreurs [14837, 18815, 19702, 19754, 19878, 36187]
+
+# found: bdd - found = les ID qui sont dans la BDD mais pas
+#   dans les fichiers (le code qui extrait les ID a un soucis)
+# comm -23 ids_citationContexts.csv ids_citationContexts_found.tmp
+# VIDE

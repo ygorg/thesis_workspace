@@ -40,6 +40,7 @@ FROM citations C INNER JOIN (SELECT * FROM papers WHERE id IN (
                  INNER JOIN citationContexts CC on C.id = CC.citationid
 ```
 
+
 mysql -u admin -p citeseerx < la_requete.sql > data.csv
 
 ## Cleaning / Mapping title to search for keyword

@@ -179,7 +179,7 @@ Notice citante + contexte de citation citant + Nom article cité
 ```python
 # What is this refering to ?
 with open('data.csv', 'rb') as f: 
-    weird_shit = [] 
+    faulty = [] 
     g = open('data.jsonl', 'w') 
     columns = f.readline().encode('utf-8').strip().split('\t') 
     columns[1] = 'papers_id' 
@@ -209,7 +209,7 @@ with open('data.csv', 'rb') as f:
         line_acc = line 
         if len(l) != len(columns): 
             # Row with extra \t :'( 
-            weird_shit.append(l) 
+            faulty.append(l) 
             print(l) 
             print(i, len(l), len(columns)); input() 
             continue 

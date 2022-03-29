@@ -50,9 +50,10 @@ def merge_compounds(d):
     # Merge the spacy Doc compute the span beforehand as merging changes
     #  the indexation
     to_merge = [d[b:e + 1] for b, e in merged]
-    for span in to_merge:
-        # also computing the lemma (but it will be overwritten)
-        span.merge(lemma=''.join(t.lemma_ for t in span))
+    with doc.retokenize() as retokenizer:
+        for span in to_merge:
+            # also computing the lemma (but it will be overwritten)
+            retokenizer.merge(span, attrs={"LEMMA":''.join(t.lemma_ for t in span)})
     return d
 
 
