@@ -1,0 +1,85 @@
+\begin{frame}{Impact de l'annotation sur l'entraînement}
+    \input{figures/large_train_plot}
+    
+    \begin{itemize}
+        \item Entraînement de CopyRNN avec 33\%, 66\% et 100\% des jeux de données KP20k et KPTimes.
+        \item L'ajout de document a KP20k ne permet pas d'augmenter significativement les performances car l'annotation est peu cohérente; contrairement aux mots-clés de KPTimes.
+    \end{itemize}
+\end{frame}
+
+
+\againframe<4>{kptimesabs}
+
+\begin{frame}{Document différent, annotation différente, absents}
+    \input{tables/kptimes_trans_prsabs}
+    \begin{itemize}
+        \item \colorbox{color1!40}{CopySci} produit presqu'exclusivement des mots-clés présents.
+        \item Il est plus \textbf{risqué} de produire des \textbf{mots-clés absent} en situation de \textbf{généralisation}.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Validation du choix des méthodes}
+    %\textbf{Métriques} : \map{}
+    
+    \begin{table}[!ht]
+    \centering
+    \resizebox{.7\textwidth}{!}{
+    \begin{tabular}{l|cc}
+        \toprule
+            \textbf{Système} & 
+            \textbf{\map} & 
+            \textbf{P@10} \\
+        \midrule
+            \textbf{\textsc{Bm25}+RM3} & \best{35,5} & \best{38,9} \\
+            {QL+RM3} & 34,4 & 36,1 \\
+            1\textsuperscript{er} {\small \cite{fujita_notes_2001}} & 
+            31,9 & 37,4 \\
+            \textbf{\textsc{Bm25}} & 31,9 & 37,1 \\
+            2\textsuperscript{nd} {\small \cite{murata_crl_2001}} & 
+            31,3 & 36,1 \\
+            {QL} & 31,2 & 35,1 \\
+            3\textsuperscript{èm} {\small \cite{chen_berkeley_2001}} &
+            26,2 & 33,9 \\
+        \bottomrule
+    \end{tabular}
+    }
+    
+    \vspace{.5cm}
+    Scores des meilleurs systèmes de la compétition NTCIR-2.
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Impact des mots-clés seuls}
+    \input{tables/ir_kw_only}
+\end{frame}
+
+\begin{frame}{Impact des mots-clés seuls (cont'd)}
+    \input{figures/ir_kw_only_n}
+\end{frame}
+
+\begin{frame}<1>{Catégorisation PRMN}
+    \input{figures/riabs_ex_prmu}
+    \begin{itemize}
+        \item La définition actuelle des mots-clés \textbf{présents} et \textbf{absents} n'est pas pertinente pour les systèmes de RI
+        \item Pour distinguer les mots-clés qui vont modifier la \textbf{pondération} de ceux qui vont l'\textbf{étendre}.
+        %\item Nous introduisons la catégorisation PRMN
+    \end{itemize}
+\end{frame}
+
+\begin{frame}<1>{PRMN: Impact des mots-clés de référence}
+    \input{tables/prmu_ref_ir}
+    \begin{itemize}
+        \item Toutes les catégories de mots-clés augmentent les résultats
+        \item Les mots-clés qui \textbf{étendent} le document sont à l'origine de la majorité des gains de score.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{PRMN: Impact des mots-clés produits automatiquement}
+    \input{tables/prmu_pred_ir}
+    \begin{itemize}
+        \item Les mots-clés absents ne sont pas assez qualitatifs pour améliorer les scores de MAP (cf. F@5).
+        \item Ils dégradent même les scores pour CopyRNN
+    \end{itemize}
+\end{frame}

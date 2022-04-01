@@ -1,0 +1,56 @@
+\begin{table}[!ht]
+    \centering
+    \resizebox{.8\textwidth}{!}{
+\begin{tabular}{l|c@{\hspace*{0mm}}rc|c@{\hspace*{0mm}}rc||c}
+\toprule
+\map{} & \multicolumn{3}{c|}{\tr} & \multicolumn{3}{c||}{\trm} & \multirow{2}{*}{F@5} \\
+\bmrm{} & \multicolumn{2}{c}{\map} & \#mc & \multicolumn{2}{c}{\map} & \#mc \\
+\midrule
+-     & \multicolumn{2}{c}{32,8} & 0,0 &
+        \multicolumn{2}{c}{35,5} & 4,8 \\
+\addlinespace
+CorrRNN &
+    \bests{35,0} & \diff{2,2} &    5,0 &
+    \bests{36,9} & \diff{1,4} &    9,7 & 22,1 \\ % ltsj 
+%(normalement ça devrait etre 22,3)
+\quad Pond. \scriptsize{(P+R)} &
+     \sign{34,6} & \diff{1,8} &    5,0 &
+            36,7 & \diff{1,2} &    9,7 & 25,5 \\
+\quad Exp. \scriptsize{(M+U)} &
+            33,4 & \diff{0,6} &    1,9 &
+            35,8 & \diff{0,3} &    5,2 & \pad{0}1,7 \\
+\addlinespace
+CopyRNN &
+     \sign{34,8} & \diff{2,0} &    5,0 &
+     \sign{37,1} & \diff{1,6} &    9,7 & 24,0 \\
+%(normalement ça devrait être 23,9)
+\quad Pond. \scriptsize{(P+R)} &
+    \bests{35,0} & \diff{2,2} & 5,0 &
+    \bests{37,5} & \diff{2,0}  &    9,7 & 27,6 \\
+\quad Exp. \scriptsize{(M+U)}  &
+            32,2 & \diff{-0,6} &    3,2 &
+            34,5 & \diff{-1,0} &    6,8 & \pad{0}0,7\\
+\bottomrule
+\end{tabular}
+    }
+
+    %\caption{Scores de \map{} sur la collection NTCIR-2 pour \textsc{Bm25}+RM3.% dans les configurations \tr{} et \trm{}. Le symbole \da{} indique une amélioration significative par rapport à l'indexation \tr{}. \say{Pond.} dénote l'ajout des mots-clés \presents{} et \reordonnes{} qui améliorent la pondération des documents. \say{Exp.} dénote l'ajout des mots-clés \mixtes{} et \nonvus{} qui étendent le document. CopyRNN et CorrRNN dénotent l'ajout des mots-clés sans distinction.}
+    \label{tab:prmu_pred}
+\end{table}
+
+
+\iffalse
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{l|ccc}
+        \toprule
+        Méthode & - & PR & MN \\
+        \midrule
+        CorrRNN & 21.9 & 25.5 & 1.7 \\
+        CopyRNN & 23.8 & 27.6 & 0.7 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performances de production de mots-clés F@5 pour l'ensemble des mots-clés, les mots-clés \presents{}-\reordonnes{} et \mixtes{}-\nonvus{} de NTCIR-2.}
+    \label{tab:kg_intrinsic_prmu}
+\end{table}
+\fi

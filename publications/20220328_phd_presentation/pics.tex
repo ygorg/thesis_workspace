@@ -1,0 +1,114 @@
+\tikzset{
+pics/doc/.style
+    args = {scale #1}{
+    code = {
+    \begin{scope}[scale=#1,shift={(-.35,-.5)}]
+    \draw[thick] (0, 0) rectangle ++(.7,1);
+    \fill[black] (.05, .85) rectangle ++(.5,.05);
+    \fill[black] (.15,.775) rectangle ++(.5,.05);
+    \fill[black] (.05,.7)   rectangle ++(.6,.05);
+    \fill[black] (.05,.625) rectangle ++(.6,.05);
+    \fill[black] (.05,.55)  rectangle ++(.45,.05);
+    \fill[black] (.15,.475) rectangle ++(.5,.05);
+    \fill[black] (.05,.4)   rectangle ++(.6,.05);
+    \fill[black] (.05,.325) rectangle ++(.6,.05);
+    \fill[black] (.05,.25)  rectangle ++(.6,.05);
+    \fill[black] (.05,.175) rectangle ++(.55,.05);
+    \end{scope}
+}}}
+
+\tikzset{
+pics/docth/.style
+    args = {scale #1}{
+    code = {
+    \begin{scope}[scale=#1,shift={(-.35,-.5)}]
+    \draw (0, 0) rectangle ++(.7,1);
+    \fill[black] (.05, .85) rectangle ++(.5,.05);
+    \fill[black] (.15,.775) rectangle ++(.5,.05);
+    \fill[black] (.05,.7)   rectangle ++(.6,.05);
+    \fill[black] (.05,.625) rectangle ++(.6,.05);
+    \fill[black] (.05,.55)  rectangle ++(.45,.05);
+    \fill[black] (.15,.475) rectangle ++(.5,.05);
+    \fill[black] (.05,.4)   rectangle ++(.6,.05);
+    \fill[black] (.05,.325) rectangle ++(.6,.05);
+    \fill[black] (.05,.25)  rectangle ++(.6,.05);
+    \fill[black] (.05,.175) rectangle ++(.55,.05);
+    \end{scope}
+}}}
+
+\tikzset{
+pics/dockw/.style
+    args = {scale #1}{
+    code = {
+    \pic {doc={scale #1}};
+    \begin{scope}[scale=#1,shift={(-.35,-.5)}]
+    \fill[color1]  (.15,.85) rectangle ++(.15,.05);
+    \fill[color2] (.4,.85) rectangle ++(.1,.05);
+    \fill[color0] (.25,.775) rectangle ++(.2,.05);
+    \fill[color3] (.3,.55) rectangle ++(.15,.05);
+    \fill[color1] (.45,.475) rectangle ++(.15,.05);
+    \fill[color3] (.2,.4) rectangle ++(.15,.05);
+    \fill[color2] (.1,.25) rectangle ++(.1,.05);
+    \end{scope}
+}}}
+
+\tikzset{
+pics/kws/.style
+    args = {scale #1}{
+    code = {
+    \begin{scope}[scale=#1,shift={(-.325,-.5)}]
+    \draw[thick] (0,0) rectangle ++(.65,1);
+    \fill[color1] (.125,.7-.05) rectangle ++(.3,.1);
+    \fill[color2] (.125,.5-.05) rectangle ++(.2,.1);
+    \fill[color0] (.125,.3-.05) rectangle ++(.4,.1);
+    \end{scope}
+}}}
+
+\tikzset{
+pics/kwsth/.style
+    args = {scale #1}{
+    code = {
+    \begin{scope}[scale=#1,shift={(-.325,-.5)}]
+    \draw (0,0) rectangle ++(.65,1);
+    \fill[color1] (.125,.7-.05) rectangle ++(.3,.1);
+    \fill[color2] (.125,.5-.05) rectangle ++(.2,.1);
+    \fill[color0] (.125,.3-.05) rectangle ++(.4,.1);
+    \end{scope}
+}}}
+
+\tikzset{
+pics/weighted/.style
+    args = {scale #1}{
+    code= {
+    \begin{scope}[scale=#1,shift={(-.45,-.75)}, nodes={scale=#1/2,anchor=base}]
+    \draw[thick] (0,0) rectangle ++(.9,1.5);
+    \node at (.2,1.15) {1.};
+    \fill[color1] (.35,1.15) rectangle ++(.3,.1);
+    \node at (.2,.925) {2.};
+    \fill[color2] (.35,.925) rectangle ++(.2,.1);
+    \node at (.2,.7) {3.};
+    \fill[color0] (.35,.7) rectangle ++(.4,.1);
+    \node at (.2,.475) {4.};
+    \fill[color3] (.35,.475) rectangle ++(.3,.1);
+    \node at (.4,.25) {\ldots};
+    \end{scope}
+}}}
+
+% https://tex.stackexchange.com/a/58735/240347
+% #1 number of teeths
+% #2 radius intern
+% #3 radius extern
+% #4 angle from start to end of the first arc
+% #5 angle to decale the second arc from the first
+% #6 inner radius to cut off
+\tikzset{
+pics/gear/.style
+    args = {#1 #2 #3 #4 #5 #6}{
+    code= {
+    \fill (0:#2)
+    \foreach \i [evaluate=\i as \n using {\i-1)*360/#1}] in {1,...,#1}{%
+        arc (\n:\n+#4:#2) {[rounded corners=1.5pt] -- (\n+#4+#5:#3)
+        arc (\n+#4+#5:\n+360/#1-#5:#3)} --  (\n+360/#1:#2)
+    }%
+    (0,0) circle[radius=#6];
+}}}

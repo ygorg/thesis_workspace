@@ -1,0 +1,129 @@
+\documentclass[
+    hyperref={breaklinks},
+    xcolor={dvipsnames,table,xcdraw},
+    10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\metroset{block=fill}
+
+\usepackage{natbib}[round]
+\renewcommand{\cite}{\citep}
+
+\input{mod_title}
+\input{manuscript_setup}
+
+\usepackage{fontspec} % ?
+\usepackage{appendixnumberbeamer}
+\usepackage[scale=2]{ccicons}
+\usepackage[export]{adjustbox} % for trimming picture
+\usepackage{graphbox} % for centering pictures
+\usepackage{scalefnt}
+\usepackage{caption}
+\DeclareCaptionLabelFormat{nonum}{#1}
+\captionsetup{labelformat=nonum}
+
+\tikzfading
+  [name=viesturs fading,
+   inner color=transparent!0,
+   outer color=transparent!100]
+
+\usepackage{arydshln}
+
+% https://blog.dorian-depriester.fr/latex/tikz/annoter-une-image-avec-tikz
+\newenvironment{annotation}[2][]{
+	\begin{tikzpicture}[]
+		\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+		\begin{scope}[x={(image.south east)},y={(image.north west)},style={font=\vphantom{Ag}}]
+}{
+		\end{scope}
+	\end{tikzpicture}
+}
+\def\AnnoSep{0.02}	% Marge entre les annotations et l'image
+\newcommand{\BckImg}[2][]{
+	\node[anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+}
+\newcommand{\annoLeft}[4][->]{
+	\draw[->,#1] (0,#2)++(-\AnnoSep,0) node[anchor=east]{#3} -- (#4);
+}
+\newcommand{\annoRight}[4][->]{
+	\draw[->,#1] (0,#2)++(+\AnnoSep+1,0) node[anchor=west]{#3} -- (#4);
+}
+\newcommand{\annoUp}[4][->]{
+	\draw[->,#1] (#2,0)++(0,\AnnoSep+1) node[anchor=south]{#3} -- (#4);
+}
+\newcommand{\annoDown}[4][->]{
+	\draw[->,#1] (#2,0)++(0,-\AnnoSep) node[anchor=north]{#3} -- (#4);
+}
+  
+
+%% For table and colors
+%https://tex.stackexchange.com/a/378511/240347
+\renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
+%https://tex.stackexchange.com/a/283965/240347
+\renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
+\newcommand<>\cb[2]{\alt#3{\colorbox{#1}{#2}}{#2}}
+
+\newcommand<>\ccancel[1]{\alt#2{\cancel{#1}}{#1}}
+
+% https://tex.stackexchange.com/a/6155/240347
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}} 
+}}
+\tikzstyle{show}=[opacity=1]
+\tikzstyle{hide}=[opacity=0]
+
+%\newcommand{\fn}[2]{\hl{orange}{#2}}
+
+\setbeamertemplate{section in toc}[sections numbered]
+\AtBeginSection[ ]
+{
+%\begin{frame}
+%\sectionpage
+%\end{frame}
+\begin{frame}{Plan}
+    \sectionpage
+    %\tableofcontents[hideallsubsections, currentsection,subsectionstyle=show/show/hide]
+\end{frame}
+}
+
+
+\title{Indexation de bout-en-bout dans les bibliothèques numériques scientifiques}
+\subtitle{}
+\date{28/03/2022}
+\author{Ygor \textsc{Gallina}}
+%\institute{Université de Nantes, LS2N}
+
+
+\begin{document}
+
+\maketitle
+
+\input{input/1_context}
+\input{input/2_automatic_kw_production}
+\input{input/3_kptimes}
+\input{input/4_large_scale_eval}
+\input{input/5_extrinsic_eval}
+\input{input/7_conclusion}
+
+\section*{Merci pour votre attention}
+\begin{frame}{}
+    \sectionpage
+\end{frame}
+
+\section*{Questions ?}
+\begin{frame}{}
+    \sectionpage
+\end{frame}
+
+\appendix
+\input{input/appendix}
+
+\begin{frame}[allowframebreaks]{Références}
+%\printbibliogaphy
+\setbeamertemplate{bibliography item}{}
+\bibliographystyle{apalike}
+\bibliography{biblio}
+
+\end{frame}
+
+\end{document}

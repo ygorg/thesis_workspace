@@ -1,0 +1,100 @@
+\usepgfplotslibrary{groupplots}
+
+
+\begin{figure}[!ht]
+    \centering
+    
+    \begin{tikzpicture}[trim axis left,trim axis right]
+
+    \begin{groupplot}[
+        group style={
+          group size=1 by 2,
+          vertical sep=1.3cm,
+        },
+        width=0.7\textwidth, height=5cm,
+        xmin=-1, xmax=10,
+        xtick = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+        tick pos=left,
+        grid style={dashed, gray!50},
+        xmajorgrids,
+        legend columns=1,
+        %legend style={
+        %    anchor=north west,
+        %    at={(-0.09,-0.2)}
+        %},
+    ]
+    
+    \nextgroupplot[
+        %ymin=34.75, ymax=38,
+        xticklabels={,,,},
+        %ytick = {35, 36, 37},
+        legend to name={CommonLegend}
+    ]
+    \node[] at (axis cs: .4, 26.5) {{{{\small Auteur}}}};
+
+    \addplot+[smooth] plot coordinates {
+    (0, 16.0)(1, 21.8)(2, 23.47)(3, 26.19)(4, 26.82)(5, 27.32)(6, 27.27)(7, 26.79)(8, 27.97)(9, 28.31)
+    };
+    \addlegendentry{CopyRNN}
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 16.0)(1, 22.08)(2, 23.1)(3, 25.11)(4, 25.87)(5, 27.39)(6, 27.9)(7, 27.07)(8, 27.55)(9, 26.71)
+    };
+    \addlegendentry{CorrRNN}
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 16.0)(1, 20.36)(2, 19.84)(3, 22.22)(4, 23.47)(5, 25.68)(6, 26.99)(7, 26.92)(8, 27.73)(9, 27.63)
+    };
+    \addlegendentry{Kea (KP20k)}
+
+    \addplot+[smooth] plot coordinates {
+    (0, 16.0)(1, 17.74)(2, 20.83)(3, 21.6)(4, 22.83)(5, 25.78)(6, 27.05)(7, 26.84)(8, 27.37)(9, 27.67)
+    };
+    \addlegendentry{MPRank}
+
+    % baseline
+    \addplot[mark=none, black, dashed] coordinates {(0, 16.0) (9, 16.0)};
+
+    %\legend{}
+
+    \nextgroupplot[
+        yshift=1cm,
+        %ymin=32.25,ymax=36,
+        xticklabels={$N$=0\quad~~,1, 2, 3, 4, 5, 6, 7, 8, 9},
+        %ytick = {32, 33, 34, 35},
+    ]
+    \node[] at (axis cs: .4, 17.5) {{{{\small None}}}};
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 0)(1, 4.14) (2, 7.5)(3, 11.51)(4, 14.21)(5, 17.02)(6, 18.29)(7, 19.11)(8, 19.5)(9, 20.4)
+    };
+    %\addlegendentry{CopyRNN}
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 0)(1, 6.36)(2, 9.72)(3, 12.57)(4, 14.87)(5, 15.63)(6, 17.17)(7, 18.11)(8, 18.02)(9, 18.09)
+    };
+    %\addlegendentry{CorrRNN}
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 0)(1, 5.86)(2, 8.02)(3, 8.51)(4, 10.43)(5, 11.59)(6, 14.17)(7, 15.44)(8, 16.43)(9, 17.05)
+    };
+    %\addlegendentry{KeaOneModel}
+    
+    \addplot+[smooth] plot coordinates {
+    (0, 0)(1, 4.94)(2, 7.5)(3, 8.95)(4, 10.8)(5, 13.48)(6, 13.98)(7, 14.08)(8, 14.92)(9, 15.15)
+    };
+    %\addlegendentry{MPRank}
+
+
+    \end{groupplot}
+    %\end{axis}
+    
+    \node[right=2cm of group c1r1.east]{\ref{CommonLegend}};
+    
+    \end{tikzpicture}
+    %\end{subfigure}
+
+
+    \caption{Scores de \map{} pour \textsc{Bm25}+RM3 sur NTCIR-2 en fonction du nombre $N$ de mots-clés prédits. Le symbole $\square$ indique une amélioration significative par rapport aux résultats sans mots-clés prédits.}
+    \label{fig:n_vs_perf}
+\end{figure}

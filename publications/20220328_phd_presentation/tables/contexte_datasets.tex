@@ -1,0 +1,82 @@
+%\newcommand{\tikzmark}[1]{%  \tikz[overlay,remember picture] \node (#1) {};}
+
+%https://tex.stackexchange.com/a/6250/240347
+%\alt<3>{\newcolumntype{C}{>{\columncolor{color1!40}}r}}{\newcolumntype{C}{r}}
+
+\begin{table}[htbp!]
+\centering
+\resizebox{0.8\textwidth}{!}{
+    \begin{tabular}{crcccrr}%rr}
+    \cmidrule[1pt]{2-7}
+        &
+        \textbf{Corpus} &
+        \textbf{Lang.} &
+        \textbf{Ann.} &
+        \textbf{\#Entr.} &
+        \textbf{\#Test} &
+        \textbf{\#mots} \\
+        %& \textbf{\#mc} & \textbf{\%abs} \\
+    \cmidrule[.5pt]{2-7}
+    %\tikzmark{b}
+    \rowcolor<2>{color1!40}
+    & \cellcolor<3>{color1!40} CSTR~\cite{witten_kea:_1999}              & en & $A$        & \cellcolor<3>{color1!40} 130 & 500 &11501 \\% & 5 & 19 \\
+    \rowcolor<2>{color1!40}
+    & NUS~\cite{goh_keyphrase_2007}             & en & $A \cup L$ & -   & 211 & 8398 \\% &11 & 14 \\
+    \rowcolor<2>{color1!40}
+    & PubMed~\cite{schutz_keyphrase_2008}       & en & $A$        & -   & 1320& 5323 \\% & 5 & 17 \\
+    \rowcolor<2>{color1!40}
+    & ACM~\cite{krapivin_large_2009}            & en & $A$        & -   & 2304& 9198 \\% & 5 & 16 \\
+    \rowcolor<2>{color1!40}
+    \multirow{-5}{*}[-0.4ex]{\rotatebox{90}{\textbf{Articles}}}
+    & Citeulike-180~\cite{medelyan_human-competitive_2009} & en & $L$ & -&182 & 8590 \\% & 5 & 11 \\
+    \rowcolor<2>{color1!40}
+    & \cellcolor<3>{color1!40} SemEval-2010~\cite{kim_semeval-2010_2010} & en & $A \cup L$ & \cellcolor<3>{color1!40} 144 & 100 & 7961 \\% &15 & 20 \\
+    
+    %\cmidrule{7-9} %\vspace{-.5em}
+    %\multirow{-6}{*}[-0.4ex]{\rotatebox{90}{\textbf{Articles}}}
+    %& & & & & \textbf{Avg.} & 8495  & 8  & 16 \\
+    
+        \cmidrule[.5pt]{2-7}
+    
+    %\tikzmark{a}
+    \rowcolor<2>{color1!40}
+    & \cellcolor<3>{color1!40} Inspec~\cite{hulth_improved_2003}         & en & $I$ & \cellcolor<3>{color1!40} 1\,000  & 500    & 135 \\% & 10 & 22 \\
+    \rowcolor<2>{color1!40}
+    & KDD~\cite{caragea_citation-enhanced_2014} & en & $A$ & -       & 755    & 191 \\% &  4 & 49 \\
+    \rowcolor<2>{color1!40}
+    & WWW~\cite{caragea_citation-enhanced_2014} & en & $A$ & -       & 1\,330 & 164 \\% &  5 & 52 \\
+    \rowcolor<2>{color1!40}
+    & TermITH-Eval~\cite{bougouin_termith-eval:_2016} & fr & $I$ & - & 400    & 165 \\% & 12 & 60 \\
+    \rowcolor<2>{color1!40}
+    \multirow{-5}{*}[-0.4ex]{\rotatebox{90}{\textbf{Notices}}}
+    & \cellcolor<3>{color1!60} \textbf<3>{KP20k~\cite{meng_deep_2017}}               & en & $A$ & \cellcolor<3>{color1!60} \textbf<3>{530\,K}  & 20\,K  & 176 \\% &  5 & 43 \\
+    %OAGK~\cite{cano_keyphrase_2019-1}         & en & $A$ & 23\,M   & -      & ?   & ?    & ? \\
+    %\cmidrule{7-9} %\vspace{-.5em}
+    %\multirow{-6}{*}[-0.4ex]{\rotatebox{90}{\textbf{Notices}}}
+    %& & & & & \textbf{Avg.} & 166  & 7  & 45 \\
+    
+    
+    \cmidrule[.5pt]{2-7}
+    %Reuters-21578~\cite{hulth-megyesi:2006:COLACL}     & en & \\
+    %110-PT-BN-KP~\cite{marujo_keyphrase_2011} & pt & $L$ & 100 & 10 & 439 & 27.6 & 7.5 \\
+    & DUC-2001~\cite{wan_single_2008}            & en & $L$ & -    & 308 & 847 \\% &  8 &  4 \\
+    & \cellcolor<3>{color1!40} 500N-KPCrowd~\cite{marujo_supervised_2012} & en & $L$ & \cellcolor<3>{color1!40} 450  &  50 & 465 \\% & 46 & 11 \\
+    \multirow{-4}{*}[-0.4ex]{\rotatebox{90}{\textbf{Journalistique}}}
+    & Wikinews~\cite{bougouin_topicrank:_2013}   & fr & $L$ & -    & 100 & 314 \\% & 10 & 11 \\
+    %\rowcolor<3>{color1!40}
+    %& KPTimes~\cite{gallina_kptimes_2019}        & en & $E$ &\textbf<3>{260\,K}&20\,K& 784 &  5 & 41 \\
+
+    %\cmidrule{7-9} %\vspace{-.5em}
+    %\multirow{-5}{*}[-0.4ex]{\rotatebox{90}{\textbf{Journalistique}}}
+    %& & & & & \textbf{Avg.} & 603  & 17  & 17 \\
+    \cmidrule[1pt]{2-7}
+    \end{tabular}
+    
+    %\tikz[right=5cm,overlay,remember picture] \node[rotate=90, anchor=center] at ($(a)!0.5!(b)$) {Notices};
+    %\tikz[overlay,remember picture] \draw[-triangle 45] ($(a.north east)+(-0.2,0.2)$) -- ($(b.south west)+(0.3,-0.2)$);
+}
+%\caption{\footnotesize Statistiques des jeux de données de production automatique de mots-clés.
+%Les mots-clés de référence sont annotés par les auteurs ($A$) ou des indexeurs professionnels ($I$).
+%La table présente le nombre de documents dans les corpus d'entraînement (\#Entr.) et de test (\#Test) ainsi que le nombre moyen de mots-clés (\#mc), de mots (\#mots) et le ratio de mots-clés absent (\%abs) par document.}
+%\label{tab:datasets_abstract}
+\end{table}

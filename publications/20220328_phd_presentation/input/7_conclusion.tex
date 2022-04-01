@@ -1,0 +1,65 @@
+\section*{Conclusion}
+
+\begin{frame}{}
+    \sectionpage
+\end{frame}
+
+\begin{frame}{Analyse de l'existant}
+    \begin{itemize}
+        \item \textbf{\'Evaluation stricte} des méthodes de l'état de l'art réalisée grâce à la création du jeu de données \textbf{KPTimes}.
+        \item Comparaison directe des méthodes impossible avant cette étude.
+    \end{itemize}
+    \begin{itemize}
+        \item Méthodes génératives peu généralisables à d'autres genres de documents et annotation.
+        \item Sans données d'entraînement les \textbf{méthodes de base} sont toujours compétitives.
+        \item Avec données d'entraînement les \textbf{méthodes génératives} sont l'état de l'art.
+        \item \'Evaluation par \textbf{appariement exact} à une référence peu fiable. Confirme l'évaluation manuelle réalisée par  \citet{bougouin_indexation_2015}.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Traiter les faiblesses de l'évaluation automatique}
+    \begin{itemize}
+        \item \textbf{\'Evaluation extrinsèque} pour étudier la qualité des mots-clés dans un \textbf{cadre applicatif}.
+        %\item Premiers travaux 
+        %\item Nos travaux sont les premiers à montrer l'intérêt des mots-clés produits automatiquement dans une tâche applicative.
+
+        \item Mots-clés produits par les récentes méthodes génératives sont \textbf{assez qualitatifs} pour améliorer une tâche de recherche documentaire contrairement aux méthodes extractives.
+    
+    \end{itemize}
+\end{frame}
+
+\section*{Perspectives}
+
+\begin{frame}{}
+    \sectionpage
+\end{frame}
+
+\begin{frame}{Perspectives à court terme}
+    \begin{itemize}
+    \item \textbf{Évaluer les méthodes génératives plus récentes} pour mesurer l'impact de leurs améliorations incrémentales sur la recherche documentaire.
+
+    \item \textbf{Jeux de données en français} pour transposer nos expériences à cette langue. Peu pertinent pour l'informatique mais pertinent pour les sciences sociales par exemple.
+    
+    \item \textbf{Cohérence des mots-clés produits} pour aider à la navigation des bibliothèques.
+    
+    %\item \textbf{Multiplier les tâches applicatives} pour l'évaluation extrinsèque. Création d'un benchmark tel que GLUE pour faciliter la comparaison des méthodes.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Perspectives à long terme}
+    \begin{itemize}
+    \item Les mots-clés sont considérés comme une \textbf{fin en soi}.
+    %\item Mots-clés non pertinent ou usage non adapté ?
+    \item \textbf{Redéfinition de la tâche}: mots-clés pour la navigation, pour la RI, pour la catégorisation, pour la création de thésaurus, \ldots
+    %\item Peu de recherche/outils sur la \textbf{navigation} assisté par des mots-clés (\citet{jones_phrasier_1999}, Microsoft Academics, AMiner).
+    
+    \item Les mots-clés sont assez qualitatifs, comment les intégrer aux bibliothèques, systèmes de RI ?
+    %\item Pallier la qualité des mots-clés auteurs:
+    %\item \textbf{Diversifier les sources d'annotation} pour ne pas reposer sur les mots-clés auteurs.
+    %\item \textbf{Génération de mots-clés non supervisée} pour ne plus être limité par les mots-clés auteurs.
+    \end{itemize}
+    %\textbf{Disponibilité d'annotation qualitatives}: les méthodes prometteuses nécessitent de grandes quantités de données annotés mais la grande majorité des annotations en mots-clés sont peu qualitatives
+
+    %\textbf{Lien avec la RI}: évaluer l'apport des mots-clés par rapport aux ré-ordonnanceurs et le passage à l'échelle des m
+\end{frame}

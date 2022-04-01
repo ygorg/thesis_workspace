@@ -1,0 +1,20 @@
+\begin{table}[htbp!]
+    \centering
+    \begin{tabular}{lc@{\hspace*{.2cm}}c c@{\hspace*{.2cm}}c}
+        &  \multicolumn{2}{c}{\cellcolor{color2!40} \textbf{KPTimes}} &
+        \multicolumn{2}{c}{\cellcolor{color1!40} \textbf{KP20k}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \\[-1.5em]
+    \% & \small{Prs} & \small{Abs} & \small{Prs} & \small{Abs} \\
+    \midrule
+    %\cmidrule{1-4}
+    \cellcolor{color2!40} CopyNews
+        & \cellcolor{color2!40} 61,2 & \cellcolor{color2!40} 38,8 & 51,1 & 48,9 \\
+    %\cmidrule(lr){1-2} \cmidrule(lr){3-4}
+    \cellcolor{color1!40} CopySci
+        & \textbf{94,0} & \pad{0}5,1 &  \cellcolor{color1!40} \textbf{92,0} & \cellcolor{color1!40} \pad{0}8,0 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Pourcentage de mots-clés présents et absents.}
+    %produit automatiquement par le modèle CopyRNN entraîné sur KPTimes (CopyNews) et KP20k (CopySci) et testé sur ces deux jeux de données.}
+    \label{tab:ratio_prsabs_transfer}
+\end{table}

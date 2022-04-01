@@ -1,0 +1,34 @@
+\begin{table}[!ht]
+    \centering
+    \setlength{\tabcolsep}{4pt}
+    \resizebox{5cm}{!}{%
+\begin{tabular}{l|c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r|c}
+    \toprule
+    \textbf{Indexation} & \multicolumn{2}{c}{\textbf{BM25}} & \multicolumn{2}{c|}{\textbf{+RM3}} & F@5 \\
+
+    \cmidrule(lr){1-6}
+    \tr        & \multicolumn{2}{c}{29,6} & \multicolumn{2}{c|}{ 32,8} & -
+    \alt<2->{\\
+    + MPRank      & \cellcolor<3>{color1!40} 29,7 & \cellcolor<3>{color1!40} \textbf<3>{\ddiff{0,1}} & 33,0 & \ddiff{0,2} & 17,1 \\
+    + Kea (KP20k) & 0,3 & \ddiff{0,7} & 33,9 & \ddiff{1,1} & 18,5\\
+    \addlinespace
+    + CorrRNN     & \cellcolor<3>{color2!40} \sign{31,6} & \cellcolor<3>{color2!40} \textbf<3>{\ddiff{2,1}} & \cellcolor<5>{color1!40} \bests{35,0} & \cellcolor<5>{color1!40} \ddiff{2,2} & 22,0 \\
+    + CopyRNN     &  \sign{31,4} &  \ddiff{1,9} &  \sign{34,8} &  \ddiff{2,0} & 23,9 \\
+    \cmidrule(lr){1-6}
+    }{\\ \cmidrule(lr){1-6}}
+    
+    \trm & \multicolumn{2}{c}{31,9} &  \multicolumn{2}{c|}{ 35,5} & - 
+    \alt<4->{\\
+    + MPRank      & 32,0 & \ddiff{0,1} & 35,8 & \ddiff{0,3} & 17,1 \\
+    + Kea (KP20k) & 32,1 & \ddiff{0,2} & 36,0 & \ddiff{0,5} & 18,5 \\
+    \addlinespace
+    + CorrRNN     & 32,4 & \ddiff{0,5} & \cellcolor<5>{color1!40} \sign{36,9} & \cellcolor<5>{color1!40} \ddiff{1,4} & 22,0 \\
+    + CopyRNN     &  32,5 &  \ddiff{0,5} &   \bests{37,1} &   \ddiff{1,6} & 23,9 \\
+    \bottomrule
+    }{\\ \bottomrule}
+    
+    \end{tabular}
+    }
+    \caption{Scores de \map{} sur la collection NTCIR-2.}
+    \label{tab:ir_results}
+\end{table}

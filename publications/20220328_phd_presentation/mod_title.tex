@@ -1,0 +1,48 @@
+\makeatletter
+
+\setbeamerfont{bibliography entry author}{size=\footnotesize,%
+                                          series=\normalfont}
+\setbeamerfont{bibliography entry title}{size=\footnotesize,%
+                                         series=\bfseries}
+\setbeamerfont{bibliography entry location}{size=\footnotesize,%
+                                            series=\normalfont}
+\setbeamerfont{bibliography entry note}{size=\footnotesize,%
+                                        series=\normalfont}
+
+\setbeamerfont{author}{size=\Large}
+
+\setbeamertemplate{title page}{
+  \begin{minipage}[b][\paperheight]{\textwidth}
+    \vspace*{1cm}
+    \ifx\inserttitlegraphic\@empty\else\usebeamertemplate*{title graphic}\fi
+    \vfill%
+    \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi
+    \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+    \vspace{-0.5cm}
+    \usebeamertemplate*{title separator}
+    \vspace{-0.75cm}
+    \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+    \ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+    \ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+    \vspace{0.5cm}
+    \textbf{Jury}\\[0.3em]
+    {\footnotesize
+    \begin{tabular}{@{}lll}
+    %Pr\'{e}sident :     & Pr\'{e}nom NOM & Fonction et \'{e}tablissement d'exercice \\
+    Rapporteurs :       & Josiane M{\scriptsize OTHE} & Professeure, Université de Toulouse \\
+                        & Patrick P{\scriptsize AROUBEK} & Ingénieur de recherche, Université de Paris-Saclay \\
+    Examinateurs :      & Lorraine G{\scriptsize OEURIOT} & Maître de conférences, Université Grenoble Alpes \\
+                        & Richard D{\scriptsize UFOUR} & Professeur, Nantes Université \\
+    Directrice: & Béatrice D{\scriptsize AILLE} & Professeure, Nantes Université \\
+    Encadrant :      & Florian B{\scriptsize OUDIN} & Maître de conférences, Nantes Université \\
+    \end{tabular}}
+    
+    \vspace*{0.3cm}
+    
+    \hfill{}
+    \includegraphics[align=c,height=2em]{logos/UN-noir.png}\hfill{}
+    \includegraphics[align=c,trim={10em 5.8em 10em 6em},clip,height=3.5em]{logos/logo_LS2N_bleu.pdf}\hfill{}
+    \vspace*{0.3cm}
+  \end{minipage}
+}
+\makeatother

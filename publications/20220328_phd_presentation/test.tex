@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{patterns}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{spy}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{fadings, matrix}
+\usetikzlibrary{fit,intersections}
+\usetikzlibrary{shapes.geometric}
+
+\usepackage{booktabs}
+\newcommand{\bm}{\textsc{Bm25}}
+\newcommand{\diff}[1]{\textcolor{gray}{\footnotesize #1}}
+\newcommand{\ddiff}[1]{\diff{#1}}
+
+\newcommand{\trc}{$T$+$R$}
+\newcommand{\tr}{\colorbox{green!20}{\trc}}
+\newcommand{\trmc}{$T$+$R$+$M$}
+\newcommand{\trm}{\colorbox{blue!20}{\trmc}}
+
+\newcommand{\bmrm}{\bm{}+RM3}
+
+% seaborn palette
+\definecolor{color0}{rgb}{0.122,0.467,0.706}
+\definecolor{color1}{rgb}{1.000,0.498,0.055}
+\definecolor{color2}{rgb}{0.173,0.627,0.173}
+\definecolor{color3}{rgb}{0.839,0.153,0.157}
+\definecolor{color4}{rgb}{0.580,0.404,0.741}
+\definecolor{color5}{rgb}{0.549,0.337,0.294}
+\definecolor{color6}{rgb}{0.890,0.467,0.761}
+\definecolor{color7}{rgb}{0.498,0.498,0.498}
+\definecolor{color8}{rgb}{0.737,0.741,0.133}
+\definecolor{color9}{rgb}{0.090,0.745,0.812}
+
+
+\pgfdeclareplotmark{X*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{0\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{0\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{0\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{0\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+}
+
+\pgfdeclareplotmark{+*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+  %\pgfusepathqstroke
+}
+
+\pgfdeclareplotmark{|*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.3\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.3\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+}
+
+\pgfplotscreateplotcyclelist{mycolor}{%
+color0,every mark/.append style={color=white,fill=color0},mark=*\\%
+color1,every mark/.append style={color=white,fill=color1},mark=X*\\%
+color2,every mark/.append style={color=white,fill=color2,scale=0.8},mark=square*\\%
+color3,every mark/.append style={color=white,fill=color3},mark=triangle*\\%
+color4,every mark/.append style={color=white,fill=color4},mark=diamond*\\%
+color5,every mark/.append style={color=white,fill=color5},mark=pentagon*\\%
+color6,every mark/.append style={color=white,fill=color6},mark=+*\\%
+color7,mark=star\\%
+color8,every mark/.append style={color=white,fill=color8},mark=|*\\%
+color9,every mark/.append style={color=white,fill=color9},mark=oplus*\\%
+}%
+
+\pgfplotsset{
+    cycle list name=mycolor,
+    every axis plot/.append style={very thick},
+    every axis plot post/.append style={
+        every mark/.append style={semithick,scale=1.5}
+    },
+    legend cell align=left,
+    grid style=dashed,
+    ymajorgrids=true,
+}
+
+\input{pics}
+
+\tikzset{
+plus/.pic = {
+    \draw[thick, fill=white] (-.25,-.25) -- (-.25,-1) -- (.25,-1) -- (.25,-.25) -- (1,-.25) -- (1,.25) -- (.25,.25) -- (.25,1) -- (-.25,1) -- (-.25,.25) -- (-1,.25) -- (-1,-.25) -- (-.25,-.25);
+}}
+
+
+\begin{document}
+
+\begin{tikzpicture}[scale=3]
+
+    \def\an{25}
+
+    \clip (-1.5,-1.5) rectangle (2,1.5);
+
+    \draw[step=0.5,help lines] (-1.4,-1.4) grid (1.4, 1.4);
+    
+    \draw (0,0) circle [radius=1];
+
+    
+    \draw[->] (-1.5,0) -- (1.5,0);
+    \draw[->] (0,-1.5) -- (0,1.5);
+    
+    \foreach \x/\xtext in {-1,-.5/$-\frac{1}{2}$,.5/$\frac{1}{2}$,1}
+    {
+        \draw (-.05,\x) node[fill=white,left] {\xtext} -- (.05,\x) ;
+    }
+    \foreach \x/\xtext in {-1,-.5/$-\frac{1}{2}$,1}
+    {
+        \draw (\x,-.05) node[fill=white,below] {\xtext} -- (\x,.05);
+    }
+    
+    \draw[red!80!black,fill=red!20] (0,0) -- (0.3,0) arc [start angle=0, end angle=\an, radius=0.3] -- cycle;
+    
+    \draw[red, very thick] (\an:1) -- node[fill=white,left] {$\sin \alpha$} (\an:1 |- 0,0);
+    \draw[blue, very thick] (\an:1 |- 0,0) -- node[fill=white,below=1pt] {$\cos \alpha$} (0,0);
+    \draw (0,0) -- (\an:1);
+    
+    \path[name path=tan upward] (1,0) -- (1,7);
+    \path[name path=tan orig] (0,0) -- (\an:7);
+    \draw[name intersections={of=tan upward and tan orig, by=x}] [orange,
+    very thick] (1,0) -- node[fill=white,right] {$\color{black} {\color{orange}\tan \alpha} = \frac{\color{red}\sin \alpha}{\color{blue}\cos \alpha}$} (x);
+    \draw[name intersections={of=tan upward and tan orig, by=x}] (0,0) -- (x);
+    
+\end{tikzpicture}
+
+
+
+\begin{tikzpicture}
+    %\fn{3}{Mot} \fn{5}{vide}\fn{6}{,} \fn{6}{mot} \fn{5}{plein}\fn{3}{?} \fn{3}{Comment} \fn{4}{trancher} \fn{3}{localement}\fn{3}{.}\\
+%\fn{3}{Nous} \fn{5}{présentons} \fn{6}{une} \fn{6}{méthode} \fn{6}{multilingue} \fn{6}{de} \fn{6}{catégorisation} \fn{6}{en} \fn{6}{mot} \fn{6}{vide} [\ldots]
+
+    %\node (1-0) at (0,0) {};
+    %\foreach \text [count=\i,evaluate=\ii using int(\i-1)] in {
+    %Mot,vide,{,},mot,plein,{?},Comment,trancher,localement,{.},Nous,présentons,une,méthode,multilingue,de,catégorisation,en,mot,vide
+    %}{
+    %\node[right=0 of 1-\ii] (1-\i) {\text};
+    %}
+    
+    %\foreach \i [
+    %    evaluate=\ii using int(\i+1),
+    %    evaluate=\iii using int(\i+2)] in {1,...,8}{
+    %    \node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(1-\i) (1-\ii) (1-\iii), yshift={4.5-3*Mod(\i-1,3)}] {};
+    %}
+    
+\node (0) at (0,0) {Mot};
+\node[right=0 of 0] (1) {vide};
+\node[right=0 of 1] (2) {,};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(2) (1) (0), yshift=1.5] {};
+\node[right=0 of 2] (3) {mot};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(3) (2) (1), yshift=-1.5] {};
+\node[right=0 of 3] (4) {plein};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(4) (3) (2), yshift=4.5] {};
+\node[right=0 of 4] (5) {?};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(5) (4) (3), yshift=1.5] {};
+\node[right=0 of 5] (6) {Comment};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(6) (5) (4), yshift=-1.5] {};
+\node[below=0 of 0] (7) {trancher};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(7) (6) (5), yshift=4.5] {};
+\node[right=0 of 7] (8) {localement};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(8) (7) (6), yshift=1.5] {};
+\node[right=0 of 8] (9) {.};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(9) (8) (7), yshift=-1.5] {};
+\node[right=0 of 9] (10) {Nous};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(10) (9) (8), yshift=4.5] {};
+\node[right=0 of 10] (11) {présentons};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(11) (10) (9), yshift=1.5] {};
+\node[right=0 of 11] (12) {une};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(12) (11) (10), yshift=-1.5] {};
+\node[right=0 of 12] (13) {méthode};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(13) (12) (11), yshift=4.5] {};
+\node[below=0 of 7] (14) {multilingue};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(14) (13) (12), yshift=1.5] {};
+\node[right=0 of 14] (15) {de};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(15) (14) (13), yshift=-1.5] {};
+\node[right=0 of 15] (16) {catégorisation};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(16) (15) (14), yshift=4.5] {};
+\node[right=0 of 16] (17) {en};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(17) (16) (15), yshift=1.5] {};
+\node[right=0 of 17] (18) {mot};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(18) (17) (16), yshift=-1.5] {};
+\node[right=0 of 18] (19) {vide};
+\node[draw, dashed, rounded corners, fill=blue!40, opacity=0.2, inner sep=0, fit=(19) (18) (17), yshift=4.5] {};
+
+\end{tikzpicture}
+
+
+1. Titre et Résumé \textbf{(\tr)}
+{\footnotesize Les mots-clés générés remplacent-ils les mots-clés de référence ?} \\
+
+2. Titre, Résumé et Mots-clés de référence \textbf{(\trm)}
+{\footnotesize Les mots-clés générés sont-ils complémentaires des mots-clés de référence ?} \\
+
+\begin{tikzpicture}
+        \tikzset{rred/.style={draw=red, line width=1.6pt}}
+
+        \pic[local bounding box=doc, rred] {docth={scale 2}};
+        %\node[right=.5 of doc] (auto_plus) {\Huge \textbf{+}};
+        
+        \node[rounded corners, fill=color0!40, draw=color0!80!black, align=center, text width=3cm, right=of doc] (auto_prod) {Production automatique de mots-clés};
+        \pic[local bounding box=auto_kws, onslide={<1->rred}, right=1.5cm of auto_prod] {kwsth={scale 1.5}};
+
+        \node[below=.4cm of doc] (ref_plus) {\Huge \textbf{+}};
+        \pic[local bounding box=ref_kws, onslide={<2>rred}, below=of ref_plus] {kwsth={scale 1.5}};
+        
+        \draw[->, thick] (doc.east) -- (auto_prod.west);
+        \draw[->, thick] (auto_prod.east) -- (auto_kws.west);
+    \end{tikzpicture}
+
+\end{document}

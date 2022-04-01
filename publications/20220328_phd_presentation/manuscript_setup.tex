@@ -1,0 +1,245 @@
+% **************************************************
+% Document Class Definition
+% **************************************************
+%\usepackage{natbib}
+%\renewcommand\cite{\citep}	% to get "(Author Year)" with natbib
+
+%\usepackage[utf8]{inputenc}
+\usepackage[english,french]{babel}
+%\usepackage[T1]{fontenc}
+
+%\usepackage[dvipsnames,table,xcdraw]{xcolor}
+\usepackage{colortbl}
+
+\usepackage{booktabs} % \cmidrule
+%\newcommand{\cmidrule}[2][1pt]{\vrule}
+%\newcommand{\toprule}{\vrule}
+%\newcommand{\midrule}{\vrule}
+%\newcommand{\bottomrule}{\vrule}
+%\newcommand{\addlinespace}{\vspace{0.5cm}}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{graphicx} % \resizebox
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{cancel}
+
+\usepackage{minted} % \begin{minted} code listing environment
+%\usepackage{mdframed} % \begin{mdframed} box environment
+%\usepackage[breaklinks]{hyperref} % \url
+%\usepackage{enumitem} % allow customization of itemize environment
+
+%\usepackage{pdflscape}
+%\usepackage{afterpage}
+\usepackage{capt-of}
+\usepackage{rotating}
+
+%\setlength {\marginparwidth }{2cm}
+%\usepackage[disable]{easy-todo}
+
+%\setlength{\parskip}{0.3em}
+
+\usepackage{amssymb} % mathsymbols \square
+\usepackage{amsmath}
+\usepackage{dsfont} % doublestroke letters
+\usepackage{hologo} % latex logos
+
+\usepackage{csquotes}
+\newcommand{\say}[1]{\enquote{#1}}
+\usepackage[
+    output-decimal-marker={,},
+    group-minimum-digits=4
+]{siunitx}      % For \num, \SI and S (tables)
+
+%\renewcommand*{\bibfont}{\footnotesize}
+
+\renewcommand\frenchtablename{\textsc{Tableau}}
+
+%\renewcommand{\baselinestretch}{1.1}
+
+
+% Make links blue
+% From https://github.com/acl-org/ACLPUB/blob/master/templates/latex/acl.sty
+%\definecolor{darkblue}{rgb}{0, 0, 0.5}
+%\hypersetup{colorlinks=true, citecolor=darkblue, linkcolor=darkblue, urlcolor=darkblue}
+
+\newcommand{\foreign}[1]{\emph{#1}}
+
+\newcommand{\npercent}[1]{\SI{#1}{\percent}}
+
+% Tables command
+\newcolumntype{R}[1]{S[table-format=#1,table-number-alignment=right]}
+
+\newcommand{\map}{\textsc{MAP}}
+\newcommand{\fmesure}{$F$-mesure}
+\newcommand{\bm}{\textsc{Bm25}}
+\newcommand{\tfidf}{\textsc{Tf$\times$Idf}}
+
+\newcommand{\trc}{$T$+$R$}
+\newcommand{\tr}{\colorbox{green!20}{\trc}}
+\newcommand{\trmc}{$T$+$R$+$M$}
+\newcommand{\trm}{\colorbox{blue!20}{\trmc}}
+
+\newcommand{\bmrm}{\bm{}+RM3}
+
+\newcommand{\present}{\underline{P}résent}
+\newcommand{\reordonne}{\underline{R}éordonné}
+\newcommand{\mixte}{\underline{M}ixte}
+\newcommand{\nonvu}{\underline{N}on-vu}
+
+\newcommand{\presents}{\present{}s}
+\newcommand{\reordonnes}{\reordonne{}s}
+\newcommand{\mixtes}{\mixte{}s}
+\newcommand{\nonvus}{\nonvu{}s}
+
+
+\colorlet{bestmodel}{blue!5}
+
+% 6/tables/ir_all-abs-pres
+\colorlet{good}{green!40!black}
+\colorlet{bad}{red!50!black}
+
+\newcommand{\da}{$^\dagger$}
+\newcommand{\dda}{$^\ddagger$}
+
+%\newcommand{\sign}[1]{\hspace*{.2em}#1\da\hspace*{-.2em}}
+%\newcommand{\signn}[1]{\hspace*{.2em}#1\dda\hspace*{-.2em}}
+\newcommand{\sign}[1]{\phantom{\da}#1\da}
+\newcommand{\signn}[1]{\phantom{\dda}#1\dda}
+
+%\newcommand{\best}[1]{\colorbox{bestmodel}{#1}}
+\newcommand{\best}[1]{\textbf{#1}}
+\newcommand{\bests}[1]{\sign{\best{#1}}}
+\newcommand{\bestss}[1]{\signn{\best{#1}}}
+
+\newcommand{\pad}[1]{\phantom{#1}}
+
+% 6/tables/*
+\newcommand{\diff}[1]{\textcolor{black!70!white}{\footnotesize #1}}
+\newcommand{\ddiff}[1]{\diff{#1}}
+\newcommand{\good}[1]{\textcolor{good}{#1}}
+\newcommand{\bad}[1]{\textcolor{bad}{#1}}
+
+% 6/figures/example
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+
+\newcommand{\hl}[2]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{#1}{\reducedstrut#2\/}%
+  \endgroup
+}
+
+% 6/figures/example
+\colorlet{c1}{blue!30!white}
+\colorlet{c2}{red!30!white}
+\colorlet{c3}{purple!30!white}
+\colorlet{c4}{green!35!white}
+\colorlet{c5}{yellow!40!white}
+\colorlet{c6}{orange!30!white}
+\colorlet{c7}{blue!60!white}
+
+\pgfplotsset{compat=1.17}
+
+\usepackage{calc}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{patterns}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{spy, matrix}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{fadings}
+\usetikzlibrary{fit,intersections}
+
+% seaborn palette
+\definecolor{color0}{rgb}{0.122,0.467,0.706}
+\definecolor{color1}{rgb}{1.000,0.498,0.055}
+\definecolor{color2}{rgb}{0.173,0.627,0.173}
+\definecolor{color3}{rgb}{0.839,0.153,0.157}
+\definecolor{color4}{rgb}{0.580,0.404,0.741}
+\definecolor{color5}{rgb}{0.549,0.337,0.294}
+\definecolor{color6}{rgb}{0.890,0.467,0.761}
+\definecolor{color7}{rgb}{0.498,0.498,0.498}
+\definecolor{color8}{rgb}{0.737,0.741,0.133}
+\definecolor{color9}{rgb}{0.090,0.745,0.812}
+
+
+\pgfdeclareplotmark{X*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{0\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{0\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.5\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{0\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{0\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{-.5\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.5\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+}
+
+\pgfdeclareplotmark{+*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{1\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.35\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-1\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.35\pgfplotmarksize}{-.35\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+  %\pgfusepathqstroke
+}
+
+\pgfdeclareplotmark{|*}
+{%
+  \pgfpathmoveto{\pgfqpoint{-.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{.3\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.3\pgfplotmarksize}{1\pgfplotmarksize}}
+  \pgfpathlineto{\pgfqpoint{-.3\pgfplotmarksize}{-1\pgfplotmarksize}}
+  \pgfusepathqfillstroke
+}
+
+\pgfplotscreateplotcyclelist{mycolor}{%
+color0,every mark/.append style={color=white,fill=color0},mark=*\\%
+color1,every mark/.append style={color=white,fill=color1},mark=X*\\%
+color2,every mark/.append style={color=white,fill=color2,scale=0.8},mark=square*\\%
+color3,every mark/.append style={color=white,fill=color3},mark=triangle*\\%
+color4,every mark/.append style={color=white,fill=color4},mark=diamond*\\%
+color5,every mark/.append style={color=white,fill=color5},mark=pentagon*\\%
+color6,every mark/.append style={color=white,fill=color6},mark=+*\\%
+color7,mark=star\\%
+color8,every mark/.append style={color=white,fill=color8},mark=|*\\%
+color9,every mark/.append style={color=white,fill=color9},mark=oplus*\\%
+}%
+
+\pgfplotsset{
+    cycle list name=mycolor,
+    every axis plot/.append style={very thick},
+    every axis plot post/.append style={
+        every mark/.append style={semithick,scale=1.5}
+    },
+    legend cell align=left,
+    grid style=dashed,
+    ymajorgrids=true,
+}
+
+% For HeatMap
+% https://tex.stackexchange.com/a/300114/240347
+\tikzset{square/.style={regular polygon,regular polygon sides=4}}
+
+\input{pics}

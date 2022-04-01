@@ -1,0 +1,111 @@
+\begin{table}
+    \centering
+    %\rotatebox{90}{%
+    \resizebox{\linewidth}{!}{
+\begin{tabular}{r c c c | c c c | c c c}
+         &
+        \multicolumn{3}{c}{\textit{Articles scientifiques}} &
+        \multicolumn{3}{c}{\textit{Notices scientifiques}} &
+        \multicolumn{3}{c}{\textit{Articles journalistiques}}
+        \\
+        
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+    
+        F@10 &
+        \textbf{PubMed} &
+        \textbf{ACM} &
+        \textbf{SemEval} &
+        \textbf{Inspec} &
+        \textbf{WWW} &
+        \textbf{KP20k} &
+        \textbf{DUC-2001} &
+        \textbf{KPCrowd} &
+        \textbf{KPTimes} \\ 
+        
+        %\\[-1.5em]
+        
+        \midrule
+
+        \textbf<3>{FirstPhrases} &
+		\cellcolor<1,3,4>{color1!26} \cellcolor<3>{color2!26} 15,4 &\cellcolor<1,3,4>{color1!22} \cellcolor<3>{color2!22} \textbf<3>{13,6} &\cellcolor<1,3,4>{color1!22} \cellcolor<3>{color2!22} 13,8 &
+		\cellcolor<1,3,4>{color1!62} \cellcolor<3>{color2!62} 29,3 &\cellcolor<1,3,4>{color1!13} \cellcolor<3>{color2!13} 10,2 &\cellcolor<1,3,4>{color1!22} \cellcolor<3>{color2!22} 13,5 &
+		\cellcolor<1,3,4>{color1!50} \cellcolor<3>{color2!50} 24,6 &\cellcolor<1,3,4>{color1!31} \cellcolor<3>{color2!31} \textbf<3>{17,1} &\cellcolor<1,3,4>{color1!11} \cellcolor<3>{color2!11} \pad{0}9,2 \\
+
+		 TextRank &
+		\cellcolor<1,3,4>{color1!0} \pad{0}1,8 &\cellcolor<1,3,4>{color1!0} \pad{0}2,5 &\cellcolor<1,3,4>{color1!0} \pad{0}3,5 &
+		\cellcolor<1,3,4>{color1!78} \textbf<3>{35,8} &\cellcolor<1,3,4>{color1!9} \pad{0}8,4 &\cellcolor<1,3,4>{color1!13} 10,2 &
+		\cellcolor<1,3,4>{color1!42} 21,5 &\cellcolor<1,3,4>{color1!5} \pad{0}7,1 &\cellcolor<1,3,4>{color1!0} \pad{0}2,7 \\
+
+        \textbf<3>{\tfidf{}} &
+		\cellcolor<1,3,4>{color1!30} \cellcolor<3>{color2!30} \textbf<3>{16,7} &\cellcolor<1,3,4>{color1!18} \cellcolor<3>{color2!18} \textbf<3>{12,1} &\cellcolor<1,3,4>{color1!32} \cellcolor<3>{color2!32} \textbf<3>{17,7} &
+	   \cellcolor<1,3,4>{color1!80} \cellcolor<3>{color2!80} \best{36,5} &\cellcolor<1,3,4>{color1!11} \cellcolor<3>{color2!11} \pad{0}9,3 &\cellcolor<1,3,4>{color1!17} \cellcolor<3>{color2!17} 11,6 &
+		\cellcolor<1,3,4>{color1!47} \cellcolor<3>{color2!47} 23,3 &\cellcolor<1,3,4>{color1!30} \cellcolor<3>{color2!30} 16,9 &\cellcolor<1,3,4>{color1!12} \cellcolor<3>{color2!12} \textbf<3>{\pad{0}9,6} \\
+
+		\midrule
+
+		PositionRank &
+		\pad{0}\cellcolor<1,3,4>{color1!0} 4,9 &\cellcolor<1,3,4>{color1!2}  \pad{0}5,7 &\cellcolor<1,3,4>{color1!5}  \pad{0}6,8 &
+		\cellcolor<1,3,4>{color1!74} 34,2 &\cellcolor<1,3,4>{color1!17}  \textbf<3>{\sign{11,6}} &\cellcolor<1,3,4>{color1!23}  \textbf<3>{\sign{14,1}} &
+		\cellcolor<1,3,4>{color1!60} \textbf<3>{\sign{28,6}} &\cellcolor<1,3,4>{color1!21}  13,4 &\cellcolor<1,3,4>{color1!9}  \pad{0}8,5 \\
+
+		MPRank &
+		\cellcolor<1,3,4>{color1!27} \textbf<3>{15,8} &\cellcolor<1,3,4>{color1!17} 11,6 &\cellcolor<1,3,4>{color1!24} \textbf<3>{14,3} &
+		\cellcolor<1,3,4>{color1!65} 30,5 &\cellcolor<1,3,4>{color1!15} \textbf<3>{\sign{10,8}} &\cellcolor<1,3,4>{color1!22} \textbf<3>{\sign{13,6}} &
+		\cellcolor<1,3,4>{color1!52} 25,6 &\cellcolor<1,3,4>{color1!34} \best{18,2} &\cellcolor<1,3,4>{color1!16} \textbf<3>{\sign{11,2}} \\
+
+		EmbedRank &
+		\pad{0}\cellcolor<1,3,4>{color1!0} 3,7 &\cellcolor<1,3,4>{color1!0} \pad{0}2,1 &\cellcolor<1,3,4>{color1!0} \pad{0}2,5 &
+		\cellcolor<1,3,4>{color1!78} 35,6 &\cellcolor<1,3,4>{color1!15} \sign{10,7} &\cellcolor<1,3,4>{color1!19} 12,4 &
+	    \bests{\cellcolor<1,3,4>{color1!62} 29,5} &\cellcolor<1,3,4>{color1!19} 12,4 &\cellcolor<1,3,4>{color1!0} \pad{0}4,0 \\
+
+		\midrule
+
+		Kea &
+		\sign{\cellcolor<1,4>{color1!35} 18,6} &\cellcolor<1,4>{color1!23}  \sign{14,2} &\cellcolor<1,4>{color1!37}  \sign{19,5} &
+		\cellcolor<1,4>{color1!75} 34,5 &\cellcolor<1,4>{color1!15}  \sign{11,0} &\cellcolor<1,4>{color1!23}  \sign{14,0} &
+		\sign{\cellcolor<1,4>{color1!55} 26,5} &\cellcolor<1,4>{color1!31}  17,3 &\cellcolor<1,4>{color1!15}  \sign{11,0} \\
+
+        \addlinespace
+        
+        CopyRNN &
+	    \bests{\cellcolor<1,2,4>{color1!49} 24,2} &\cellcolor<1,2,4>{color1!49} \bests{24,4} &\cellcolor<1,2,4>{color1!39} \bests{20,3} &
+		\cellcolor<1,2,4>{color1!59} 28,2 &\cellcolor<1,2,4>{color1!44} \bests{22,2} &\cellcolor<1,2,4>{color1!52} \bests{25,4} &
+		% Trained on KP20k
+		% 12,7 & 15,5 & 11,0 \\
+	    % Trained on KPTimes
+	   \cellcolor<1,2,4>{color1!14}  10,5 &\cellcolor<1,2,4>{color1!9}  \pad{0}8,4 &\cellcolor<1,2,4>{color1!87} \bests{39,3} \\
+
+        CorrRNN &
+		\sign{\cellcolor<1,2,4>{color1!40} 20,8} &\cellcolor<1,2,4>{color1!41}  \sign{21,1} &\cellcolor<1,2,4>{color1!37}  19,4 &
+		\cellcolor<1,2,4>{color1!58} 27,9 &\cellcolor<1,2,4>{color1!38}  \sign{19,9} &\cellcolor<1,2,4>{color1!43}  \sign{21,8} &
+		% Trained on KP20k
+		%17,0 & 11,5 & 11,5 & \pad{0}5,7 & \pad{0}9,7 & \pad{0}8,0 \\
+        % Trained on KPtimes
+       \cellcolor<1,2,4>{color1!14}  10,5 &\cellcolor<1,2,4>{color1!7}  \pad{0}7,8 &\cellcolor<1,2,4>{color1!39}  \sign{20,5} \\
+        %\midrule
+        
+        %Kea (KP20k) &
+        %\sign{18,9} & \sign{18,5} &
+        %\best[s]{13,7} & \best[s]{13,1} &
+        %\sign{19,1} & \sign{14,1} \\
+        
+        
+        %CopyRNN (extr.) &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{30,6} & \best{28,1} &
+        %\best{24,2} & \best{25,4} &
+        %\best{24,8} & \best{26,6} &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{21,0} & \best{14,2} \\
+        
+        %CopyRNN (extr.) &
+        %\best[s]{24,6} & \best[s]{26,2} &
+        %\best[s]{23,0} & \best[s]{24,3} &
+        %\best[s]{21,7} & \best{14,7} \\
+        
+        \bottomrule
+    \end{tabular}
+    }
+    %\caption{Performance de F@10 des modèles de production de mots-clés.
+    %Le symbole \da{} indique une significativité au niveau 0.05 en utilisant le t-test de Student avec toute les méthodes de base.}
+\end{table}

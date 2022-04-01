@@ -1,0 +1,243 @@
+\section{Contribution: Évaluation comparative stricte}
+
+\subsection{Motivation}
+
+\begin{frame}{Motivation}
+
+    Les résultats rapportés dans les articles ne sont \textbf{pas directement comparables}.
+    
+    %La différence de \textbf{jeux de données} et \textbf{métriques} utilisés ainsi que les \textbf{cadre expérimentaux} notamment les pré-traitements différents~ \cite{boudin_how_2016} rendent les scores peu comparables.
+    
+    \begin{block}{Incomparabilité causé par}
+    \begin{enumerate}
+        \item Jeux de données différents
+        \item Métriques différentes
+        \item Pré-traitements différents
+    \end{enumerate}
+    \end{block}
+    
+    
+    Trois articles publiés à ACL 2017 ne partagent aucun jeu de données et aucune métrique:
+    {\footnotesize
+    \cite{meng_deep_2017},% Inspec ACM NUS SemEval-2010 KP20k;F@5,10
+    \cite{florescu_positionrank:_2017}, %KDD, WWW, NUS; PRF@2,4,6,8,MRR
+    \cite{teneva_salience_2017} %KPCrowd Inspec PRF
+    }
+    
+    \alt<2>{
+    $\Rightarrow$ \'Evaluation à l'aide d'un cadre expérimental \textbf{strict} et \textbf{unifié}.}{\phantom{un texte très long sur deux lignes lalalalalalaalalalal deux lignes}}
+\end{frame}
+
+\iffalse
+\begin{frame}{Motivation}
+    %Pour obtenir un aperçu des performances des méthodes et indiquer quelles sont les méthodes à utiliser
+    Nous évaluons 9 méthodes sur 9 jeux de données.
+
+    \begin{block}{Cadre expérimental strict et partagé}
+    \begin{enumerate}
+        \item Pré-traitement
+        \item Protocole d'évaluation
+        \item Réimplémentation
+    \end{enumerate}
+    \end{block}
+\end{frame}
+\fi
+
+\subsection{Cadre expérimental}
+
+\begin{frame}<1>[label=aa]{Méthodes évaluées}
+%\begin{columns}
+%\begin{column}{0.5\textwidth}
+    \begin{block}{Méthodes de base}
+    \begin{itemize}
+        \item FirstPhrases
+        \item \textbf<2>{TextRank}~\cite{mihalcea_textrank:_2004}
+        \item \textbf<2>{\tfidf{}}~\cite{jones_statistical_1972}
+    \end{itemize}
+    \end{block}
+        
+    \begin{block}{Méthodes non supervisées}
+    \begin{itemize}
+        \item PositionRank~\cite{florescu_positionrank:_2017}
+        \item \textbf<3>{MultiPartiteRank}~\cite{boudin_unsupervised_2018}
+        \item \textbf<4>{EmbedRank}~\cite{bennani-smires_simple_2018}
+    \end{itemize}
+    \end{block}
+        
+    \begin{block}{Méthodes supervisées}
+    \begin{itemize}
+        \item Kea~\cite{witten_kea:_1999}
+        \item CopyRNN~\cite{meng_deep_2017}
+        \item CorrRNN~\cite{chen_keyphrase_2018}
+    \end{itemize}
+    \end{block}
+%\end{column}
+%\begin{column}{0.5\textwidth}
+    \begin{center}
+     \only<2>{
+     \includegraphics[width=0.9\textwidth,trim={0 0 0 32em},clip]{figures/large_textrank.png}}
+     \only<2>{
+     \begin{align*}
+        \tfidf & (d, w) = \\
+        & \textsc{Tf}_d(w) * log\left( \frac{N}{\textsc{Df}(w)} \right)
+    \end{align*}
+     }
+     \only<3>{
+     \includegraphics[width=0.9\textwidth]{figures/large_mprank.png}}
+     \only<4>{
+     \includegraphics[width=1\textwidth]{figures/large_embedrank.png}}
+     \end{center}
+%\end{column}
+%\end{columns}
+\end{frame}
+
+\begin{frame}{Jeux de données}
+    \input{tables/results_datasets}
+    \begin{itemize}
+        \item Représentatifs des jeux de données utilisés
+        %\item Trois types de documents
+        \item Différents types d'annotation (Auteur, Lecteur, Indexeur, \'Editeur)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Cadre expérimental strict}
+    \begin{block}{Paramètres expérimentaux unifiés}
+    \begin{itemize}
+        \item \textbf{Prétraitements}: réalisé avec Stanford CoreNLP.
+        \item \textbf{Sélection des candidats}: syntagmes nomimaux (\texttt{A*N+}) + filtrage. % mots courts, moins de 5 mots, non alpha, mots-vides
+        \item \textbf{Métrique}: F@10
+        
+        \item \textbf{Entraînement}:
+        \begin{itemize}
+            \item Kea: en validation croisée si pas de documents d'entraînement.
+            \item Méthodes génératives: sur KP20k et KPTimes en fonction du genre de document.
+        \end{itemize}
+
+        \item Utilisation des paramètres recommandés par les auteurs dans les articles originaux.
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Cadre expérimental strict}
+    \begin{block}{Réimplémentation}
+    
+        Est-ce que nos réimplémentations obtiennent des résultats comparables aux méthodes originales ?
+    
+        \input{tables/results_reproducibility}
+        
+        \begin{itemize}
+        \item Résultats comparables
+            \item Différences liées aux paramètres peu explicités
+            %\item EmbedRank: différence liée à la casse
+            %\item CopyRNN: ?
+            %\item CorrRNN: différence d'entraînement (données)
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\section*{Analyse des résultats}
+
+\begin{frame}{}
+    \sectionpage
+\end{frame}
+
+\begin{frame}{Résultats généraux}
+    \input{tables/results_large}
+    \begin{itemize}
+        \item Les méthodes génératives obtiennent les meilleures performances.
+        \item \tfidf{} et FirstPhrases sont compétitives. %avec les méthodes non supervisées
+        \item Inspec (annotation indexeur) obtient les meilleures performances en général.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Impact de l'annotation sur l'évaluation}
+
+    Annotation \textbf{indexeur} et \textbf{auteur} de 64 documents communs à Inspec et KP20k.
+    
+    \vspace{.5em}
+
+\begin{block}{Comparaison de l'annotation indexeur et auteur (id Inspec: 2107)}
+    \hspace{.15cm}
+    \footnotesize
+    
+%     \iffalse
+%     \begin{table}[]
+%         \centering
+%         \begin{tabular}{p{3cm}p{3cm}p{3cm}}
+% \textbf{Indexeur} & \textbf{\tfidf{}} & \textbf{Auteur}\\
+% asynchronous computer-mediated group interaction & asynchronous computer-mediated group interaction & computer-mediated communication\\
+% deindividuation & deindividuation & deindividuation\\
+% personal identifiability & personal identifiability & \\
+% group identity & group identity & \\
+% group processes & group processes & \\
+% social identity theory &  & social identity\\
+% e-mail~discussions & & e-mail\\
+% social issues & & \\
+% psychology &  & \\
+% internet &  & \\
+% geographically dispersed computer users &  & \\
+% group polarization &  & \\
+% group cohesion &  & \\
+%         \end{tabular}
+%     \end{table}
+%     \fi
+    \textbf{Indexeur} (13) : \cb<1,2>{color3!40}{deindividuation} -- \cb<2>{color5!40}{personal identifiability} -- \cb<2>{color7!40}{group identity} -- \cb<1,2>{color2!40}{asynchronous computer-mediated group interaction} -- \cb<2>{color6!40}{group processes} -- \\ group cohesion -- \cb<1>{color1!40}{e-mail discussions} --  \cb<1>{color4!40}{social identity theory} -- geographically dispersed computer users -- group polarization -- {social issues} -- {psychology} -- {internet}\\
+
+    %\textbf{CopyRNN}: \cb{color2!40}{computer-mediated} communication, group identity, social identity theory, social identity, \cb{color3!40}{deindividuation}\\
+    \textbf{\tfidf{}}: \cb<2,3>{color3!40}{deindividuation} -- \cb<2>{color5!40}{personal identifiability} -- \cb<2>{color7!40}{group identity} -- \cb<2>{color2!40}{\textit<3>{asynchronous computer-mediated group interaction}} -- \cb<2>{color6!40}{group processes}\\
+    
+    \textbf{Auteur} (4) : \cb<1,3>{color3!40}{deindividuation} -- \cb<1>{color4!40}{social~identity} -- \cb<1>{color2!20}{computer-mediated~communication} -- \cb<1>{color1!40}{e-mail}\\
+
+
+    \end{block}
+\end{frame}
+
+\begin{frame}<1-3,5>{Impact de l'annotation sur l'évaluation}
+
+    
+    \begin{columns}
+    \begin{column}{.49\textwidth}
+    \input{tables/lay_vs_experts}
+    \end{column}
+    \begin{column}{.5\textwidth}
+    \settowidth{\leftmargini}{\usebeamertemplate{itemize item}}
+    \addtolength{\leftmargini}{\labelsep -.75cm}
+    \begin{itemize}
+        %\only<1-2>{
+        %\item Inspec et KP20k partagent 66 documents, ils sont ainsi dotés d'une {double d'annotation}: \\ \textbf{indexeur} et \textbf{auteurs}.
+        \item<2-> Performances sur la référence indexeur \textbf{plus haute} que sur la référence auteur.
+        %}
+        %\only<3-4>{
+        \item<3-> Contraste extractives / génératives inexistant avec l'annotation indexeur.
+        \item<5-> $\Rightarrow$ \'Evaluation peu fiable.
+        %\item Les méthodes génératives sont robustes à ce changement de référence. %la méthode CopyRNN généralise pas mal à une annotation différente avec le même type de documents.
+        %}
+    \end{itemize}
+    \end{column}
+    \end{columns}
+    
+\end{frame}
+
+\begin{frame}{Comparaison des performances des méthodes état de l'art}
+
+    \begin{block}{Problématique}
+    Comparaison directe des performances impossible à cause de la variabilité dans les jeux de données et les métriques utilisées.
+    \end{block}
+    
+    \'Evaluation des méthodes à l'aide d'un cadre expérimental strict.
+
+    \begin{block}{Conclusion}
+    \begin{itemize}
+        \item Méthodes de base (\tfidf{}) toujours compétitives sans données d'apprentissage.
+        \item Les méthode génératives (CopyRNN) représentent l'état de l'art.
+    \end{itemize}
+    
+    \begin{itemize}
+        \item Annotation auteur sous-évalue les méthodes.
+        \item Conclusions tirées de l'évaluation peu fiables car changeantes en fonction du type d'annotation.
+        %; mais c'est la plus largement disponible
+    \end{itemize}
+    \end{block}
+    
+    
+\end{frame}

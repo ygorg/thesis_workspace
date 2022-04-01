@@ -1,0 +1,336 @@
+\section{Contribution: Validation des méthodes génératives}
+
+\subsection{Constitution du jeu de données}
+
+\begin{frame}{Motivation}
+    
+    \begin{itemize}
+        \item Actuellement \textbf{un seul} jeu de données de grande taille.
+        \begin{itemize}
+            \item Insuffisant pour obtenir des conclusions fiables. %Cette seule évaluation ne permet pas d'avoir des conclusions fiables.
+            \item Résultats \textbf{transposables} à d'autres jeux de données?
+        \end{itemize}
+        
+        \item Nécessité de construire un nouveau jeu de données avec:
+        \begin{itemize}
+            \item documents \textbf{annotés en mots-clés};
+            \item \textbf{suffisamment} de documents pour entraîner des méthodes neuronales;
+            \item \textbf{annotation différente} de l'annotation auteur.
+        \end{itemize}
+    \end{itemize}
+    
+    \pause
+    
+    \begin{itemize}
+        \item Les \textbf{articles journalistiques} sont disponibles en \textbf{grande quantité} sur internet
+        \item Sont souvent \textbf{annotés en mots-clés} pour le référencement
+    \end{itemize}
+    
+\end{frame}
+\begin{frame}{Sources de données}
+    \begin{columns}
+    \begin{column}{.45\textwidth}
+    \textbf{NewYork Times}
+    \begin{itemize}
+        \item Annotation éditeur
+        %\item Période: 2006 -- 2017
+        \item $\Rightarrow$ 296\,974 articles
+    \end{itemize}
+    \end{column}
+    \begin{column}{.54\textwidth}
+    \textbf{Japan Times}
+    \begin{itemize}
+        \item \'Evaluer la généralisation
+        %\item Période: 2008 -- 2019
+        \item $\Rightarrow$ 11\,057 articles
+    \end{itemize}
+    \end{column}
+    \end{columns}
+
+    \vspace{.5cm}
+    \begin{itemize}
+        \item Filtrage des documents trop longs, trop courts et redondants.
+    \end{itemize}
+
+%\end{frame}
+
+%\begin{frame}{Statistiques}
+    
+    \begin{table}[htbp!]
+\centering
+\resizebox{0.98\textwidth}{!}{
+    \begin{tabular}{lccrrrrrr}
+     & & \multicolumn{4}{c}{Corpus} & \multicolumn{3}{c}{Document} \\% & Mots-clés \\
+    \cmidrule(lr){4-6} \cmidrule(lr){7-9} \\[-1.2em]% \cmidrule(lr){9-9} \\[-1.2em]
+    \textbf{Corpus} & \textbf{Ann.} & \textbf{Lang.} & \textbf{\#Entr.} & \textbf{\#Val.} & \textbf{\#Test} & \textbf{\#mots} & \textbf{\#mc} & \textbf{\%abs} \\%& \textbf{\#uniq.} \\
+    \cmidrule(lr){1-3} \cmidrule(lr){4-6} \cmidrule(lr){7-9}
+    KPTimes       & $E$ &en&260\,K&20\,K& 20\,K & 738 &   5,0 & 38,4 \\%& 20\,535 \\
+    \quad+ NYTimes & $E$&en&260\,K&20\,K& 10\,K & \cb<2>{color1!40}{905} &   5,0 & \cb<2>{color1!40}{52,5} \\%& 13\,387 \\
+    \quad+ JPTimes & $E$&en&    - &   - & 10\,K & \cb<2>{color1!40}{570} &   5,0 & \cb<2>{color1!40}{24,2} \\%&  8\,611 \\
+    \bottomrule
+    \end{tabular}
+}
+\end{table}
+    
+\end{frame}
+
+
+%\begin{frame}{Exemple de document du NewYork Times}
+%    \input{figures/kptimes_sample}
+%\end{frame}
+
+\begin{frame}{Processus d'annotation éditeur}
+
+    \begin{figure}
+        \centering
+
+\begin{tikzpicture}[minimum width=1.5cm, minimum height=1cm, scale=.7,transform shape]
+    \tikzstyle{edge label}=[above=-.25cm,sloped,scale=1,black!60]
+    \tikzstyle{label}=[scale=.75, text width=2cm, align=center]
+    
+    \pic[local bounding box=doc] (doc) {doc={scale 1.5}};
+    
+    \node[below=0.5cm of doc, rounded corners, text width=2.5cm, align=center, draw=color0!80!black, fill=color0!30] (auto) {\footnotesize Extraction automatique de mots-clés};
+    \pic[below=1.5cm of auto,local bounding box=kwsauto] {kws={scale 1.5}};
+    \node[right=of auto, rounded corners, draw=color0!80!black, fill=color0!30] (editor) {Editeurs};
+
+    \begin{scope}[local bounding box=kwsadd, scale=1.5]
+    \def\xdist{1.5-.325}
+    \def\ydist{1-.4}
+    \draw[thick] ($(editor)+(\xdist,\ydist)$) rectangle +(.65,.8);
+    \fill[color3] ($(editor)+(\xdist,\ydist)$) ++(.125,.5-.05) rectangle +(.25,.1);
+    \fill[color4] ($(editor)+(\xdist,\ydist)$) ++(.125,.3-.05) rectangle +(.35,.1);
+    \end{scope}
+    
+    \begin{scope}[local bounding box=kwsfilt, scale=1.5]
+    \def\xdist{1.5-.325}
+    \def\ydist{-1-.4}
+    \draw[thick] ($(editor)+(\xdist,\ydist)$) rectangle +(.65,.8);
+    \fill[color1] ($(editor)+(\xdist,\ydist)$) ++(.125,.5-.05) rectangle +(.3,.1);
+    \fill[color2] ($(editor)+(\xdist,\ydist)$) ++(.125,.3-.05) rectangle +(.2,.1);
+    \end{scope}
+
+    \begin{scope}[local bounding box=kws, scale=1.5]
+    \def\xdist{3-.325}
+    \def\ydist{0-.6}
+    \draw[thick] ($(editor)+(\xdist,\ydist)$) rectangle +(.65,1.2);
+    \fill[color3] ($(editor)+(\xdist,\ydist)$) ++(.125,.9-.05) rectangle +(.25,.1);
+    \fill[color4] ($(editor)+(\xdist,\ydist)$) ++(.125,.7-.05) rectangle +(.35,.1);
+    \fill[color1] ($(editor)+(\xdist,\ydist)$) ++(.125,.5-.05) rectangle +(.3,.1);
+    \fill[color2] ($(editor)+(\xdist,\ydist)$) ++(.125,.3-.05) rectangle +(.2,.1);
+    \end{scope}
+    
+    \draw[->] (doc) -- (auto);
+    \draw[->] (auto) -- (kwsauto);
+    \draw[->] (kwsauto) to[out=0, in=180] (editor);
+    \draw[->] (doc) to[out=0, in=180] (editor);
+    \draw[->] (editor) to[out=0, in=180] node [edge label] {Ajout} (kwsadd);
+    \draw[->] (editor) to[out=0, in=180] node [edge label] {Filtre} (kwsfilt);
+    
+    \draw[->] (kwsadd) to[out=0, in=180] (kws);
+    \draw[->] (kwsfilt) to[out=0, in=180] (kws);
+    
+\end{tikzpicture}
+    \end{figure}
+    
+    \begin{itemize}
+        \item Annotation \textbf{semi-automatique} basée sur un vocabulaire contrôlé
+        \item Les éditeurs \textbf{valident} et \textbf{complètent} les mots-clés proposés
+        \item Annotation \textbf{cohérente} (vocabulaire contrôlé) et \textbf{exhaustive} (ajout de mots-clés)
+    \end{itemize}
+    
+%   \begin{table}[]
+%       \centering
+        %ny0048697
+%        \begin{tabular}{cp{3.5cm}p{2cm}p{1.5cm}}
+%Catégories & Acteurs & Lieux & Sujets \\
+%\midrule
+%Human Rights &  Ilham~Tohti; Communist~Party of~China & Urumqi~China; Beijing & Censorship; Uyghur \\
+%        \end{tabular}
+%    \end{table}
+\end{frame}
+
+\begin{frame}{Cohérence de l'annotation}
+    \input{figures/kp_freq_distr}
+    \begin{itemize}
+        \item 80\% de mots-clés associés à un seul document pour l'annotation auteur
+        %\item Il y a moins d'hapax dans KPTimes que dans KP20k.
+    \end{itemize}
+    
+    \textbf{Hypothèses}:
+    \begin{itemize}
+        \item \'Evaluation plus fiable
+        \item Apprentissage plus efficace des méthodes génératives
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Cadre expérimental}
+
+\begin{frame}{Cadre Expérimental}
+    \begin{block}{Méthodes extractives}
+    \begin{itemize}
+        \item \tfidf{}~\cite{jones_statistical_1972}: spécificité des mots
+        \item MultiPartiteRank~\cite{boudin_unsupervised_2018}: centralité des mots
+        \item Kea~\cite{witten_kea:_1999}: classifieur bayesien
+    \end{itemize}
+    \end{block}
+    
+    \begin{block}{Méthodes génératives}
+    \begin{itemize}
+        \item CopyRNN
+        \begin{itemize}
+        \item \colorbox{color2!40}{CopyNews}: Entraîné sur \colorbox{color2!40}{KPTimes} (articles journalistiques)
+        \item \colorbox{color1!40}{CopySci}: Entraîné sur \colorbox{color1!40}{KP20k} (notices scientifiques)
+        \end{itemize}
+    \end{itemize}
+    \end{block}
+    
+    Utilisation des paramètres recommandés par les auteurs.
+    
+    \textbf{Métrique}: F-mesure sur les 10 meilleurs mots-clés
+\end{frame}
+
+\begin{frame}<1,4>{Cadre Expérimental}
+    \input{tables/kptimes_stat}
+    \begin{itemize}
+        %\item Les documents de JPTimes sont plus courts que ceux de NYTimes et DUC-2001.
+        %\item JPTimes contient moitié moins de mots-clés absents que NYTimes.
+        \item Annotation lecteur de DUC-2001: plus de mots-clés que les autres jeux de données et majoritairement présents.
+    \end{itemize}
+    
+\end{frame}
+
+\subsection{Résultats}
+
+\begin{frame}{Document similaire, type d'annotation similaire}
+
+La supériorité de CopyRNN est-elle toujours présente avec NYTimes ?
+%Les résultats obtenus sur KP20k sont-ils répétables sur NYTimes ?
+
+\begin{table}[htbp!]
+\centering
+%\resizebox{\textwidth}{!}{
+\begin{tabular}{lc}
+    \small{$\text{F}@10$} & \colorbox{color2!40}{\textbf{NYTimes}} \\
+    \midrule
+    \tfidf{}      & \pad{0}9,6 \\
+    MPRank        & 11,2 \\
+    Kea           & 11,0 \\
+    \addlinespace
+    \colorbox{color2!40}{CopyNews} & \best{39,3}\\
+    \bottomrule
+\end{tabular}
+%}
+\end{table}
+    
+    \begin{itemize}
+        \item Comme sur KP20k, CopyRNN obtient toujours de meilleurs résultats que les méthodes extractives.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}<1,2,3,5>[label=kptimesabs]{Document similaire, type d'annotation différent}
+
+Les performances de CopyRNN sont-elles généralisables à un type d'annotation différent ?
+
+\begin{table}[htbp!]
+\centering
+\begin{tabular}{lccc}
+    & \'Editeur & \cb<2>{color1!40}{\'Editeur} & \cb<3>{color1!40}{Lecteur} \\
+    \small{$\text{F}@10$} & \colorbox{color2!40}{\textbf{NYTimes}} & \textbf{JPTimes} & \textbf{DUC-2001} \\
+    \midrule
+    \tfidf{}      & \pad{0}9,6 & 15,1 & 23,0 \\
+    MPRank        & 11,2 & 16,8 & 25,3\\
+    Kea           & 11,0 & 16,6 & \best{26,2}\\
+    \addlinespace
+    \colorbox{color2!40}{CopyNews} & \cb<2,3>{color1!40}{\best{39,3}} & \cb<2>{color1!40}{\best{24,6}} & \cb<3,5>{color1!40}{10,5} \\
+    \bottomrule
+    \only<4>{\small \%abs. & \small 52,5 & \small 24,2 & \small 3,1\\}
+\end{tabular}
+\end{table}
+    
+    \only<1-4>{
+    \begin{itemize}
+        \item CopyNews connaît une première baisse de performances lors de l'évaluation sur JPTimes.
+        \item CopyNews généralise mal à un type d'annotation différent.
+        \only<4>{\item Méthodes extractives désavantagés par le taux de mots-clés absent}
+        \end{itemize}
+    }
+    
+    \only<5>{
+    \begin{block}{Exemple de mots-clés d'un article de DUC-2001 (\footnotesize AP890511-0126):}
+    \hspace{.15cm}\footnotesize
+    \colorbox{color2!40}{\textbf{CopyNews}}: \textcolor{color0}{tuberculosis} -- \textcolor{color3}{us} -- \textcolor{color9}{prisons} -- new~jersey --  medicine~and~health
+
+    \textbf{M.-c. lecteur}: \textcolor{color0}{tuberculosis}~rate -- \textcolor{color3}{u.s}.~\textcolor{color9}{prisons} -- aids-virus~infections --\\
+    \phantom{\textbf{M.-c. lecteur}:} \textcolor{color0}{tuberculosis}~cases -- airborne transmission --  cdc
+    \end{block}
+    }
+    
+    % \begin{block}{Exemple de mots-clés d'un article de JPTimes ({\footnotesize jp0007430}):}
+    % \hspace{.15cm}\footnotesize
+    % \colorbox{color2!40}{\textbf{CopyNews}}: \textcolor{color0}{oxfam} -- economy -- \textcolor{color9}{davos} world economic forum -- \textcolor{color3}{poverty} -- \underline{us economy}
+
+    % \textbf{M.-c. lecteur}: \textcolor{color0}{oxfam} -- wealth -- \textcolor{color9}{davos} -- jeff bezos -- \textcolor{color3}{poverty}
+    % \end{block}
+\end{frame}   
+
+%\begin{frame}{Document similaire, annotation différente (exemple)}
+%    \input{figures/kptimes_example_gene_news}
+%\end{frame}
+
+\begin{frame}<1,2>{Document différent, type d'annotation différent}
+    Les performances de CopyRNN sont-elles généralisables à d'autres genres de documents ?
+
+    \input{tables/kptimes_trans_perf}
+    
+    \only<1>{
+    \begin{itemize}
+    \item CopyNews obtient de meilleures performances grâce à son annotation plus cohérente.
+    \item Faible généralisation à un type d'annotation et un genre différent.
+    \end{itemize}
+    }
+    
+    \only<2-3>{
+    \begin{block}{Exemple de mots-clés d'un article de \textbf{KP20k} ({\small 011355}):}
+    \hspace{.15cm}\footnotesize
+    \colorbox{color2!40}{\textbf{CopyNews}}: research -- science~and~technology -- medicine~and~health -- \\ \phantom{\textbf{CopyNews}:} \textbf<3>{diagnostic~problem-solving} -- science~journal
+    
+    \colorbox{color1!40}{\textbf{M.-c. auteur}}: \textbf<3>{diagnosis} -- \textbf<3>{multiple~disorders} -- \textbf<3>{competition} -- \textbf<3>{neural~networks} --\\
+    \phantom{\textbf{M.-c. auteur}:} \textbf<3>{learning}
+    \end{block}
+    }
+    
+    %\begin{block}{Exemple de mots-clés d'un article de KPTimes:}
+    %\colorbox{color1!40}{\textbf{CopySci}}: \\
+    %\textbf{M.-c. éditeur}: 
+    %\end{block}
+\end{frame}
+
+
+%\begin{frame}{Document différent, annotation différente (exemple)}
+%    \input{figures/kptimes_example_gene_sci}
+%\end{frame}
+
+% explication absent présent et copie
+
+\begin{frame}{Validation des performances des méthodes neuronales}
+
+    \begin{block}{Problématique}
+    Entraînement des méthodes génératives sur \textbf{un seul} jeu de données: \textbf{KP20k}.
+    \end{block}
+    
+    %Pour ajouter un point de comparaison et valider les performances des méthodes génératives.
+    Introduction de \textbf{KPTimes}, le seul jeu de données de \textbf{grande taille} d'\textbf{articles journalistiques} annotés en mots-clés par des \textbf{éditeurs}.
+    
+    \begin{block}{Conclusion}
+    %\textbf{Analyse des performances des méthodes génératives:}
+    \begin{enumerate}
+        \item Résultats transposables à KPTimes.
+        \item Faible généralisation à des documents de \textbf{genres différents} et à un \textbf{type d'annotation différent}.
+        \item Faibles performances en partie liées à l'évaluation.
+        %\item Sans données d'entraînement les \textbf{méthodes extractives} sont \textbf{compétitives} avec les méthodes neuronales.
+    \end{enumerate}
+    \end{block}
+
+\end{frame}

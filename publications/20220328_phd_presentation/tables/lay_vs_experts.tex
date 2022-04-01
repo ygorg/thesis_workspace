@@ -1,0 +1,31 @@
+\begin{table}[!htb]
+    \centering
+    \resizebox{.5\textheight}{!}{
+    \begin{tabular}{r c@{\hspace*{2mm}}c  c@{\hspace*{2mm}}c}
+            %\toprule
+            
+            \textbf{Méthode} {\small F@10} & {\small \textit{Index.}} & {\small \textit{Auteur}}\\[-.2em]
+            \midrule
+            
+            % With 64 documents
+            FirstPhrases     &    26,9 &   13,4 \\
+            TextRank         &\cellcolor<3>{color1!40} {34,5} &   12,0 \\
+            TF$\times$IDF    &\cellcolor<3>{color1!40} {\best{35,0}} &   14,6 \\
+            \midrule
+            PositionRank     &\cellcolor<3>{color1!40} {33,2}&   15,3 \\
+            MPRank           &    27,9 &   13,7 \\
+            EmbedRank        &\cellcolor<3-4>{color1!40} {\best{35,3}} &\cellcolor<4>{color1!40} {15,1} \\
+            \midrule
+            Kea              &\cellcolor<3>{color1!40} {32,9}&   15,4 \\
+            \addlinespace
+            CopyRNN          &\cellcolor<3-4>{color1!40} {33,8} &\cellcolor<3-4>{color1!40} {\bestss{27,9}}\\
+            CorrRNN          &    28,7 &   \cellcolor<3>{color1!40} {\best{25,0}} \\
+            \midrule
+            Moy.             &   \cellcolor<2>{color1!40} {32,0} &  \cellcolor<2>{color1!40} {17,0} \\
+            %\bottomrule
+    \end{tabular}
+    }
+    %\caption{Performance de F@10 des modèles évalués sur un sous-ensemble de 64 document d'Inspec pour les références indexeurs (\textit{I}) et auteurs (\textit{A}).
+    %Le symbole \dda~indique la significativité par rapport à toutes les autres méthodes.}
+    
+\end{table}

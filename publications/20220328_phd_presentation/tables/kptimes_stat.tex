@@ -1,0 +1,22 @@
+\begin{table}[htbp!]
+\centering
+\resizebox{0.98\textwidth}{!}{
+    \begin{tabular}{lcrrrrrr}
+     & & \multicolumn{3}{c}{Corpus} & \multicolumn{3}{c}{Document} \\
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8} \\[-1.2em]
+    \textbf{Corpus} & \textbf{Ann.} & \textbf{\#Entr.} & \textbf{\#Val.} & \textbf{\#Test} & \textbf{\#mots} & \textbf{\#mc} & \textbf{\%abs} \\
+    \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+    \footnotesize Journalistique\\
+    KPTimes       & $E$ &    - &    - &  20\,K & 738 &   5,0 & 38,4 \\% & 5.0 \\
+    \rowcolor<3>{color0!20} \quad JPTimes & $E$ &    - &     - &  10\,K & 570 &   5,0 & \textbf<3>{24,2}  \\% & 5.9 \\
+    \rowcolor<2-3>{color1!40} \quad NYTimes & $E$ &260\,K &20\,K &  10\,K & 905 &   5,0 & \textbf<2-3>{52,5}  \\% & 3.8 \\
+    \addlinespace
+    %\footnotesize Journalistique\\
+    \rowcolor<4>{color1!40} DUC-2001      & $L$ &    - &     - &    308 & 847 &   \textbf<4>{8,1} &  \textbf<4>{\pad{0}3,1} \\% & 1.4 \\
+    \addlinespace
+    \footnotesize Scientifique\\
+    \rowcolor<2-3>{color1!40} KP20k         & $A$ &530\,K& 20\,K &  20\,K & 176 &   5,3 & \textbf<2-3>{42,4}  \\% & 2.0 \\
+    \bottomrule
+    \end{tabular}
+}
+\end{table}

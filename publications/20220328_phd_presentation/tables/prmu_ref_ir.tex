@@ -1,0 +1,58 @@
+\iffalse
+\begin{table*}[ht!]
+    \centering
+    \begin{tabular}{l|ccc||ccc}
+        \multicolumn{1}{c}{} & \multicolumn{3}{c}{$\lceil$ \hfill NTCIR-2 (\map{}) \hfill $\rceil$} & \multicolumn{3}{c}{$\lceil$ \hfill ACM-CR (R@10) \hfill $\rceil$}\\
+        \toprule
+        \textbf{index} & \textbf{\textsc{Bm25}} & \textbf{+RM3} & \textbf{\#mc} & \textbf{\textsc{Bm25}} & \textbf{+RM3} & \textbf{\#mc}\\
+        %\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+        %~ & \map & P10 & \map & P10 \\
+        \midrule
+            \tr   & 29,6 & 32,8 & - & 35,6 & 34,1 & - \\
+        \cmidrule(lr){1-7}
+            ~+~\present   & \sign{30,7} & 33,5 & 2,9 & 36,0 & 34,1 & 2,4 \\
+            ~+~\reordonne & 29,8 & 33,5 & 0,4  & 35,4 & 33,4 & 0,5 \\ %C1
+            ~+~\mixte     & \bests{30,8} & \best{33,9} & 0,8 & \best{36,2} & 33,4 & 0,9 \\ %C2
+            ~+~\nonvu     & 29,7 & \best{33,9} & 0,7 & \best{36,2} & \best{33,8} & 0,8 \\ % C3
+        \cmidrule(lr){1-7}
+            ~+~Pond. \scriptsize{(P+R)}    & \sign{30,6} & 33,8 & 3,3  & 35,8 & 32,4 & 2,9\\ % P+C1
+            ~+~Exp. \scriptsize{(M+N)}     & \bests{30,8} & \best{34,3} & 1,5 & \best{37,2} & \best{33,4} & 1,6\\ % C2+C3
+        \cmidrule(lr){1-7}
+            ~+~Absent \scriptsize{(R+M+N)} & \sign{30,8} & \sign{34,9} & 1,9 & 36,6 & 34,1 & 2,1 \\ % abs
+         \cmidrule(lr){1-7}
+            ~+~P+R+M+N    & \signn{\sign{31,9}}  & \signn{\sign{35,5}}   & 4,8  & 36,7 & 32,9 & 4,5\\
+         \bottomrule
+    \end{tabular}
+    \caption{Efficacité de la recherche de \textsc{Bm25} et \textsc{Bm25}+RM3 en utilisant différentes configurations d'indexation. Nous rapportons aussi le nombre moyen de mots-clés (\#mc). \da et \dda indiquent la significativité par rapport à, respectivement, l'indexation titre \& résumé et \underline{P}résent.}
+    \label{tab:prmu_ref}
+\end{table*}
+\fi
+
+
+\begin{table}
+    \centering
+    \resizebox{0.7\textwidth}{!}{
+\begin{tabular}{l|c@{\hspace*{0mm}}rc@{\hspace*{0mm}}rc}
+
+\map{}    & \multicolumn{2}{l}{\bm} & \multicolumn{2}{l}{+RM3} & \textbf{\#mc} \\
+\midrule
+\tr    & \multicolumn{2}{c}{29,6} & \multicolumn{2}{c}{\cb<2>{color1!40}{32,8}} & -\\
+\cmidrule(lr){1-6}
+%~+~\present     &  \sign{30,7} &  \diff{1,2} &         33,5 &  \diff{0,6} &  2,9 \\
+%~+~\reordonne   &         29,8 &  \diff{0,2} &         33,5 &  \diff{0,6} &  0,4 \\
+%~+~\mixte       & \bests{30,8} &  \diff{1,2} &  \best{33,9} &  \diff{1,0} &  0,8 \\
+%~+~\nonvu       &         29,7 &  \diff{0,1} &  \best{33,9} &  \diff{1,1} &  0,7 \\
+%\cmidrule(lr){1-6}
+Pond. (P+R)     &  \sign{30,6} &  \diff{1,1} & \cb<2->{color1!40}{33,8} &  \diff{1,0} & \cb<3>{color1!40}{3,3} \\
+Exp. (M+N)      & \bests{30,8} &  \diff{1,3} & \cb<2->{color1!40}{\best{34,3}} & \diff{1,5} & \cb<3>{color1!40}{1,5} \\
+%\cmidrule(lr){1-6}
+%Absent (R+M+N)  &  \sign{30,8} &  \diff{1,2} &  \sign{34,9} &  \diff{2,0} &  1,8 \\
+\cmidrule(lr){1-6}
+~+~P+R+M+N &\signn{\sign{31,9}}& \diff{2,3} &\signn{\sign{35,5}}& \diff{2,7}& 4,7 \\
+\bottomrule
+\end{tabular}
+}
+
+    %\caption{Efficacité de recherche de \bm{} et \bmrm{} en utilisant différentes configurations d'indexation. Est aussi indiqué le nombre moyen de mots-clés ajoutés (\#mc). Les symboles \da{} et \dda{} indiquent une amélioration significative par rapport à, respectivement, l'indexation \trc{} et \present{}.}
+    \label{tab:prmu_ref}
+\end{table}
