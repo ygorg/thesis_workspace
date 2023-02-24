@@ -1,0 +1,30 @@
+\begin{table}[!ht]
+    \centering
+    \setlength{\tabcolsep}{4pt}
+    \resizebox{.7\textwidth}{!}{%
+\begin{tabular}{l|c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r||c@{\hspace*{0mm}}r}
+    \toprule
+    \textbf{Indexation} & \multicolumn{2}{c}{\textbf{BM25}} & \multicolumn{2}{c}{\textbf{+RM3}} & \multicolumn{2}{c}{\textbf{QL}} & \multicolumn{2}{c||}{\textbf{+RM3}} & \multicolumn{2}{c}{Moy.} \\
+
+    \midrule
+    \tr      & \multicolumn{2}{c}{29,6} & \multicolumn{2}{c}{32,8} & \multicolumn{2}{c}{29,5} & \multicolumn{2}{c||}{32,9} & \multicolumn{2}{c}{31,2} \\
+    + MPRank      & 29,7 & \ddiff{0,1} & 33,0 & \ddiff{0,2} & 29,8 & \ddiff{0,4} & 33,0 & \ddiff{0,1} & 31,4 & \phantom{0}\ddiff{0,2} \\
+    + Kea (KP20k) & 30,3 & \ddiff{0,7} & 33,9 & \ddiff{1,1} & 30,3 & \ddiff{0,9} & 33,5 & \ddiff{0,6} & 32,0 & \ddiff{0,8} \\
+    + CorrRNN     & \sign{31,6} & \ddiff{2,1} & \bests{35,0} & \ddiff{2,2} & \sign{30,9} & \ddiff{1,4} & 34,1 & \ddiff{1,2} & 32,9 & \ddiff{1,7} \\
+    + CopyRNN     & \sign{31,4} & \ddiff{1,9} & \sign{34,8} & \ddiff{2,0} & \sign{31,2} & \ddiff{1,7} & 33,9 & \ddiff{1,0} & 32,8 & \ddiff{1,6} \\
+    
+    \midrule
+    \trm       & \multicolumn{2}{c}{31,9} & \multicolumn{2}{c}{35,5} & \multicolumn{2}{c}{31,2} & \multicolumn{2}{c||}{34,4} & \multicolumn{2}{c}{33,2} \\
+    + MPRank      & 32,0 & \ddiff{0,1} & 35,8 & \ddiff{0,3} & 31,6 & \ddiff{0,4} & 34,7 & \ddiff{0,3} & 33,5 & \ddiff{0,3} \\
+    + Kea (KP20k) & 32,1 & \ddiff{0,2} & 36,0 & \ddiff{0,5} & 31,8 & \ddiff{0,6} & 34,7 & \ddiff{0,3} & 33,6 & \ddiff{0,4} \\
+    + CorrRNN     & 32,4 & \ddiff{0,5} & \sign{36,9} & \ddiff{1,4} & 32,0 & \ddiff{0,8} & 34,3 & \ddiff{-0,1} & 33,9 & \ddiff{0,7} \\
+    + CopyRNN     & 32,5 & \ddiff{0,5} & \bests{37,1} & \ddiff{1,6} & 32,2 & \ddiff{1,1} & \sign{36,0} & \ddiff{1,6} & 34,4 & \ddiff{1,2} \\
+
+    \bottomrule
+    \end{tabular}
+
+    }
+    \caption{Scores de \map{} sur la collection NTCIR-2 pour les systèmes de recherche documentaire utilisant différentes configuration d'indexation. La différence de score avec la configuration sans mot-clés prédits est affiché en gris.
+    Les symboles \da{} et \dda{} indiquent la significativité par rapport à \tr{} et \trm{} respectivement.}
+    \label{tab:ir_results}
+\end{table}

@@ -1,0 +1,32 @@
+\begin{table*}[!ht]
+    \centering
+    \begin{tabular}{lrrrrrr|rl}
+    %\multicolumn{3}{c}{~} &
+    %\multicolumn{3}{c}{\small{$\lceil$ \hfill {\scriptsize absent keyphrases} \hfill $\rceil$}}
+    \\
+    \midrule
+     & & & & & & & & BM25+RM3 \\
+    \textbf{Model} & \textbf{\#} & \textbf{\%P} & \textbf{\%R} & \textbf{\%M} & \textbf{\%U} & \textbf{\%uw} &  \textbf{F$@$5} & mAP {\small (cf.~32.83)} \\
+    %\textbf{Model} & \textbf{\#} & \textbf{\%P} & \textbf{\%R} & \textbf{\%M} & \textbf{\%U} & \textbf{\%uw} &  \textbf{F$@$5} & \textbf{F$@$10} & \textbf{mAP$@$5} & \textbf{mAP$@$10} \\
+    \midrule
+        %ref            & 4.8 & 61.2 &  8.2 & 16.6 & 14.1 & 21.5 &    - &    - & \multicolumn{2}{c}{35.22} \\
+        %seq2seq+copy   & 5.0 & 96.9 &  1.3 &  0.9 &  0.9 & 12.3 & 24.0 & 22.3 & 34.58 & 34.40 \\
+        % seq2seq+corr  & 5.0 & 89.7 &  7.1 &  2.5 &  0.8 &  3.2 & 22.1 & 20.7 & 35.13 & 34.04 \\
+        %cat-seq2seq+tg & 4.4 & 52.3 &  3.0 &  8.7 & 36.0 & 40.0 & 14.0 & 14.7 & 32.16 & 32.07 \\
+                 
+        ref
+                 & 4.8 & 61.2 &  8.2 & 16.6 & 14.1 & 21.5 &    - & 35.22 \\
+        CopyRNN
+                 & 5.0 & 96.9 &  1.3 &  0.9 &  0.9 & 12.3 & 24.0 & 34.58 \\
+        CorrRNN
+                 & 5.0 & 89.7 &  7.1 &  2.5 &  0.8 &  3.2 & 22.1 & 35.13 \\
+        TgNet
+                 & 4.4 & 52.3 &  3.0 &  8.7 & 36.0 & 40.0 & 14.0 & 32.16 \\
+    \bottomrule
+    %\multicolumn{2}{c}{~} &
+    %\multicolumn{2}{c@{}}{\small{$\lfloor$ \hfill {\scriptsize term-weighting} \hfill $\rfloor$}} &
+    %\multicolumn{2}{c}{\small{$\lfloor$ \hfill {\scriptsize doc. expansion} \hfill $\rfloor$}}
+    \end{tabular}
+    \caption{Number (\#) and proportion of \underline{P}resent, \underline{R}eordered, \underline{M}ixed and \underline{U}nseen keyphrases in model's top 5 output with NTCIR1+2. We also report the ratio of unique, unseen words in M+U keyphrases (\%uw).}
+    \label{tab:perf-dist-model}
+\end{table*}

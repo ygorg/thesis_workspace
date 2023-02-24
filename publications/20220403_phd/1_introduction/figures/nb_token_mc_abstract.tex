@@ -1,0 +1,34 @@
+\begin{figure}
+    \centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    smooth,
+    scale only axis,
+    width=\textwidth-0.1cm-60,
+    height=3cm,
+    yticklabel style={inner sep=0pt, align=right, xshift=-0.1cm},
+    xmin=1, xmax=7,xtick={1,2,3,4,5,6,7},
+    xlabel={\# de mots par mot-clé},
+    ylabel={\% de mots-clés},
+    legend pos=north east]
+
+\addlegendentry{Inspec (Indexeurs)}
+\addplot coordinates {
+    (1, 13.4337472)(2, 52.59515571)(3, 24.83207816)(4, 6.81864441)(5, 1.54691634)(6, 0.63097904)(7, 0.10177081)(9, 0.04070832)};
+%\addlegendentry{KDD}
+%\addplot coordinates {
+%    (1, 25.47688328)(2, 56.22373101)(3, 14.03168445)(4, 3.55641772)(5, 0.54962819)(6, 0.06466214)(7, 0.03233107)(8, 0.06466214)};
+\addlegendentry{KP20k (Auteurs)}
+\addplot coordinates {
+    (1, 33.21207643)(2, 46.26992924)(3, 14.69292636)(4, 3.13468042)(5, 1.08752285)(6, 0.97289719)(7, 0.35713947)(8, 0.11273103)(9, 0.0435767)(10, 0.03126155)(11, 0.01799907)(12, 0.01420979)(13, 0.0094732)(14, 0.0047366)(15, 0.01136783)(16, 0.00284196)(17, 0.00284196)(18, 0.00284196)(19, 0.00378928)(20, 0.00378928)(21, 0.00094732)(23, 0.00189464)(24, 0.00094732)(25, 0.00094732)(27, 0.00094732)(28, 0.00284196)(33, 0.00094732)(105, 0.00094732)};
+\addlegendentry{TermITH-Eval (Indexeurs)}
+\addplot coordinates {
+    (1, 52.11118184)(2, 35.53999576)(3, 8.97517505)(4, 1.52768937)(5, 1.20942075)(6, 0.23339699)(7, 0.19096117)(8, 0.04243582)(9, 0.02121791)(10, 0.06365372)(12, 0.02121791)(14, 0.02121791)(15, 0.02121791)(16, 0.02121791)};
+\end{axis}
+\end{tikzpicture}
+
+
+    \caption{Nombre de constituants par mot-clé dans les ensembles de test de différents jeux de données.}
+    \label{fig:tok_per_kw_abstract}
+\end{figure}

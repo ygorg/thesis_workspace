@@ -1,0 +1,15 @@
+\begin{table}[htbp!]
+\centering
+    \begin{tabular}{l S[table-format=2.1,table-number-alignment=right] S[table-format=6.0,table-number-alignment=right] S[table-format=2.1,table-number-alignment=right] S[table-format=6.0,table-number-alignment=right]}
+    & \multicolumn{2}{c}{\textbf{KP20k}} & \multicolumn{2}{c}{\textbf{KPTimes}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \\[-1.5em]
+    & \small{\#ass.} &   \small{\#uniq.} &  \small{\#ass.} &   \small{\#uniq.} \\
+    \midrule
+    Test  & 2,0 &  53489 &   5.0 &  20535 \\ % NYTimes + JPTimes
+    Val.  & 2,0 &  52975 &   3.9 &  13269 \\ % NYTimes
+    Entr. & 4,3 & 648697 &  13.1 & 101748 \\ % NYTimes
+    \bottomrule
+    \end{tabular}
+\caption{Comparaison du nombre de mots-clés total et du nombre moyen d'assignation d'un mot-clé entre les ensembles de test, de validation et d'entraînement de KPTimes et KP20k.}
+\label{tab:kptimes_comp_ass_kw}
+\end{table}

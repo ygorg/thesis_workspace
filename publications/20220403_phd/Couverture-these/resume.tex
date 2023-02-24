@@ -1,0 +1,68 @@
+\markboth{}{}
+% Plus petite marge du bas pour la quatrième de couverture
+% Shorter bottom margin for the back cover
+\newgeometry{inner=30mm,outer=20mm,top=40mm,bottom=20mm}
+
+%insertion de l'image de fond du dos (resume)
+%background image for resume (back)
+\backcoverheader
+
+% Switch font style to back cover style
+\selectfontbackcover{ % Font style change is limited to this page using braces, just in case
+
+\vspace{-1cm}
+
+\titleFR{Indexation de bout-en-bout dans les bibliothèques numériques scientifiques}
+
+\keywordsFR{indexation automatique, mots-clés, évaluation extrinsèque, recherche d'information, génération de mots-clés, méthodes de bout en bout}
+
+\abstractFR{
+%Le nombre de documents scientifiques dans les bibliothèques numériques ne cesse d'augmenter.
+%Indexer efficacement ces documents est donc crucial pour faciliter l'accès aux connaissances scientifiques.
+%Les mots-clés, permettant d'enrichir cette indexation, ne peuvent être annotés manuellement étant donné le volume de document à traiter.
+Le nombre de documents scientifiques dans les bibliothèques numériques ne cesse d'augmenter.
+Les mots-clés, permettant d'enrichir l'indexation de ces documents ne peuvent être annotés manuellement étant donné le volume de document à traiter.
+La production automatique de mots-clés est donc un enjeu important.
+Le cadre évaluatif le plus utilisé pour cette tâche souffre de nombreuses faiblesses qui rendent l'évaluation des nouvelles méthodes neuronales peu fiables.
+Notre objectif est d'identifier précisément ces faiblesses et d'y apporter des solutions selon trois axes.
+% KPtimes
+Dans un premier temps, nous introduisons KPTimes, un jeu de données du domaine journalistique.
+Il nous permet d'analyser la capacité de généralisation des méthodes neuronales.
+De manière surprenante, nos expériences montrent que le modèle le moins performant est celui qui généralise le mieux.
+%
+Dans un deuxième temps, nous effectuons une comparaison systématique des méthodes états de l'art grâce à un cadre expérimental strict.
+Cette comparaison indique que les méthodes de référence comme \tfidf{} sont toujours compétitives et que la qualité des mots-clés de référence a un impact fort sur la fiabilité de l'évaluation.
+%
+Enfin, nous présentons un nouveau protocole d'évaluation extrinsèque basé sur la recherche d'information.
+Il nous permet d'évaluer l'utilité des mots-clés, une question peu abordée jusqu'à présent.
+Cette évaluation nous permet de mieux identifier les mots-clés importants pour la tâche de production automatique de mots-clés et d'orienter les futurs travaux.
+}
+
+\titleEN{End-to-end indexation in digital scientific libraries}
+
+\keywordsEN{automatic indexing, keywords, extrinsic evaluation, information retrieval, keyword generation, end-to-end method}
+
+\abstractEN{More and more scientific documents are being avaible in digital libraries.
+Efficient indexing is of the utmost importance for ease of access to scientific knowledge.
+Keywords, that supplements this indexation, can't be annotated manually given the volume of document to process.
+Automatic keyword production is then an important issue.
+The commonly used evaluation protocol has many weaknesses which make the evaluation of the recent neural models less reliable.
+Our goal is to precisely identify these weaknesses and to provide solutions given three axis.
+%
+First, we introduce KPTimes, a dataset from the news domain.
+It will allow us to analyse the generalisation ability of neural models.
+Suprisingly, the least performant model is the most generalisable one.
+%
+Then, we perform a systematic comparison of state-of-the-art methods using a strict experimental setup.
+This comparison shows that baselines such as \tfidf{} are still competitive and that reference keywords quality have a strong impact on evaluation reliability.
+%
+Finally, we introduce a new extrinsic evaluation protocol based on information retrieval.
+It allow us to evaluate keyphrase usefulness, an issue that has been given very little attention until now.
+This evaluation will help us better identify important keywords for automatic keyword production and to guide future works.
+}
+
+}
+
+% Rétablit les marges d'origines
+% Restore original margin settings
+\restoregeometry

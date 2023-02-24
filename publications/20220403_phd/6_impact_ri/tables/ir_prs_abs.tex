@@ -1,0 +1,36 @@
+\iffalse
+\begin{table}[ht!]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \begin{tabular}{l|cc|cc}
+        \toprule
+        %\multirow{2}{*}{\textbf{Méthode}} & \multicolumn{2}{c|}{$T$+$R$ {\small(cf.~31,9)}} & \multicolumn{2}{c}{$T$+$R$+$M$ {\small(cf.~35,2)}}\\
+        \multirow{2}{*}{\textbf{Méthode}} & \multicolumn{2}{c|}{\tr} & \multicolumn{2}{c}{\trm}\\
+        ~ & \textbf{pres.} & \textbf{abs.} & \textbf{pres.} & \textbf{abs.} \\
+        \midrule
+        - & \multicolumn{2}{c|}{31,9} & \multicolumn{2}{c}{35,2} \\
+        CorrRNN & 33,0 & 32,0 & 36,1 & 34,8 \\
+        CopyRNN & \bests{34,2} & 32,1 & \bests{36,3} & 35,0 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Scores de \map pour BM25+RM3 sur NTCIR1+2 en utilisant les 5 meilleurs mots-clés absent ou présent. La première ligne indique les résultats sans mots-clés prédits. $\dagger$ indique la significativité par rapport à une indexation sans mots-clés prédits.}
+    \label{tab:ir_prs_abs}
+\end{table}
+\fi
+
+\begin{table}[ht!]
+    \centering
+    \setlength{\tabcolsep}{5pt}
+    \begin{tabular}{l|cc|cc}
+        \toprule
+        \multirow{2}{*}{\textbf{Méthode}} & \multicolumn{2}{c|}{\tr} & \multicolumn{2}{c}{\trm}\\
+        ~ & \textbf{pres.} & \textbf{abs.} & \textbf{pres.} & \textbf{abs.} \\
+        \midrule
+        -       & \multicolumn{2}{c|}{32.8} & \multicolumn{2}{c}{35.5} \\
+        CorrRNN & \sign{34.9} & 33.0 & \sign{36.9} & 35.4 \\
+        CopyRNN & \sign{34.5} & 32.6 & \sign{36.7} & 35.4 \\
+        \bottomrule
+    \end{tabular}
+    \caption{\textcolor{red}{Version redefining} Scores de \map pour BM25+RM3 sur NTCIR1+2 en utilisant les 5 meilleurs mots-clés absent ou présent. La première ligne indique les résultats sans mots-clés prédits. $\dagger$ indique la significativité par rapport à une indexation sans mots-clés prédits.}
+    \label{tab:ir_prs_abs}
+\end{table}

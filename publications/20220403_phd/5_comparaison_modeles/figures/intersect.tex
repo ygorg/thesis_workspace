@@ -1,0 +1,311 @@
+%\definecolor{color3}{RGB}{208, 226, 194}
+%\definecolor{cb}{RGB}{26, 40, 61}
+
+\definecolor{ca}{RGB}{255, 0 , 0}
+\definecolor{cb}{RGB}{255, 255, 255}
+
+% https://tex.stackexchange.com/questions/401370/how-to-interpolate-two-colors-in-a-cell
+% \newcommand\Heat[1]{% \Heat{number in the interval [-1,1]}
+%    \pgfmathparse{int(50+50*#1)}% map number in [-1,1] to [0,100]
+%    \edef\HeatCell{\noexpand\cellcolor{red!\pgfmathresult!blue}}%
+%    \HeatCell$#1$%
+%}
+
+
+\begin{figure}
+\centering
+\begin{subfigure}{0.49\textwidth}
+    \centering
+\resizebox{0.9\linewidth}{!}{
+\begin{tikzpicture}[square/.append style={inner sep=2.3}]
+
+    \foreach \x [count=\n] in {
+        TextRank,EmbedRank,PositionRank,FirstPhrases,MPRank,Kea,\tfidf{},CopyRNN,CorrRNN
+    } {
+        \node[rotate=-45,xshift=0.6cm,anchor=east] at (\n-1,1) {\x};
+        \node[xshift=0.5cm,anchor=east] at (-1,-\n+1) {\x};
+    }
+        \node at (0,-1) [square,fill=color3!68!cb] {6,8};
+        \node at (0,-2) [square,fill=color3!70!cb] {7,0};
+        \node at (0,-3) [square,fill=color3!40!cb] {4,0};
+        \node at (0,-4) [square,fill=color3!40!cb] {4,0};
+        \node at (0,-5) [square,fill=color3!50!cb] {5,0};
+        \node at (0,-6) [square,fill=color3!60!cb] {6,0};
+        \node at (0,-7) [square,fill=color3!22!cb] {2,2};
+        \node at (0,-8) [square,fill=color3!24!cb] {2,4};
+
+        \node at (1,0) [square,fill=color3!68!cb] {6,8};
+        \node at (1,-2) [square,fill=color3!69!cb] {6,9};
+        \node at (1,-3) [square,fill=color3!45!cb] {4,5};
+        \node at (1,-4) [square,fill=color3!46!cb] {4,6};
+        \node at (1,-5) [square,fill=color3!53!cb] {5,3};
+        \node at (1,-6) [square,fill=color3!56!cb] {5,6};
+        \node at (1,-7) [square,fill=color3!27!cb] {2,7};
+        \node at (1,-8) [square,fill=color3!27!cb] {2,7};
+
+        \node at (2,0) [square,fill=color3!70!cb] {7,0};
+        \node at (2,-1) [square,fill=color3!69!cb] {6,9};
+        \node at (2,-3) [square,fill=color3!55!cb] {5,5};
+        \node at (2,-4) [square,fill=color3!52!cb] {5,2};
+        \node at (2,-5) [square,fill=color3!62!cb] {6,2};
+        \node at (2,-6) [square,fill=color3!61!cb] {6,1};
+        \node at (2,-7) [square,fill=color3!29!cb] {2,9};
+        \node at (2,-8) [square,fill=color3!30!cb] {3,0};
+
+        \node at (3,0) [square,fill=color3!40!cb] {4,0};
+        \node at (3,-1) [square,fill=color3!45!cb] {4,5};
+        \node at (3,-2) [square,fill=color3!55!cb] {5,5};
+        \node at (3,-4) [square,fill=color3!70!cb] {7,0};
+        \node at (3,-5) [square,fill=color3!75!cb] {7,5};
+        \node at (3,-6) [square,fill=color3!52!cb] {5,2};
+        \node at (3,-7) [square,fill=color3!28!cb] {2,8};
+        \node at (3,-8) [square,fill=color3!28!cb] {2,8};
+
+        \node at (4,0) [square,fill=color3!40!cb] {4,0};
+        \node at (4,-1) [square,fill=color3!46!cb] {4,6};
+        \node at (4,-2) [square,fill=color3!52!cb] {5,2};
+        \node at (4,-3) [square,fill=color3!70!cb] {7,0};
+        \node at (4,-5) [square,fill=color3!67!cb] {6,7};
+        \node at (4,-6) [square,fill=color3!54!cb] {5,4};
+        \node at (4,-7) [square,fill=color3!29!cb] {2,9};
+        \node at (4,-8) [square,fill=color3!28!cb] {2,8};
+
+        \node at (5,0) [square,fill=color3!50!cb] {5,0};
+        \node at (5,-1) [square,fill=color3!53!cb] {5,3};
+        \node at (5,-2) [square,fill=color3!62!cb] {6,2};
+        \node at (5,-3) [square,fill=color3!75!cb] {7,5};
+        \node at (5,-4) [square,fill=color3!67!cb] {6,7};
+        \node at (5,-6) [square,fill=color3!72!cb] {7,2};
+        \node at (5,-7) [square,fill=color3!30!cb] {3,0};
+        \node at (5,-8) [square,fill=color3!30!cb] {3,0};
+
+        \node at (6,0) [square,fill=color3!60!cb] {6,0};
+        \node at (6,-1) [square,fill=color3!56!cb] {5,6};
+        \node at (6,-2) [square,fill=color3!61!cb] {6,1};
+        \node at (6,-3) [square,fill=color3!52!cb] {5,2};
+        \node at (6,-4) [square,fill=color3!54!cb] {5,4};
+        \node at (6,-5) [square,fill=color3!72!cb] {7,2};
+        \node at (6,-7) [square,fill=color3!26!cb] {2,6};
+        \node at (6,-8) [square,fill=color3!27!cb] {2,7};
+
+        \node at (7,0) [square,fill=color3!22!cb] {2,2};
+        \node at (7,-1) [square,fill=color3!27!cb] {2,7};
+        \node at (7,-2) [square,fill=color3!29!cb] {2,9};
+        \node at (7,-3) [square,fill=color3!28!cb] {2,8};
+        \node at (7,-4) [square,fill=color3!29!cb] {2,9};
+        \node at (7,-5) [square,fill=color3!30!cb] {3,0};
+        \node at (7,-6) [square,fill=color3!26!cb] {2,6};
+        \node at (7,-8) [square,fill=color3!51!cb] {5,1};
+
+        \node at (8,0) [square,fill=color3!24!cb] {2,4};
+        \node at (8,-1) [square,fill=color3!27!cb] {2,7};
+        \node at (8,-2) [square,fill=color3!30!cb] {3,0};
+        \node at (8,-3) [square,fill=color3!28!cb] {2,8};
+        \node at (8,-4) [square,fill=color3!28!cb] {2,8};
+        \node at (8,-5) [square,fill=color3!30!cb] {3,0};
+        \node at (8,-6) [square,fill=color3!27!cb] {2,7};
+        \node at (8,-7) [square,fill=color3!51!cb] {5,1};
+
+\end{tikzpicture}
+}
+\caption{Notices scientifiques.}
+\end{subfigure}
+%
+\begin{subfigure}{0.49\textwidth}
+\centering
+\resizebox{0.9\linewidth}{!}{
+\begin{tikzpicture}[square/.append style={inner sep=2.3}]
+
+    \foreach \x [count=\n] in {
+        TextRank,EmbedRank,PositionRank,FirstPhrases,MPRank,Kea,\tfidf{},CopyRNN,CorrRNN
+    } {
+        \node[rotate=-45,xshift=0.6cm,anchor=east] at (\n-1,1) {\x};
+        \node[xshift=0.5cm,anchor=east] at (-1,-\n+1) {\x};
+    }
+        \node at (0,-1) [square,fill=color3!25!cb] {2,5};
+        \node at (0,-2) [square,fill=color3!53!cb] {5,3};
+        \node at (0,-3) [square,fill=color3!5!cb] {0,5};
+        \node at (0,-4) [square,fill=color3!5!cb] {0,5};
+        \node at (0,-5) [square,fill=color3!4!cb] {0,4};
+        \node at (0,-6) [square,fill=color3!3!cb] {0,3};
+        \node at (0,-7) [square,fill=color3!3!cb] {0,3};
+        \node at (0,-8) [square,fill=color3!4!cb] {0,4};
+
+        \node at (1,0) [square,fill=color3!25!cb] {2,5};
+        \node at (1,-2) [square,fill=color3!24!cb] {2,4};
+        \node at (1,-3) [square,fill=color3!4!cb] {0,4};
+        \node at (1,-4) [square,fill=color3!5!cb] {0,5};
+        \node at (1,-5) [square,fill=color3!5!cb] {0,5};
+        \node at (1,-6) [square,fill=color3!5!cb] {0,5};
+        \node at (1,-7) [square,fill=color3!4!cb] {0,4};
+        \node at (1,-8) [square,fill=color3!4!cb] {0,4};
+
+        \node at (2,0) [square,fill=color3!53!cb] {5,3};
+        \node at (2,-1) [square,fill=color3!24!cb] {2,4};
+        \node at (2,-3) [square,fill=color3!12!cb] {1,2};
+        \node at (2,-4) [square,fill=color3!10!cb] {1,0};
+        \node at (2,-5) [square,fill=color3!9!cb] {0,9};
+        \node at (2,-6) [square,fill=color3!9!cb] {0,9};
+        \node at (2,-7) [square,fill=color3!7!cb] {0,7};
+        \node at (2,-8) [square,fill=color3!9!cb] {0,9};
+
+        \node at (3,0) [square,fill=color3!5!cb] {0,5};
+        \node at (3,-1) [square,fill=color3!4!cb] {0,4};
+        \node at (3,-2) [square,fill=color3!12!cb] {1,2};
+        \node at (3,-4) [square,fill=color3!36!cb] {3,6};
+        \node at (3,-5) [square,fill=color3!20!cb] {2,0};
+        \node at (3,-6) [square,fill=color3!16!cb] {1,6};
+        \node at (3,-7) [square,fill=color3!17!cb] {1,7};
+        \node at (3,-8) [square,fill=color3!23!cb] {2,3};
+
+        \node at (4,0) [square,fill=color3!5!cb] {0,5};
+        \node at (4,-1) [square,fill=color3!5!cb] {0,5};
+        \node at (4,-2) [square,fill=color3!10!cb] {1,0};
+        \node at (4,-3) [square,fill=color3!36!cb] {3,6};
+        \node at (4,-5) [square,fill=color3!41!cb] {4,1};
+        \node at (4,-6) [square,fill=color3!36!cb] {3,6};
+        \node at (4,-7) [square,fill=color3!22!cb] {2,2};
+        \node at (4,-8) [square,fill=color3!20!cb] {2,0};
+
+        \node at (5,0) [square,fill=color3!4!cb] {0,4};
+        \node at (5,-1) [square,fill=color3!5!cb] {0,5};
+        \node at (5,-2) [square,fill=color3!9!cb] {0,9};
+        \node at (5,-3) [square,fill=color3!20!cb] {2,0};
+        \node at (5,-4) [square,fill=color3!41!cb] {4,1};
+        \node at (5,-6) [square,fill=color3!85!cb] {8,5};
+        \node at (5,-7) [square,fill=color3!29!cb] {2,9};
+        \node at (5,-8) [square,fill=color3!20!cb] {2,0};
+
+        \node at (6,0) [square,fill=color3!3!cb] {0,3};
+        \node at (6,-1) [square,fill=color3!5!cb] {0,5};
+        \node at (6,-2) [square,fill=color3!9!cb] {0,9};
+        \node at (6,-3) [square,fill=color3!16!cb] {1,6};
+        \node at (6,-4) [square,fill=color3!36!cb] {3,6};
+        \node at (6,-5) [square,fill=color3!85!cb] {8,5};
+        \node at (6,-7) [square,fill=color3!27!cb] {2,7};
+        \node at (6,-8) [square,fill=color3!18!cb] {1,8};
+
+        \node at (7,0) [square,fill=color3!3!cb] {0,3};
+        \node at (7,-1) [square,fill=color3!4!cb] {0,4};
+        \node at (7,-2) [square,fill=color3!7!cb] {0,7};
+        \node at (7,-3) [square,fill=color3!17!cb] {1,7};
+        \node at (7,-4) [square,fill=color3!22!cb] {2,2};
+        \node at (7,-5) [square,fill=color3!29!cb] {2,9};
+        \node at (7,-6) [square,fill=color3!27!cb] {2,7};
+        \node at (7,-8) [square,fill=color3!37!cb] {3,7};
+
+        \node at (8,0) [square,fill=color3!4!cb] {0,4};
+        \node at (8,-1) [square,fill=color3!4!cb] {0,4};
+        \node at (8,-2) [square,fill=color3!9!cb] {0,9};
+        \node at (8,-3) [square,fill=color3!23!cb] {2,3};
+        \node at (8,-4) [square,fill=color3!20!cb] {2,0};
+        \node at (8,-5) [square,fill=color3!20!cb] {2,0};
+        \node at (8,-6) [square,fill=color3!18!cb] {1,8};
+        \node at (8,-7) [square,fill=color3!37!cb] {3,7};
+
+\end{tikzpicture}
+}
+\caption{Articles scientifiques.}
+\end{subfigure}
+%
+\begin{subfigure}{0.49\textwidth}
+    \centering
+\resizebox{0.9\linewidth}{!}{
+\begin{tikzpicture}[square/.append style={inner sep=2.3}]
+
+    \foreach \x [count=\n] in {
+        TextRank,EmbedRank,PositionRank,FirstPhrases,MPRank,Kea,\tfidf{},CopyRNN,CorrRNN
+    } {
+        \node[rotate=-45,xshift=0.6cm,anchor=east] at (\n-1,1) {\x};
+        \node[xshift=0.5cm,anchor=east] at (-1,-\n+1) {\x};
+    }
+        \node at (0,-1) [square,fill=color3!42!cb] {4,2};
+        \node at (0,-2) [square,fill=color3!54!cb] {5,4};
+        \node at (0,-3) [square,fill=color3!17!cb] {1,7};
+        \node at (0,-4) [square,fill=color3!19!cb] {1,9};
+        \node at (0,-5) [square,fill=color3!22!cb] {2,2};
+        \node at (0,-6) [square,fill=color3!23!cb] {2,3};
+        \node at (0,-7) [square,fill=color3!5!cb] {0,5};
+        \node at (0,-8) [square,fill=color3!5!cb] {0,5};
+
+        \node at (1,0) [square,fill=color3!42!cb] {4,2};
+        \node at (1,-2) [square,fill=color3!41!cb] {4,1};
+        \node at (1,-3) [square,fill=color3!19!cb] {1,9};
+        \node at (1,-4) [square,fill=color3!25!cb] {2,5};
+        \node at (1,-5) [square,fill=color3!26!cb] {2,6};
+        \node at (1,-6) [square,fill=color3!26!cb] {2,6};
+        \node at (1,-7) [square,fill=color3!7!cb] {0,7};
+        \node at (1,-8) [square,fill=color3!6!cb] {0,6};
+
+        \node at (2,0) [square,fill=color3!54!cb] {5,4};
+        \node at (2,-1) [square,fill=color3!41!cb] {4,1};
+        \node at (2,-3) [square,fill=color3!38!cb] {3,8};
+        \node at (2,-4) [square,fill=color3!35!cb] {3,5};
+        \node at (2,-5) [square,fill=color3!39!cb] {3,9};
+        \node at (2,-6) [square,fill=color3!34!cb] {3,4};
+        \node at (2,-7) [square,fill=color3!11!cb] {1,1};
+        \node at (2,-8) [square,fill=color3!13!cb] {1,3};
+
+        \node at (3,0) [square,fill=color3!17!cb] {1,7};
+        \node at (3,-1) [square,fill=color3!19!cb] {1,9};
+        \node at (3,-2) [square,fill=color3!38!cb] {3,8};
+        \node at (3,-4) [square,fill=color3!50!cb] {5,0};
+        \node at (3,-5) [square,fill=color3!50!cb] {5,0};
+        \node at (3,-6) [square,fill=color3!33!cb] {3,3};
+        \node at (3,-7) [square,fill=color3!14!cb] {1,4};
+        \node at (3,-8) [square,fill=color3!15!cb] {1,5};
+
+        \node at (4,0) [square,fill=color3!19!cb] {1,9};
+        \node at (4,-1) [square,fill=color3!25!cb] {2,5};
+        \node at (4,-2) [square,fill=color3!35!cb] {3,5};
+        \node at (4,-3) [square,fill=color3!50!cb] {5,0};
+        \node at (4,-5) [square,fill=color3!55!cb] {5,5};
+        \node at (4,-6) [square,fill=color3!47!cb] {4,7};
+        \node at (4,-7) [square,fill=color3!17!cb] {1,7};
+        \node at (4,-8) [square,fill=color3!16!cb] {1,6};
+
+        \node at (5,0) [square,fill=color3!22!cb] {2,2};
+        \node at (5,-1) [square,fill=color3!26!cb] {2,6};
+        \node at (5,-2) [square,fill=color3!39!cb] {3,9};
+        \node at (5,-3) [square,fill=color3!50!cb] {5,0};
+        \node at (5,-4) [square,fill=color3!55!cb] {5,5};
+        \node at (5,-6) [square,fill=color3!76!cb] {7,6};
+        \node at (5,-7) [square,fill=color3!18!cb] {1,8};
+        \node at (5,-8) [square,fill=color3!17!cb] {1,7};
+
+        \node at (6,0) [square,fill=color3!23!cb] {2,3};
+        \node at (6,-1) [square,fill=color3!26!cb] {2,6};
+        \node at (6,-2) [square,fill=color3!34!cb] {3,4};
+        \node at (6,-3) [square,fill=color3!33!cb] {3,3};
+        \node at (6,-4) [square,fill=color3!47!cb] {4,7};
+        \node at (6,-5) [square,fill=color3!76!cb] {7,6};
+        \node at (6,-7) [square,fill=color3!17!cb] {1,7};
+        \node at (6,-8) [square,fill=color3!16!cb] {1,6};
+
+        \node at (7,0) [square,fill=color3!5!cb] {0,5};
+        \node at (7,-1) [square,fill=color3!7!cb] {0,7};
+        \node at (7,-2) [square,fill=color3!11!cb] {1,1};
+        \node at (7,-3) [square,fill=color3!14!cb] {1,4};
+        \node at (7,-4) [square,fill=color3!17!cb] {1,7};
+        \node at (7,-5) [square,fill=color3!18!cb] {1,8};
+        \node at (7,-6) [square,fill=color3!17!cb] {1,7};
+        \node at (7,-8) [square,fill=color3!26!cb] {2,6};
+
+        \node at (8,0) [square,fill=color3!5!cb] {0,5};
+        \node at (8,-1) [square,fill=color3!6!cb] {0,6};
+        \node at (8,-2) [square,fill=color3!13!cb] {1,3};
+        \node at (8,-3) [square,fill=color3!15!cb] {1,5};
+        \node at (8,-4) [square,fill=color3!16!cb] {1,6};
+        \node at (8,-5) [square,fill=color3!17!cb] {1,7};
+        \node at (8,-6) [square,fill=color3!16!cb] {1,6};
+        \node at (8,-7) [square,fill=color3!26!cb] {2,6};
+
+\end{tikzpicture}
+}
+\caption{Articles journalistiques.}
+\end{subfigure}
+
+\caption{Nombre moyen de mots-clés en commun dans les 10 premiers mots-clés de chacune des méthodes.}
+\label{fig:intersect}
+
+\end{figure}

@@ -1,0 +1,46 @@
+\iffalse
+\begin{table}[htbp!]
+    \centering
+    \begin{tabular}{llSS}
+        & & \textbf{KPTimes} &   \textbf{KP20k} \\
+    \cmidrule(lr){3-4}
+    %\cmidrule{1-4}
+    \multirow{2}{*}{CopyNews}
+        & Présent & 61.2 & 51.1 \\
+        & Absent & 38.8 & 48.9 \\
+        %& R & \best{11.73} & \best{2.62} \\
+        %& M &  20.08 &  24.42 \\
+        %& U & \best{7.02} & \best{21.85} \\
+        \cmidrule(lr){1-2} \cmidrule(lr){3-4}
+    \multirow{2}{*}{CopySci}
+        & Présent &  94.9 &  92.0 \\
+        & Absent &  5.1 &  8.0 \\
+        %& R &   0.79 &   2.95 \\
+        %& M &   1.27 &   2.87 \\
+        %& U &   3.02 &   2.22 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Pourcentage de mots-clés présents et absents produit automatiquement par le modèle CopyRNN entraîné sur KPTimes (CopyNews) et KP20k (CopySci) et testé sur ces deux jeux de données.}
+    \label{tab:ratio_prsabs_transfer}
+\end{table}
+\fi
+
+
+\begin{table}[htbp!]
+    \centering
+    \begin{tabular}{lS@{\hspace*{1mm}}S S@{\hspace*{1mm}}S}
+        & \multicolumn{2}{c}{\textbf{KPTimes}} & \multicolumn{2}{c}{\textbf{KP20k}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \\[-1.5em]
+    & \small{Prs} & \small{Abs} & \small{Prs} & \small{Abs} \\
+    \midrule
+    %\cmidrule{1-4}
+    {CopyNews}
+        & 61.2 & 38.8 & 51.1 & 48.9 \\
+    %\cmidrule(lr){1-2} \cmidrule(lr){3-4}
+    {CopySci}
+        & 94. & 5.1 &  92.0 & 8.0 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Pourcentage de mots-clés présents et absents produit automatiquement par le modèle CopyRNN entraîné sur KPTimes (CopyNews) et KP20k (CopySci) et testé sur ces deux jeux de données.}
+    \label{tab:ratio_prsabs_transfer}
+\end{table}

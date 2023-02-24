@@ -1,0 +1,86 @@
+% La page de garde est en français
+% The front cover is in French
+\selectlanguage{french}
+
+% Inclure les infos de chaque établissement
+% Include each institution data
+
+% Inclure infos de l'école doctorale
+\newcommand\addecoledoctorale[5]{\direcole{#1}\numeroecole{#2}\definecolor{color-ecole}{RGB}{#3}\nomecoleA{#4}\nomecoleB{#5}}
+\addecoledoctorale
+    {MathSTIC}{601}{236,115,127}
+    {Math\'{e}matiques et Sciences et Technologies}
+    {de l'Information et de la Communication}
+
+\newcommand\addetablissement[4]{\logoetablissementB{#1}\nometablissementC{#2}\nometablissementD{#3}\nometablissementE{#4}}
+\addetablissement
+    {UN-noir}{}{}
+    {NANTES UNIVERSITE}
+% Inclure infos de l'établissement
+% Include institution data
+%\etablissement{UN}
+
+%Inscrivez ici votre sp\'{e}cialit\'{e} (voir liste des sp\'{e}cialit\'{e}s sur le site de votre \'{e}cole doctorale)
+%Indicate the domain (see list of domains in your ecole doctorale)
+\spec{Informatique}
+
+%Attention : le pr\'{e}nom doit être en minuscules (Jean) et le NOM en majuscules (BRITTEF) 
+\author{Ygor GALLINA}
+
+% Donner le titre complet de la th\`{e}se, \'{e}ventuellement le sous titre, si n\'{e}cessaire sur plusieurs lignes 
+\title{Indexation de bout-en-bout \\ dans les bibliothèques numériques scientifiques}
+%\lesoustitre{Évaluation de méthodes de production automatique de mots-clés dans \\ les bibliothèques scientifiques}
+
+%Indiquer la date et le lieu de soutenance de la th\`{e}se 
+%indicates the date and the place of the defense 
+\date{28 mars 2022}
+\lieu{Nantes}
+
+%Indiquer le nom du (ou des) laboratoire (s) dans le(s)quel(s) le travail de th\`{e}se a \'{e}t\'{e} effectu\'{e}, indiquer aussi si souhait\'{e} le nom de la (les) facult\'{e}(s) (UFR, \'{e}cole(s), Institut(s), Centre(s)...), son (leurs) adresse(s)... 
+\uniterecherche{Laboratoire des Sciences du Numériques de Nantes (LS2N)}
+
+%Indiquer le Numero de th\`{e}se, si cela est opportun, ou laisser vide pour faire disparaitre cet ligne de la couverture
+\numthese{} % \numthese{}
+
+%Exemples :  Examples :
+%%%- Professeur, Universit\'{e} d’Angers 
+%%%- Chercheur, CNRS, \'{e}cole Centrale de Nantes 
+%%%-  Professeur d’universit\'{e} – Praticien Hospitalier, Universit\'{e} Paris V  
+%%%-  Maitre de conf\'{e}rences, Oniris 
+%%%- Charg\'{e} de recherche, INSERM, HDR, Universit\'{e} de Tours  
+\jury{
+{\normalTwelve \textbf{Rapporteurs avant soutenance :}}\\ \newline
+\footnotesizeTwelve
+\begin{tabular}{@{}ll}
+Josiane MOTHE & Professeure, Université de Toulouse (IRIT) \\
+Patrick PAROUBEK & Ingénieur de recherche au CNRS, Université de Paris-Saclay (LISN) \\
+
+\end{tabular}
+
+\vspace{\baselineskip}
+{\normalTwelve \textbf{Composition du Jury :}}\\ \newline
+\footnotesizeTwelve
+\begin{tabular}{@{}lll}
+Pr\'{e}sident :     & Richard DUFOUR & Professeur, Nantes Université (LS2N) \\ \\
+Examinateurs :      & Josiane MOTHE & Professeure, Université de Toulouse (IRIT) \\
+                    & Patrick PAROUBEK & Ingénieur de recherche au CNRS, Université de Paris-Saclay (LISN) \\
+                    & Lorraine GOEURIOT & Maître de conférences, Université Grenoble Alpes (LIG - IUT 1) \\
+                    & Richard DUFOUR & Professeur, Nantes Université (LS2N) \\
+Dir. de th\`{e}se : & Béatrice DAILLE & Professeure, Nantes Université (LS2N)\\
+Co-encadrant :      & Florian BOUDIN & Maître de conférences, Nantes Université (LS2N) \\
+\end{tabular}
+
+% Si pas d'invités: supprimer seulement "Invit\'{e}(s) :" et la ligne du tableau en conservant \\ à la fin
+\vspace{\baselineskip}
+{\normalTwelve \textbf{}}\\ \newline
+\footnotesizeTwelve
+\begin{tabular}{@{}ll}
+ \\
+\end{tabular}
+
+{\fontsize{9.5}{11}\selectfont \phantom{\textcolor{red}{\textit{Attention, en cas d’absence d’un des membres du Jury le jour de la soutenance, la composition du jury doit être revue pour s’assurer qu’elle est conforme et devra être répercutée sur la couverture de thèse}}}}\\ \newline
+}
+
+
+
+\maketitle

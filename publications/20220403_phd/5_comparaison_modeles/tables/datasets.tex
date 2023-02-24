@@ -1,0 +1,54 @@
+\begin{table}[ht!]
+\centering
+%\resizebox{.48\textwidth}{!}{
+\setlength{\tabcolsep}{4.5pt}
+    \begin{tabular}{@{}rcrrrrr}
+    
+    \cmidrule[1pt]{1-7}
+        \textbf{Dataset} &
+        \textbf{Ann.} &
+        \textbf{Train} &
+        \textbf{Test} &
+        \textbf{\#words} &
+        \textbf{\#kp} &
+        \textbf{\%abs} \\
+    \cmidrule[.5pt]{1-7}
+
+    %CSTR~\cite{Witten:1999:KPA:313238.313437} & $A$        & 130 & 500    & 11\,501 & 5,4  & 18,7 \\
+    PubMed~\cite{schutz_keyphrase_2008}         & $A$        & -   & 1\,320 & 5\,323  & 5,4  & 16,9 \\
+    ACM~\cite{krapivin_large_2009}              & $A$        & -   & 2\,304 & 9\,198  & 5,3  & 16,3 \\
+    SemEval~\cite{kim_semeval-2010_2010} & $A \cup R$ & 144 & 100    & 7\,961  & 14,7 & 19,7 \\
+    
+    %\addlinespace[.-3em]{}
+    \cmidrule{5-7} %\vspace{-.5em}
+    
+    %& & & \textbf{Avg.} &  8~495 &  7.8 & 16.2 \\
+    \multicolumn{4}{r}{\textit{Scientific articles (avg.)}} &  7~494 &  8.5 & 17.6 \\
+    %\multicolumn{3}{c}{\textbf{Scientific Articles}} & \textbf{Avg.} &  8~495 &  7.8 & 16.2 \\
+    
+    \cmidrule[.5pt]{1-7}
+    
+    Inspec~\cite{hulth_improved_2003}         & $I$ & 1\,000 & 500    & 135 & 9.8 & 22,4 \\
+    %KDD~\cite{caragea-EtAl:2014:EMNLP2014} & $A$ & -      & 755    & 191 & 4.1 & 49.3 \\
+    WWW~\cite{caragea_citation-enhanced_2014} & $A$ & -      & 1\,330 & 164 & 4.8 & 52.0 \\
+    KP20k~\cite{meng_deep_2017}                  & $A$ & 530K & 20K & 176 & 5.3 & 42.6 \\
+    
+    \cmidrule{5-7} %\vspace{-.5em}
+    \multicolumn{4}{r}{\textit{Paper abstracts (avg.)}} &  158 &  6.6 & 39.0 \\
+    
+    \cmidrule[.5pt]{1-7}
+    
+    DUC-2001~\cite{wan_single_2008} & $R$ & -   & 308 & 847 & 8.1    &  3.7 \\
+    KPCrowd~\cite{marujo_supervised_2012}                  & $R$ & 450 & 50  & 465 & 46.2   & 11.2 \\
+    KPTimes~\cite{gallina_kptimes_2019}     & $I$ & 260K & 10K & 921 & 5.0 &  54.7 \\
+    
+    \cmidrule{5-7} %\vspace{-.5em}
+    \multicolumn{4}{r}{\textit{News articles (avg.)}} &    744 &  19.8 & 23.2 \\
+
+    \cmidrule[1pt]{1-7}
+    
+    \end{tabular}
+%}
+\caption{Statistics of the datasets. Gold annotation is supplied by authors ($A$), readers ($R$) or professional indexers ($I$). The number of documents in the training and testing splits are shown. The average number of keyphrases (\#kp) and words (\#words) per document, and the ratio of missing keyphrases (\%abs) are computed on the test set.} %Stemming is applied on keyphrases and documents to reduce the number of mismatches.}
+\label{tab:benchmark_datasets}
+\end{table}

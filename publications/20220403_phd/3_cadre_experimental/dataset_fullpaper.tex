@@ -1,0 +1,33 @@
+\begin{table*}[htbp!]
+\centering
+\resizebox{\textwidth}{!}{
+    \begin{tabular}{rccrS[table-format=4.0,table-number-alignment=right]S[table-format=5.0,table-number-alignment=right]S[table-format=2.1,table-number-alignment=right]S[table-format=2.1,table-number-alignment=right]}
+    
+    \cmidrule[1pt]{1-8}
+            \textbf{Corpus} &
+            \textbf{Lang.} &
+            \textbf{Ann.} &
+            \textbf{\#Entr.} &
+            \textbf{\#Test} &
+            \textbf{\#mots} &
+            \textbf{\#mc} &
+            \textbf{\%abs} \\
+        \cmidrule[.5pt]{1-8}
+    CSTR~\cite{witten_kea:_1999}              & en & $A$        & 130 &   500 & 11501 &  5.4 & 18.7 \\
+    NUS~\cite{goh_keyphrase_2007}             & en & $A \cup L$ & -   &   211 &  8398 & 10.8 & 14.4 \\
+    PubMed~\cite{schutz_keyphrase_2008}       & en & $A$        & -   & 1320&  5323 &  5.4 & 16.9 \\
+    ACM~\cite{krapivin_large_2009}            & en & $A$        & -   & 2304&  9198 &  5.3 & 16.3 \\
+    Citeulike-180~\cite{medelyan_human-competitive_2009} & en & $L$ & - & 182 &  8590 &  5.4 & 10.9 \\
+    SemEval-2010~\cite{kim_semeval-2010_2010} & en & $A \cup L$ & 144 &   100 &  7961 & 14.7 & 19.7 \\
+    
+    \cmidrule{6-8} %\vspace{-.5em}
+    & & & & \textbf{Avg.} & 8495  & 7.8  & 16.2 \\
+
+    \cmidrule[1pt]{1-8}
+    
+    \end{tabular}
+}
+\caption{Statistiques des jeux de données d'articles scientifiques. Les mots-clés de référence sont annotés par des auteurs ($A$) ou des lecteurs ($L$). La table présente le nombre de documents dans les corpus d'entraînement (\#Entr.) et de test (\#Test) ainsi que le nombre moyen de mots-clés (\#mc), de mots (\#mots) et le ratio de mots-clés absent (\%abs) par document.}
+
+\label{tab:datasets_fullpaper}
+\end{table*}

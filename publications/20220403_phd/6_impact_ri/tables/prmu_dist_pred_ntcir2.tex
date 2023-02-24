@@ -1,0 +1,15 @@
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{l|rrrr|r}
+    \toprule
+    \textbf{Modèle} & \textbf{\%P} & \textbf{\%R} & \textbf{\%M} & \textbf{\%N} & \textbf{F@5} \\
+    \midrule
+        CorrRNN & 89,7 &  7,1 &  2,5 &  0,8 & 22,1\\
+        CopyRNN & 96,9 &  1,3 &  0,9 &  0,9 & 24,0\\
+    %\midrule
+    %    Gold & 60,2 &  9,5 & 15,4 & 15,0  \\
+    \bottomrule
+    \end{tabular}
+    \caption{Proportion de mots-clés \underline{P}résent, \underline{R}éordonné, \underline{M}ixte et \underline{N}on-vu dans les 5 meilleurs mots-clés sur le jeu de donnée NTCIR-2. La F@5 est calculée sur les mots-clés de référence.}
+    \label{tab:prmu_dist_pred_ntcir2}
+\end{table}

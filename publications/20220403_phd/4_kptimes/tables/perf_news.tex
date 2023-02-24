@@ -1,0 +1,20 @@
+\begin{table}[htbp!]
+    \centering
+\begin{tabular}{l c@{\hspace*{1mm}}c c@{\hspace*{1mm}}c c@{\hspace*{1mm}}c}
+ & \multicolumn{2}{c}{\textbf{KPTimes}} & \multicolumn{2}{c}{\textbf{DUC-2001}} & \multicolumn{2}{c}{\textbf{KPCrowd}} \\
+  \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \\[-1.5em]
+&    \small{$\text{F}@10$} &   \small{\map} &     \small{$\text{F}@10$} &   \small{\map} &         \small{$\text{F}@10$} &   \small{\map} \\
+\midrule
+FirstPhrases  &    11,4 &  10,7 &     24,3 &  22,3 &    17,1 &  16,5 \\
+\tfidf{}         &    12,4 &  12,8 &     23,0 &  21,6 &    16,9 &  15,8 \\
+MPRank        &    14,0 &  13,3 &     25,3 &  \best{24,9} & \best{18,2} &  \best{17,0} \\
+\addlinespace
+Kea           &    13,8 &  14,1 & \best{26,2} &  24,5 & 17,3 &  16,7 \\
+\addlinespace
+CopyNews       & \best{31,9} & \best{38,7} & 10,5 &   \pad{0}7,2 & \pad{0}8,4 &   \pad{0}4,2 \\
+\bottomrule
+\end{tabular}
+
+    \caption{Performances de différents modèles de production de mot-clés sur des jeux de données d'articles journalistiques.}
+    \label{tab:kptimes_perf_news}
+\end{table}

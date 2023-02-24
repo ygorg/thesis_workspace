@@ -1,0 +1,128 @@
+\begin{figure}
+    \centering
+
+\begin{mdframed}[backgroundcolor=blue!2, font=\small]
+    
+    Architecture of the DNA computer
+
+    \vspace{0.3em}
+
+    \quad In recent years, the use of DNA computers has been advocated. A DNA computer is a problem-solving system using DNA sequences in areas such as a solution of the Hamilton problem suggested by Adleman. Solutions for specific problems in other areas have also been suggested. This search request demands articles concerned with DNA computer-like systems that involve applications of the chemical action and reaction of DNA. Articles that discuss RNA computing are considered to be relevant. Articles that deal with suggestion of executable experiments not in fact executed are also considered to be relevant. Articles that discuss simulations are considered to be relevant.
+    
+    %\vspace{0.5em}
+    
+    %Termes ajoutés par RM3: aid, network, parallel, educ, field, processor, research
+\end{mdframed}
+
+    \caption{Requête 146 de la collection NTCIR-2.}
+    \label{fig:topic_topic_drift}
+\end{figure}
+
+\begin{figure}
+    \centering
+
+Requête : \say{Architecture of the DNA computer}
+
+\vspace{0.75em}
+
+\begin{tikzpicture}
+\tikzset{nodoc/.style={rectangle,fill=red!20!white, text width=0.4\linewidth, font=\footnotesize}, minimum size=1cm}
+\tikzset{okdoc/.style={rectangle,fill=green!20!white, text width=0.4\linewidth, font=\footnotesize}}
+
+\node at (0, 0) (titletrm) [rectangle] {\trmc{}};
+\node[below = 0.2 cm of titletrm] (doc00) [nodoc] {An Investigation of Education of Drafting by CAD-System in the Field of Building Equipment and Machine.};
+\node[below = 0.2 cm of doc00] (doc01) [okdoc] {DNA Computing and Related Fields};
+\node[below = 0.2 cm of doc01] (doc02) [nodoc] {Design of a Processor Core for Massively Parallel Computers};
+\node[below = 0.2 cm of doc02] (doc03) [okdoc] {A study on the computational accuracy in DNA conputation};
+\node[below = 0.2 cm of doc03] (doc04) [okdoc] {Studies in Brain-Structured Supercomputers};
+\node[below = 0.2 cm of doc04] (doc05) [okdoc] {Encoding better DNA sequence for DNA computing};
+\node[below = 0.2 cm of doc05] (doc06) [okdoc] {Simulation sutudy for high-speed DNA sequencing};
+\node[below = 0.2 cm of doc06] (doc07) [nodoc] {A Way to Performance Modeling on High Performance Computing Systems};
+\node[below = 0.2 cm of doc07] (doc08) [okdoc] {Autonomous DNA Computer};
+\node[below = 0.2 cm of doc08] (doc09) [okdoc] {Construction of advanced first-generation DNA computers};
+
+\node at (7.75,0) (titlekw) {\trmc{}+CorrRNN};
+\node[below = 0.2 cm of titlekw] (doc10) [nodoc] {An Investigation of Education of Drafting by CAD-System in the Field of Building Equipment and Machine.};
+\node[below = 0.2 cm of doc10] (doc11) [okdoc] {DNA Computing and Related Fields};
+\node[below = 0.2 cm of doc11] (doc12) [okdoc] {A study on the computational accuracy in DNA conputation};
+\node[below = 0.2 cm of doc12] (doc13) [okdoc] {Autonomous DNA Computer};
+\node[below = 0.2 cm of doc13] (doc14) [okdoc] {Encoding better DNA sequence for DNA computing};
+\node[below = 0.2 cm of doc14] (doc15) [nodoc] {A Way to Performance Modeling on High Performance Computing Systems};
+\node[below = 0.2 cm of doc15] (doc16) [nodoc] {Study on Support for Computer Architecture Design};
+\node[below = 0.2 cm of doc16] (doc17) [nodoc] {From Distributed Computing to Mobile Computing};
+\node[below = 0.2 cm of doc17] (doc18) [nodoc] {Design of a Processor Core for Massively Parallel Computers};
+\node[below = 0.2 cm of doc18] (doc19) [nodoc] {A parallel computer architecture for volume rendering};
+
+
+\node[left = 0.08cm of doc00] {1.};
+\node[left = 0.08cm of doc01] {2.};
+\node[left = 0.08cm of doc02] {3.};
+\node[left = 0.08cm of doc03] {4.};
+\node[left = 0.08cm of doc04] {5.};
+\node[left = 0.08cm of doc05] {6.};
+\node[left = 0.08cm of doc06] {7.};
+\node[left = 0.08cm of doc07] {8.};
+\node[left = 0.08cm of doc08] {9.};
+\node[left = 0.08cm of doc09] {10.};
+
+\draw[->] (doc02.east) to[out=-70, in=110] (doc18.west);
+\draw[->] (doc03.east) to[out=35, in=-145] (doc12.west);
+\draw[->] (doc05.east) to[out=35, in=-145] (doc14.west);
+\draw[->] (doc07.east) to[out=45, in=-135] (doc15.west);
+\draw[->] (doc08.east) to[out=80, in=-120] (doc13.west);
+
+\end{tikzpicture}
+
+\caption{Comparaison des 10 premiers documents retournés par le système QL+RM3 pour la requête 146 de la collection NTCIR-2 avec une indexation \trmc{} et \trmc{}+CorrRNN. Les documents pertinents sont colorés en vert, les autres en rouge. Les flèches indiquent les documents ayant changé de rang.}
+    \label{fig:topic_drift}
+\end{figure}
+
+
+
+\iffalse
+Documents retournés ainsi que leurs mots-clés~:\\
+\begin{mdframed}[backgroundcolor=blue!2, font=\small]
+
+DNA Computing and Related Fields {\small gakkai-e-0000128800}\\
+\vspace{0.3em}
+Ref~: dna analysis, dna computing, genome informatics, molecular computing, nanotechnology \\
+Préd~: dna, dna computing, hamiltonian, hamiltonian path, molecular computing \\
+
+A study on the computational accuracy in DNA conputation {\tiny gakkai-e-0000128800}\\
+directed hamilton path problem, dna computation, computational accuracy, np-complete \\
+dna, dna computation, computational accuracy, conputation, np-complete problems \\
+
+Autonomous DNA Computer {\small gakkai-e-0000128800}\\
+dna computing, molecular computing \\
+dna, dna computing, autonomous, computer, computing \\
+
+Encoding better DNA sequence for DNA computing {\small gakkai-e-0000128800}\\
+dna computing, hybridization, molecular biology, gas, genetic algorithms \\
+dna, dna computing, genetic, genetic algorithms, genetic algorithms ( \\
+
+An Investigation of Education of Drafting by CAD-System in the Field of Building Equipment and Machine. {\small gakkai-e-0000128800}\\
+architectural equipment field, education of cad-system, education of drafting \\
+architectural, architectural equipment, computer, computer aided design, computer aided design education \\
+
+A Way to Performance Modeling on High Performance Computing Systems {\small gakkai-e-0000128800}\\
+bench mark, computer architecture, high performance computing, parallel algortithm, parallel processing, performance evaluation \\
+computer architecture, computer architecture design, high performance, high performance computing, performance modeling \\
+
+Study on Support for Computer Architecture Design {\small gakkai-e-0000128800}\\
+compiler generation, computer architecture design, performance evaluation \\
+architecture design, computer architecture, computer architecture design, information extraction, performance evaluation \\
+
+From Distributed Computing to Mobile Computing {\small gakkai-e-0000128800}\\
+computer networks, distributed computing, distributed processing, internet, mobile computing \\
+arpanet, computer network, computer network architecture, distributed computing, mobile computing \\
+
+Design of a Processor Core for Massively Parallel Computers {\small gakkai-e-0000128800}\\
+massively parallel computers, message driven, processor architecture, processor core, processor element, thread architecture \\
+dynamic load balancing, load balancing, massively parallel, parallel, thread scheduling \\
+
+A parallel computer architecture for volume rendering {\small gakkai-e-0000128800}\\
+3d memory, computer architecture, computer graphics, ray casting, scientific visualization, volume rendering \\
+computer architecture, parallel architecture, parallel computer architecture, scientific visualization, volume rendering \\
+    
+    \end{mdframed}
+\fi

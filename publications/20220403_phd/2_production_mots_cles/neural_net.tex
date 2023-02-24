@@ -1,0 +1,88 @@
+%Heavily inspired from https://texample.net/tikz/examples/neural-network/
+
+\begin{tikzpicture}[shorten >=1pt,->,draw=black!50]
+    \def\myscale{1.5}
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17*\myscale,inner sep=0cm]
+    \tikzstyle{input neuron}=[neuron, fill=color1!60];
+    \tikzstyle{hidden neuron}=[neuron, fill=color0!60];
+    \tikzstyle{output neuron}=[neuron, fill=color2!60];
+    \tikzstyle{edge label}=[above=-.025cm,sloped,scale=.4*\myscale,black!60]
+    \tikzstyle{label}=[scale=.75*\myscale, text width=2cm, align=center]
+
+    \def\layersep{2.5*\myscale}
+    \def\ninput{2}
+    \def\nlayerone{3}
+    \def\nlayertwo{2}
+    \def\noutput{2}
+
+    % Draw the input layer nodes
+    \foreach \name / \y in {1,...,\ninput}
+    % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
+        \node[input neuron] (I-\name) at (0,-\y*\myscale) {};
+
+
+    % Draw the hidden layer nodes
+    \foreach \name / \y in {1,...,\nlayerone}
+        \path[yshift=.5*\myscale cm]
+            node[hidden neuron] (H1-\name) at (1*\layersep,-\y*\myscale) {};
+
+    \foreach \name / \y in {1,...,\nlayertwo}
+        \path[yshift=.0*\myscale cm]
+            node[hidden neuron] (H2-\name) at (2*\layersep,-\y*\myscale) {};
+
+    % Draw the output layer node
+    \foreach \name / \y in {1,...,\noutput}
+        \path[yshift=0*\myscale cm]
+            node [output neuron] (O-\name) at (3*\layersep,-\y*\myscale) {};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+    
+    %\foreach \source in {1,...,\ninput}
+    %    \foreach \dest in {1,...,\nlayerone}
+    %        \draw[->] (I-\source) -- node [edge label, pos={.28-}] {$W^1_{\source,\dest}$} (H1-\dest);
+    
+    \def\layerout{1}
+    \def\source{1}
+    \foreach \dest / \n in {1/.2,2/.25,3/.235}
+        \draw[->] (I-\source) -- node [edge label, pos={\n}] {$W^\layerout_{\source,\dest}$} (H\layerout-\dest);
+    \def\source{2}
+    \foreach \dest / \n in {1/.17,2/.285,3/.26}
+        \draw[->] (I-\source) -- node [edge label, pos={\n}] {$W^\layerout_{\source,\dest}$} (H\layerout-\dest);
+
+
+    \def\layerout{2} % modify this
+    \pgfmathtruncatemacro{\layerin}{\layerout - 1}
+    \def\source{1} % modify this
+    \foreach \dest / \n in {1/.2,2/.26} % modify this
+        \draw[->] (H\layerin-\source) -- node [edge label, pos={\n}] {$W^\layerout_{\source,\dest}$} (H\layerout-\dest);
+    \def\source{2} % modify this
+    \foreach \dest / \n in {1/.2,2/.25} % modify this
+        \draw[->] (H\layerin-\source) -- node [edge label, pos={\n}] {$W^\layerout_{\source,\dest}$} (H\layerout-\dest);
+    \def\source{3} % modify this
+    \foreach \dest / \n in {1/.23,2/.3} % modify this
+        \draw[->] (H\layerin-\source) -- node [edge label, pos={\n}] {$W^\layerout_{\source,\dest}$} (H\layerout-\dest);
+
+    % Connect every node in the hidden layer with the output layer
+    \def\layerout{3} % modify this
+    \pgfmathtruncatemacro{\layerin}{\layerout - 1}
+    \foreach \source in {1,...,\nlayertwo}
+        \foreach \dest in {1,...,\noutput}
+            \draw[->] (H\layerin-\source) -- node [edge label, pos={.20+(1-Mod(\dest,2))*.05}] {$W^\layerout_{\source,\dest}$} (O-\dest);
+
+    % Annotate the layers
+    \node[label, below=.1cm of I-\ninput] (I-label) {Entrée};
+
+    \node[draw, dashed, rounded corners,fill=none, fit=(H1-1) (H1-\nlayerone)] (H1) {};
+    \node[label, below=.1cm of H1] (H1-label) {Première couche};
+
+    \node[draw, dashed, rounded corners,fill=none, fit=(H2-1) (H2-\nlayertwo)] (H2) {};
+    \node[label, below=.1cm of H2] (H2-label) {Seconde couche};
+
+    \node[draw, dashed, rounded corners,fill=none, fit=(O-1) (O-\noutput)] (O) {};
+    \node[label, below=.1cm of O] (O-label) {Couche de sortie};
+
+    \node[draw, dashed, rounded corners,fill=none, fit=(H1) (H1-label) (H2) (H2-label)] (H) {};
+    \node[label, text width=10cm, below=.1cm of H] (H-label) {Couches cachées};
+
+\end{tikzpicture}

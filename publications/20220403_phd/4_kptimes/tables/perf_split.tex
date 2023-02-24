@@ -1,0 +1,25 @@
+\begin{table}[htbp!]
+    \centering
+    %\resizebox{\textwidth}{!}{
+\begin{tabular}{l c@{\hspace*{1mm}}c|c@{\hspace*{1mm}}c c@{\hspace*{1mm}}c}
+ & \multicolumn{2}{c}{\tiny{(NYT $+$ JPT)}}
+ & \multicolumn{2}{c}{\multirow{2}{*}[-0.35em]{\textbf{NYTimes}}} & \multicolumn{2}{c}{\multirow{2}{*}[-0.35em]{\textbf{JPTimes}}} \\
+ %[-0.6em]
+ & \multicolumn{2}{c}{\textbf{KPTimes}} \\
+ %& \multicolumn{2}{c}{\textbf{NYTimes}} & \multicolumn{2}{c}{\textbf{JPTimes}}\\
+  \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \\[-1.5em]
+&    \small{$\text{F}@10$} &   \small{\map} &   \small{$\text{F}@10$} &   \small{\map} &   \small{$\text{F}@10$} &   \small{\map} \\
+\midrule
+FirstPhrases  & 11,4 &  10,7 & \pad{0}9,2 & \pad{0}8,4 & 13,5 & 13,1 \\
+\tfidf{}         & 12,4 &  12,8 & \pad{0}9,6 & \pad{0}9,4 & 15,1 & 16,2 \\
+MPRank        & 14,0 &  13,3 & 11,2 & 10,1 & 16,8 & 16,5 \\
+\addlinespace
+Kea           & 13,8 &  14,1 & 11,0 & 10,8 & 16,6 & 17,5 \\
+\addlinespace
+CopyNews       & \best{31,9} &  \best{38,7} & \best{39,3} & \best{50,9} & \best{24,6} & \best{26,5} \\
+\bottomrule
+\end{tabular}
+    %}
+    \caption{Performances de différents modèles de production de mot-clés sur KPTimes et ses sous-ensembles de test.}
+    \label{tab:kptimes_perf_split}
+\end{table}

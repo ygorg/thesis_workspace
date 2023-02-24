@@ -1,0 +1,148 @@
+\chapter{Conclusion}
+\label{chap:conclusion}
+% la tâche
+Dans cette thèse nous nous sommes intéressés à la tâche de production automatique de mots-clés.
+L'objectif de cette tâche est d'associer à un document des mots-clés qui représentent ses concepts les plus importants.
+Ces mots-clés servent, entre autres, à indexer les documents dans les bibliothèques scientifiques numériques pour en faciliter la recherche, ou encore pour faciliter la navigation dans ces bibliothèques grâce à la recherche à facette.
+
+% l'état de l'art
+Les méthodes actuelles de production automatique de mots-clés peuvent être séparées en deux catégories: les méthodes en chaîne de traitement (sélection de candidats puis leur pondération) et les méthodes de bout-en-bout (en une seule étape).
+Nous pouvons créer une dichotomie entre les méthodes qui extraient des mots-clés (qui apparaissent dans le document) et les méthodes qui en génèrent (qui apparaissent ou non dans le document).
+La mise à disposition à partir de 2017 d'un grand jeu de données (KP20k), a permis le développement de méthodes neuronales, aujourd'hui état de l'art.
+Ces méthodes reposent sur l'architecture encodeur-décodeur empruntée au domaine de la traduction automatique.
+Ces méthodes génératives ont actuellement deux défauts: les mots-clés produits sont très redondants, et très peu de mots-clés absents sont effectivement produits.
+Malgré cela, ces méthodes ont de très bons résultats sur les mots-clés présents.
+
+% évaluation
+L'évaluation des méthodes de production automatique de mots-clés consiste à comparer, de manière exacte, les mots-clés produits, à un ensemble de mots-clés de référence.
+% finir de décrire avant de critiquer
+Ce processus d'évaluation ne permet pas de prendre en compte les variantes des mots-clés, qu'elles soient syntaxiques ou sémantiques par exemple.
+Ainsi ce processus sous-estime les performances des méthodes et ne permet pas non plus de refléter l'utilité des mots-clés dans le cadre de tâches applicatives.
+
+
+\section{Contributions}
+
+%le but de cette thèse n'a pas été de présenter un nouveau modèle, mais plutôt de regarder l'état de la tâche pour voir vers où aller
+%En effet, les scores de la tâche (bien qu'ils montent un peu) ne décollent pas de ouf.
+%Dès lors, que se passe-t-il, vers quelles direction faut-il chercher ?
+%\todo{Ce travail hypothétisait que ... Pour démontrer ces hypothèses, nous avons mené des études empiriques de grande ampleur sur des jeux de données existantes...}
+
+Nos contributions principales portent sur la constitution d'un jeu de données d'articles journalistiques, une étude empirique sur les méthodes de production automatique de mots-clés, la proposition d'un nouveau processus d'évaluation extrinsèque pour ces méthodes et la proposition d'une catégorisation des mots-clés absents. %permettant d'effectuer des analyses plus fines à la fois sur leur nature et sur leur impact.
+
+%KPTimes
+Le jeu de données KPTimes, notre première contribution, est une nouvelle ressource pour l'entraînement et l'évaluation de la tâche de production de mots-clés. Il est composé d'articles journalistiques annotés par des éditeurs. Sa taille permet l'entraînement des modèles neuronaux. 
+Les documents sont annotés de manière semi-automatique grâce à un système d'indexation contrôlée, cette annotation est ensuite vérifiée et enrichie par les éditeurs.
+Ce processus d'annotation est plus consistant que l'annotation par les auteurs et simplifie l'apprentissage des modèles neuronaux.
+KPTimes enrichit l'offre d'entraînement et d'évaluation des méthodes de production de mots-clés sur un nouveau domaine, non couvert par les ressources existantes.
+%
+Nous avons ensuite appliqué les méthodes état de l'art de production de mots-clés sur KPTimes.
+Nous avons constaté que les méthodes extractives étaient moins performantes sur KPTimes que sur les autres jeux de données, ce qui s'explique par le nombre plus important de mots-clés absents qu'il contient. Par contre, les méthodes neuronales qui peuvent générer des mots-clés présents et absents sont plus performantes sur KPTimes que sur KP20k.
+%
+Ce jeu de données nous a également permis de réaliser une première étude sur la capacité de généralisation des modèles neuronaux.
+Cette étude a montré la meilleure capacité de généralisation de CopyRNN lorsqu'il est entraîné sur le jeu de données scientifiques KP20k que sur le jeu de données généralistes KPTimes.
+%
+Ce résultat est surprenant étant donné la meilleure qualité des mots-clés de KPTimes mais est en fait lié à la faible capacité du modèle entraîné sur KP20k à produire des mots-clés absents.
+En effet, il est moins risqué, pour avoir un rapport avec le document, de produire un mot-clé présent, limité au document, plutôt qu'un mot-clé absent.
+L'amélioration de la production de mots-clés absents semble donc une piste à explorer pour cette problématique de généralisation des modèles génératifs.
+
+%Évaluation large
+Notre seconde contribution est une évaluation à grande échelle des méthodes de production automatique de mots-clés.
+Notre objectif était d'évaluer les méthodes dans un cadre strict pour pouvoir comparer leur performances ainsi que de mesurer l'impact de la qualité des types d'annotation, en particulier entre une annotation auteur et une annotation indexeur.
+%
+Nos résultats montrent que les récentes méthodes neuronales sont globalement meilleures que les méthodes statistiques classiques comme \tfidf{} ou les méthodes non supervisées comme MultipartiteRank mais que ces dernières restent compétitives en particulier sur la ressource Inspec bénéficiant d'une indexation professionnelle.
+L'étude de l'impact des références auteur et indexeur sur l'évaluation automatique  montre que la référence auteur sous-estime la performance de toutes les méthodes.
+En effet, les scores obtenus grâce à l'évaluation avec la référence auteur sont toujours moins importants qu'avec la référence indexeur.
+\\
+La quantité de données nécessaire à l'entraînement de modèles neuronaux performants a été peu discutée pour la tâche de génération automatique de mots-clés.
+Ainsi, pour quantifier cette grandeur, nous avons évalué ces méthodes en faisant varier la taille de l'ensemble d'apprentissage. 
+Nos résultats indiquent que l'ajout de données d'entraînement apporte une amélioration importante de la \fmesure{} pour une annotation en mots-clés effectuée par les éditeurs.
+L'ajout de données annotées par les auteurs, moins consistante que l'annotation par les éditeurs, n'apporte que très peu d'amélioration de la \fmesure{}.
+Ainsi, la disponibilité d'annotation en mots-clés qualitative est donc un enjeu important pour l'entraînement de méthodes génératives performantes.
+
+%Evaluation RI
+Notre troisième contribution est la proposition d'un nouveau processus d'évaluation extrinsèque par la recherche d'information.
+% présenter le processus
+Nous avons défini un protocole d'évaluation exploitant la bibliothèque de recherche d'information \texttt{anserini} et une collection de test composée de notices scientifiques de plusieurs domaines. Nous évaluons l'impact des mots-clés en les ajoutant aux documents à indexer, puis en exécutant les requêtes.
+Nous avons identifié plusieurs configurations d'indexation: documents seuls, documents et mots-clés de référence, documents et mots-clés prédits, document et mots-clés de référence et prédits.
+%
+Nos résultats montrent que les mots-clés améliorent l'efficacité de recherche d'information. L'amélioration est tangible pour les mots-clés de référence et pour les mots-clés prédits.
+Elle est la plus importante quand mots-clés de référence et mots-clés prédits sont utilisés conjointement, ce qui montre leur complémentarité.
+Ce résultat démontre l'intérêt de la tâche de production de mots-clés pour la recherche d'information, ce qui n'avait jamais été démontré à ce jour. 
+%
+Les mots-clés prédits par les méthodes neuronales sont les seuls à améliorer l'efficacité de recherche de manière significative.
+Ceux produits par les méthodes non-supervisées ne sont pas assez qualitatifs pour améliorer significativement les résultats.
+La comparaison entre les résultats de l'évaluation intrinsèque et de l'évaluation extrinsèque par la recherche d'information nous a fourni des signaux différents pour plusieurs de nos expériences. Ce constat montre l'importance de réaliser différentes évaluations et encourage le développement de nouvelles méthodes d'évaluation.
+
+%PRMN
+Notre quatrième contribution est la proposition d'une nouvelle catégorisation des mots-clés constituée de quatre catégories: \present{}, \reordonne{}, \mixte{} et \nonvu{}.
+Cette catégorisation, plus précise que la catégorisation présent/absent actuellement utilisée, permet de différencier les mots-clés qui étendent le document avec de nouveaux mots (\mixte{} et \nonvu{}) de ceux dont les mots apparaissent déjà dans le document (\presents{} et \reordonne{}).
+%Les mots-clés \presents{} ciblent ceux dont tous les mots apparaissent de manière contiguë dans le document; les \reordonnes{} désignent ceux dont tous les mots occurrent dans le document de manière non-contiguë ou inversée. Les mots-clés \mixtes{} et \nonvus{} ciblent respectivement les mots-clés dont seule une partie des constituants n'apparaît pas dans le document et ceux dont aucun n'apparaît dans le document.
+%Les deux catégories \mixte{} et \nonvu{} dénotent les mots-clés qui étendent le document en y ajoutant de nouveaux mots.
+Notre analyse fine des mots-clés de référence montre que ceux qui étendent le document ne composent que \npercent{30} des mots-clés de référence mais sont à l'origine de la majorité des gains de scores sur les tâches évaluées.
+Ce résultat atteste de l'importance de ces mots-clés pour les tâches applicatives et donc de l'importance de pouvoir les produire de manière automatique.
+Malgré leur impact positif, les mots-clés qui étendent le document ne sont pas simples à produire automatiquement. Les performances des méthodes génératives sur ces mots-clés le montrent.
+Ainsi, la qualité de ces mots-clés produits automatiquement n'est, malheureusement, pas assez élevée et leur utilisation peut faire baisser les scores des tâches applicatives. Néanmoins, ces résultats encouragent l'amélioration des méthodes génératives et le développement de nouvelles méthodes permettant de produire ces mots-clés \mixtes{} et \nonvus{}.
+
+\section{Perspectives}
+
+Nos contributions ont permis de faire évoluer l'évaluation des méthodes de production automatique de mots-clés avec la définition et la mise en \oe{}uvre d'une évaluation extrinsèque reproductible sur une tâche concrète: la recherche d'information sur des articles scientifiques pour l'anglais.
+
+%Court terme: autres méthodes neuronales
+Notre évaluation extrinsèque a porté sur deux méthodes neuronales: CopyRNN et CorrRNN.
+L'étude d'un plus grand nombre de ces méthodes aurait permis d'étendre encore la portée de notre travail. Les nouvelles méthodes TGNet~\cite{chen_title-guided_2019}, ExHiRD~\cite{chen_exclusive_2020} et leurs équivalents entraînés grâce à l'apprentissage par renforcement~\cite{chan_neural_2019} devraient être intégrés dans les évaluations futures.
+
+% Court terme
+% évaluation RI proche de l'annotation humaine ?
+% si on dit que l'évaluation humaine c le best truc, alors plus une évaluation est corrélée à l'évaluation humaine mieux c'est.
+% question: quelle évaluation humaine ?
+Nous aurions pu compléter nos évaluations intrinsèque et extrinsèque automatiques par une évaluation humaine de manière à voir si l'évaluation extrinsèque était plus proche de l'évaluation manuelle que l'évaluation automatique.
+%Vérifier si une corrélation existait entre l'évaluation extrinsèque et manuelle, ou à minima, si l'évaluation extrinsèque était plus proche d'une évaluation humaine que l'évaluation intrinsèque.
+%Intrinsèque
+Une évaluation humaine des mots-clés nécessite leur annotation manuelle. Ce processus peut être effectué de différentes manières et avec différents objectifs.
+\citet{jones_human_2001} ont fait réaliser une annotation humaine de six documents par des étudiant·es en évaluant la pertinence des mots-clés prédits par Kea et des mots-clés de référence sur une échelle de 0 à 10.
+\citet{balkan_automatic_2017} a fait réaliser une annotation humaine de 50 documents par deux indexeurs professionnels, en comparant les mots-clés prédits par Kea++ à des mots-clés de référence appartenant à un vocabulaire contrôlé.
+Le but de cette annotation était d'évaluer la correspondance entre les mots-clés prédits et les mots-clés de référence avec trois catégories: adéquat, partiellement adéquat et inadéquat. Les mots-clés non adéquats ont ensuite été catégorisés plus finement comme~: trop général, trop spécifique, redondant ou hors-sujet.
+\citet{bougouin_indexation_2015,barreaux_indexation_2017} ont fait réaliser une annotation humaine par des indexeurs professionnels dans le but d'évaluer la pertinence des mots-clés prédits par rapport au document et la perte d'information de l'ensemble de mots-clés prédits par rapport aux mots-clés de référence.\\
+Le protocole de ce type d'évaluation est complexe à définir et à mettre en place. En effet, faire appel à de nombreux annotateurs non professionnels nécessite des procédures de contrôle de l'annotation. \`A l'inverse il est complexe et coûteux de disposer de plusieurs indexeurs professionnels mais l'annotation est de qualité.
+
+%Que cela soit pour une évaluation intrinsèque ou extrinsèque, une évaluation humaine requière la définition et la mise en \oe{}uvre de protocoles sophistiqués à l'instar des campagnes d'évaluations par des humains des traducteurs automatiques~\cite{popel_transforming_2020}. 
+%Pour l'évaluation extrinsèque, la communauté RI à ce jour n'a pas mis en place de tels protocoles.
+
+
+%Cours termes autre langue en particulier fr
+Nous avions projeté de réaliser les mêmes expériences pour le français. Pour mettre en \oe{}uvre les méthodes neuronales, il aurait fallu construire un large jeu de données en français.
+Nous aurions pu utiliser les bases bibliographiques Pascal et Francis \footnote{\url{https://pascal-francis.inist.fr}} qui rassemblent \num{2 279 791} notices bibliographiques d'articles publiés entre 1972 et 2015 annotées en mots-clés indexeurs.
+Pour notre évaluation extrinsèque, nous aurions pu utiliser la collection de recherche d'information Amaryllis~\cite{peters_advances_2002} qui regroupe \num{148 688} notices scientifiques extraites de ces mêmes bases bibliographiques Pascal et Francis ainsi que 25 requêtes.
+
+
+
+% Long terme
+% Diversifier les tâches applicatives
+Notre travail sur l'évaluation extrinsèque pourrait être étendu par l'ajout de nouvelles tâches applicatives.
+%
+La multiplication des évaluations extrinsèques permettrait d'évaluer l'utilité des mots-clés, et donc d'encourager l'utilisation de mots-clés produits automatiquement pour des tâches applicatives.
+Les évaluations extrinsèques permettraient aussi de chercher à optimiser d'autres caractéristiques que la correspondance des mots-clés prédits à ceux de référence.
+En effet certaines caractéristiques telles que la consistance (un mot-clé représente un concept), la granularité (production de mots-clés plus ou moins généraux) et l'utilité (amélioration d'une tâche applicative) des mots-clés sont laissées pour compte dans l'évaluation intrinsèque actuelle.
+Par exemple, des mots-clés utilisés pour indexer des documents ne doivent qu'améliorer l'efficacité de recherche mais n'ont pas besoin d'être particulièrement consistants~; des mots-clés destinés à la recherche à facette par contre, doivent être consistants et faire sens pour faciliter leur utilisation par des utilisateurs.
+%
+Les mots-clés sont utilisés dans d'autres applications comme l'extraction terminologique~\cite{lanza_terminology_2019} et la génération de questions~\cite{subramanian_neural_2018}. Il reste néanmoins à définir un protocole précis et reproductible associé à des données d'évaluation. Pour l'extraction terminologique, les données de TermEval2020~\cite{rigouts_terryn_termeval_2020} pourraient être utilisées mais celles-ci restent de taille restreinte. Pour la génération de questions, la banque de test SQuAD~\cite{rajpurkar_know_2018} comportant \num{100 000} questions sur des textes anglais constitue un référentiel intéressant.
+
+
+
+
+% contextes de citation
+%Tout le travail réalisé et les expériences menées ont montré l'importance de la qualité des mots-clés de référence. 
+%Une autre piste que nous aurions voulu explorer est l'utilité des contextes de citation en complément des notices pour extraire des mots-clés.
+% Expliquer le contexte de citation C'est quoi mettre un exemple
+%Ces contextes de citation seraient une alternative aux mots-clés auteurs.
+% dire qu'on peut les extraire automatiquement à partir des articles intégraux. D'ailleurs certaines ressources comme... sont maintenant disponibles
+% Détailler la ressources ACMCR/arvix/citeseerx
+
+
+%- travailler sur la consistance des modèles (travail sur la ref de KP20k "Clean")
+
+
+%Long terme:
+%- travail sur la génération d'ensemble
+%- plus d'évaluation extrinsèques
+%- on pourrait faire une catégorisation encore plus fine, qui prendrait en compte les variantes (avec les synonymes par ex), ou créer des catégories plus sémantiques (????, tâche, dataset, ...)

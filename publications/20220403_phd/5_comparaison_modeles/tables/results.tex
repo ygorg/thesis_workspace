@@ -1,0 +1,58 @@
+\begin{sidewaystable}
+%\begin{table}[ht!]
+    \centering
+    %\rotatebox{90}{%
+    \resizebox{\linewidth}{!}{
+    \input{5_comparaison_modeles/tables/results_tabular}
+    }
+    \caption{Performance des modèles de production de mots-clés.
+    Le symbole \da{} indique une significativité au niveau 0.05 en utilisant le t-test de Student avec toute les méthodes de base.}
+    \label{tab:results}
+%\end{table}
+\end{sidewaystable}
+
+
+\iffalse
+\def\boxit#1{%
+  \smash{\fboxsep=1pt\llap{\rlap{\fbox{\strut\makebox[#1]{}}}~}}\ignorespaces
+}
+\clearpage
+\begin{table*}[ht!]
+    \centering
+    
+    \begin{subtable}[h]{\textwidth}
+    \centering
+    \resizebox{0.75\textwidth}{!}{
+    \input{5_comparaison_modeles/tables/results-papers}
+    }
+    \caption{Résultats sur les articles scientifiques.}
+    \label{tab:results-papers}
+    \end{subtable}
+    
+    \vspace{.5em}
+    
+    \begin{subtable}[h]{\textwidth}
+    \centering
+    \resizebox{0.75\textwidth}{!}{
+    \input{5_comparaison_modeles/tables/results-abstracts}
+    }
+    \caption{Résultats sur les résumés d'articles scientifiques.}
+    \label{tab:results-abtracts}
+    \end{subtable}
+    
+    \vspace{.6em}
+    
+    \begin{subtable}[h]{\textwidth}
+    \centering
+    \resizebox{0.75\textwidth}{!}{
+    \input{5_comparaison_modeles/tables/results-news}
+    }
+    \caption{Résultats sur les articles journalistiques.}
+    \label{tab:results-news}
+    \end{subtable}
+    
+    \caption{Résultats papier. Performance des modèles de production de mots-clés.
+    $^\dagger$ indique une significativité au niveau 0.05 en utilisant le t-test de Student avec toute les baselines. $^*$ Nous n'avons pas pu obtenir de résultats à cause du temps d'exécution ou la limitation de mémoire des GPU.}
+    \label{tab:results}
+\end{table*}
+\fi

@@ -1,0 +1,388 @@
+\chapter{Cadre expérimental}\label{chap:framework}
+
+Dans ce chapitre, nous nous intéressons d'abord aux différents jeux de données utilisés pour évaluer ou entraîner des méthodes de production automatique de mots-clés ainsi qu'à leurs particularités.
+Nous présentons ensuite les processus d'évaluation de ces méthodes ainsi que les différentes métriques utilisées. Nous terminons ce chapitre par une discussion sur la représentativité des jeux de données que nous avons utilisés dans nos travaux.
+
+
+
+\section{Jeux de données} \label{sec:framework_datasets}
+
+Nous présentons dans cette section les jeux de données utilisés dans les travaux traitant de production automatique de mots-clés.
+Nous avons limité cette étude aux jeux de données utilisés dans ce manuscrit.
+%, certains jeux de données utilisés dans~\cite{campos_yake_2020,yuan_generating_2018} ne sont pas décrit ici car peu utilisés.
+
+% deux genres différents: article scientifique et article journaliste
+% plusieurs genres de documents scientifiques: article scientifique, rapport technique
+Nos jeux rassemblent des documents scientifiques et des documents journalistiques. 
+Bien que ce travail se concentre sur la littérature scientifique, nous exploitons aussi des jeux de données journalistiques, relevant du domaine général, qui permettent de tester les capacités d'adaptation des méthodes à d'autres types de données.
+%distinction article/notice
+Nous distinguons articles et notices scientifiques car bien que les deux soient des documents scientifiques, l'accès aux premiers est souvent régi par un péage (\foreign{paywall}) mis en place par les éditeurs, alors que les seconds sont librement accessibles. 
+
+
+% langue
+Les jeux de données présentés ici sont en grande majorité des documents en langue anglaise, à l'exception de TermITH-Eval qui est en français.
+%Cette prépondérance s'explique par le monopole de la langue anglaise dans la communauté scientifique.
+%annotation mots-clés
+Les documents scientifiques sont majoritairement annotés en mots-clés par leurs auteurs contrairement aux articles journalistiques généralement annotés par des lecteurs.
+Pour garantir la qualité des mots-clés lecteurs, différents processus d'annotation sont mis en \oe{}uvre, tels que des guides d'annotation ou des séances d'adjudication itérative qui permettent d'obtenir le consensus sur le choix des mots-clés.
+
+%but
+%Le but de la tâche est d'extraire automatiquement les mots-clés annotés
+Ces jeux de données sont exploités pour entraîner et évaluer des méthodes de production automatique de mots-clés.
+Ceux qui servent à évaluer les méthodes d'extraction contiennent peu de documents (un millier en moyenne). Au contraire, les jeux de données introduits pour générer des mots-clés constituent de très larges collections de plusieurs centaines de milliers de documents, par exemple KP20k et KPTimes contiennent respectivement \num{570 000} et \num{300 000} documents.
+%
+Les tableaux~\ref{tab:datasets_abstract}, \ref{tab:datasets_fullpaper} et \ref{tab:datasets_news} présentent les statistiques des jeux de données décrits dans cette section.
+Ces statistiques sont calculées sur les ensembles de test. Le ratio de mots-clés absents est calculé en comparant les formes racinisées~\cite{porter_algorithm_1980} des mots du document et des mots-clés, dans le but de prendre en compte les variantes flexionnelles.
+
+Les jeux de données sont présentés par type de documents: notices scientifiques (titre et résumé seulement), documents scientifiques (articles, rapports techniques) et articles journalistiques.
+
+
+
+\subsection{Jeux de données composés de notices scientifiques}\label{sub:framework_abstract}
+
+Le contenu textuel d'une notice scientifique se résume à son titre et à son résumé. Elle peut comporter aussi des informations bibliographiques apparaissant sous forme de métadonnées.
+Ce sont ces notices qui sont utilisées pour indexer les documents~\cite{huang_holes_2019}.
+%disponibilité des notices scientifiques: libre de droits
+Les notices adoptent un format standardisé qui facilite leur traitement; elles ne contiennent ni tableaux, ni figures, ni références bibliographiques, etc.
+%Ces différents éléments ne contiennent pas de mots-clés et peuvent poser des problèmes aux méthodes.
+Les statistiques des jeux de données décrits dans cette section sont détaillées dans le tableau~\ref{tab:datasets_abstract}.
+Nous présentons les jeux de données par ordre de publication.
+
+\input{3_cadre_experimental/dataset_abstract}
+
+
+\paragraph{Inspec~\cite{hulth_improved_2003}}
+Inspec\footnote{\url{https://www.theiet.org/publishing/inspec}} est une base de données bibliographiques caractérisée par une indexation manuelle réalisée par des indexeurs professionnels.
+Ce jeu de données contient un ensemble de test, de validation et d'entraînement contenant respectivement 500, 500 et \num{1000} documents. Les documents sont en anglais et traitent des domaines \say{Computers and Control} et \say{Information Technology}.
+Deux types d'indexation sont effectués pour ajouter des mots-clés: une indexation contrôlée à l'aide d'un thésaurus, qui garantit une indexation cohérente, et une indexation non contrôlée, c'est-à-dire non restreinte par un ensemble de mots, qui augmente la couverture de l'indexation.
+Le nombre de mots-clés moyen proposé par l'indexation contrôlée et l'indexation non contrôlée sont respectivement de 4,5 et 9,4.
+
+
+\paragraph{KDD/WWW~\cite{caragea_citation-enhanced_2014}}
+Ces deux jeux de données sont constitués de, respectivement, 755 et \num{1330} notices scientifiques en anglais d'articles provenant des conférences KDD (\foreign{Knowledge Discovery and Data mining}) et WWW (\foreign{World Wide Web Conference}).
+Les notices sont associées à des mots-clés auteurs, 4,1 et 4,8 en moyenne par document pour KDD et WWW respectivement.
+La particularité de ces deux jeux de données est de contenir les contextes de citation des documents qui pourront être pris en compte par les méthodes de production automatique de mots-clés.
+Ces contextes de citation ont été extraits à partir de la bibliothèque numérique scientifique CiteSeerX\footnote{\url{https://citeseerx.ist.psu.edu}}.
+
+
+\paragraph{TermiTH-Eval~\cite{bougouin_termith-eval:_2016}}
+Dans le cadre du projet ANR TermITH\footnote{\url{https://anr.fr/Projet-ANR-12-CORD-0029}}, et à l'aide des indexeurs professionnels de l'Inist\footnote{\url{https://www.inist.fr/}}, 400 articles scientifiques en français ont été annotés en mots-clés de manière non contrôlée. Il y a en moyenne 11,8 mots-clés par document.
+Ces articles scientifiques proviennent de 4 domaines: linguistique, science de l'information, archéologie et chimie.
+Pour procéder à leur annotation et garantir sa qualité, des principes ont été définis: conformité (utiliser la terminologie du domaine), exhaustivité (identifier tous les mots-clés utiles à la recherche d'information), consistance (deux concepts similaires doivent être représentés par le même mot-clé), spécificité (les mots-clés doivent être le plus précis possible mais des mots-clés plus génériques peuvent être ajoutés) et impartialité (les mots-clés choisis ne doivent pas refléter l'opinion de l'annotateur).
+
+\paragraph{KP20k~\cite{meng_deep_2017}}
+La construction de ce jeu de données est peu documentée. Il contient des notices scientifiques et mots-clés auteurs en anglais qui proviennent de plusieurs bibliothèques numériques scientifiques dont l'ACM Digital Library, ScienceDirect, Wiley, Web of Science\footnote{\texttt{\href{https://dl.acm.org}{dl.acm.org}}, \texttt{\href{https://www.sciencedirect.com}{sciencedirect.com}}, \texttt{\href{https://www.onlinelibrary.wiley.com}{onlinelibrary.wiley.com}}, \texttt{\href{https://www.webofknowledge.com}{webofknowledge.com}}}.
+Selon une annotation manuelle de 100 documents pris au hasard dans l'ensemble de test, les documents de KP20k concernent en très grande majorité le domaine de l'informatique (\npercent{76}), et dans une moindre mesure les mathématiques (\npercent{8}), l'ingénierie (\npercent{6}), le domaine médical (\npercent{5}), la physique (\npercent{4}) et la chimie (\npercent{1}).
+KP20k contient \num{567 830} documents dont \num{20 000} sont utilisés comme documents de test; chaque document comporte en moyenne 5,3 mots-clés.
+Ce jeu de données a été présenté avec la première méthode supervisée de génération automatique de mots-clés, CopyRNN, qui utilise une architecture neuronale séquence à séquence. C'est le premier jeu de données à contenir suffisamment de documents pour entraîner des méthodes de ce type.
+
+\subsection{Jeux de données composés d'articles scientifiques}\label{sub:framework_full}
+
+Les jeux de données composés d'articles scientifiques contiennent l'intégralité des documents, c'est-à-dire le titre, le résumé, le corps du texte et la bibliographie.
+Les statistiques des jeux de données décrits dans cette section sont détaillées dans le tableau~\ref{tab:datasets_fullpaper}.
+
+% La diff entre articles et notices:
+% - accès restreint aux corps des articles
+% - pas facile de gérer tout ce texte
+% - il faut convertir avec les problèmes que ça implique
+
+%format
+Les articles scientifiques sont généralement disponibles au format PDF, ils doivent être convertis au format texte pour être traités par les méthodes de production automatique de mots-clés.
+L'extraction du texte d'un fichier PDF peut se faire grâce à des techniques de reconnaissance optique de caractères (OCR), ou s'il contient du texte sélectionnable, en reconstruisant le document grâce à la position de ces morceaux de texte.
+Les articles pleins sont des documents beaucoup plus longs que les seules notices scientifiques: \num{8 495} mots en moyenne contre 166 pour les notices. Ils sont plus difficiles à traiter de par leur longueur et leur structure (articles double-colonnes, tableaux, sections, etc.).
+%\todo{Calculer avec OpenNMT combien de Giga pour 1 document ?}
+%Les articles pleins sont plus complexe à traiter que les notices de par leur longueur: l'espace de recherche est plus grand et leur traitement par des méthode neuronales à l'aide de GPU requièrent beaucoup de mémoire 
+% les gpu c cher et la mémoire est limité; ne peuvent pas traiter de longs documents car il y a des limitations en termes de mémoire.
+%; et leur structure: ces documents contiennent des citations, des titre de sections, des figures, etc. qui ajoutent du bruit.
+Nous présentons les jeux de données par ordre chronologique.
+
+\input{3_cadre_experimental/dataset_fullpaper}
+
+\paragraph{CSTR~\cite{witten_kea:_1999}}
+Les documents du jeu de données CSTR proviennent de la New Zealand Digital Library. Ce sont des rapports techniques en anglais dans le domaine de l'informatique. Ces documents sont similaires aux articles scientifiques de par les sujets qu'ils traitent et de par leur structure, mais sont plus longs: \num{11 501} mots contre \num{8 495} en moyenne pour les articles scientifiques.
+CSTR est un des premiers jeux de données ayant servi à évaluer une méthode de production automatique de mots-clés.
+Il est composé de 630 rapports annotés en mots-clés auteurs avec 5,4 mots-clés par rapport en moyenne.
+Il est séparé en un ensemble d'entraînement (130 documents) et de test (500 documents), ce qui permet d'entraîner des modèles supervisés.
+
+
+\paragraph{NUS~\cite{goh_keyphrase_2007}}\label{par:nus}
+Le jeu de données NUS est composé de 211 articles scientifiques en anglais qui ont été aspirés du web grâce à la requête \texttt{keywords general terms filetype:pdf} qui retourne des documents PDF disponibles dans l'ACM\,DL.\footnote{\texttt{keywords general terms} sont des mots qui apparaissent dans le style \LaTeX{} de conférences dont les actes sont publiés dans l'ACM\,DL.}
+Ces articles scientifiques appartiennent au domaine de l'informatique et sont annotés en mots-clés auteurs. Pour rendre l'évaluation plus robuste, une annotation concurrente effectuée par des étudiants bénévoles a été ajoutée. L'union de ces deux annotations (10,8 mots-clés en moyenne) est utilisée pour évaluer les méthodes de production automatique de mots-clés.
+Les PDF des articles ont été convertis au format texte à l'aide du logiciel \texttt{PDF995}\footnote{\url{www.pdf995.com}}.
+
+
+\paragraph{PubMed~\cite{schutz_keyphrase_2008}}
+Le jeu de données PubMed contient \num{1320} documents en anglais contenant des mots-clés auteurs (5,4 en moyenne) extraits de la bibliothèque numérique scientifique PubMed Central\footnote{\url{www.ncbi.nlm.nih.gov/pmc}}.
+Cette bibliothèque archive les articles scientifiques publiés dans des revues du domaine biomédical et des sciences de la vie.
+En plus du format PDF, les articles sont disponibles au format XML, ils sont donc déjà dans un format textuel. Le format XML permet aussi de filtrer les figures et tableaux, et d'utiliser la structure du document.
+
+
+\paragraph{ACM~\cite{krapivin_large_2009}}
+Le jeu de données ACM est composé de \num{2304} articles scientifiques en anglais provenant du domaine de l'informatique.
+Chaque document est associé à 5,3 mots-clés auteurs en moyenne.
+La particularité de ce jeu de données est que les différentes parties des documents ont été identifiées grâce à un traitement automatique. Ces différentes parties sont le titre, le résumé, le corps du texte et la bibliographie.
+De plus, le texte a été nettoyé de ses formules mathématiques, tableaux et figures à l'aide d'un classifieur.
+
+
+\paragraph{Citeulike-180~\cite{medelyan_human-competitive_2009}}
+Ce jeu de données est composé de 180 articles scientifiques en anglais avec en moyennes 5,4 mots-clés annotés par des lecteurs.
+Le processus d'annotation s'est déroulé en deux étapes au sein de la plateforme CiteULike dédiée à la gestion de bibliographie \footnote{La plateforme n'est plus accessible depuis 2019.}: (1) les lecteurs assignent les étiquettes de leur choix aux articles; (2) ne sont conservées comme mots-clés que les étiquettes qui sont assignées au moins deux fois et les documents qui comportent au moins 3 étiquettes.
+Cette annotation s'inscrit dans une démarche d'annotation non professionnelle similaire au jeu de données NUS (cf. \ref{par:nus}).
+
+
+\paragraph{SemEval-2010~\cite{kim_semeval-2010_2010}}
+Le jeu de données SemEval-2010 a été constitué à l'occasion de la compétition du même nom.
+Il contient 244 documents en anglais annotés en mots-clés auteurs extraits de l'ACM\,DL.
+Ces documents sont répartis dans quatre domaines de recherches\footnote{\foreign{Distributed Systems}, \foreign{Information Search and Retrieval}, \foreign{Distributed Artificial Intelligence – Multiagent Systems}, \foreign{Social and Behavioral Sciences – Economics}.}: systèmes distribués; recherche d'information; intelligence artificielle distribuée -- systèmes multi-agent; sciences sociales et du comportement -- économie. 
+Les documents ont été convertis en texte à l'aide de l'outil \texttt{pdftotext}\footnote{\url{https://www.xpdfreader.com/pdftotext-man.html}}.
+Dans une démarche similaire à NUS (cf. \ref{par:nus}), les mots-clés auteurs sont complétés par des mots-clés lecteurs qui intègrent des variantes morphosyntaxiques comme \foreign{distribution of relevance} et \foreign{relevance distribution}.
+L'annotation a été réalisée par cinquante étudiants recrutés et rémunérés. Pour garantir la qualité de l'annotation, un guide d'annotation a été construit et validé par adjudication.
+L'union de ces indexations représente en moyenne 14,7 mots-clés par document.
+
+
+
+
+\subsection{Jeux de données composés d'articles journalistiques}\label{sub:framework_news}
+
+Les articles journalistiques sont pour la plupart extraits de journaux quotidiens en ligne. La taille de ces articles est variable, les brèves sont des documents assez courts ($\simeq100$ mots) et les enquêtes peuvent être bien plus longues (\textgreater{} \num{10 000} mots).
+Contrairement aux articles scientifiques, les auteurs ne fournissent pas de mots-clés mais il est courant que les articles journalistiques soient classés en catégories générales (sport, politique, culture, \ldots).
+Les statistiques des jeux de données décrits dans cette section sont détaillées dans le tableau~\ref{tab:datasets_news}.
+Nous présentons les jeux de données par ordre chronologique.
+
+\input{3_cadre_experimental/dataset_news}
+
+\paragraph{DUC-2001~\cite{wan_single_2008}}
+DUC-2001 est à l'origine un ensemble d'articles journalistiques en anglais créé pour la campagne d'évaluation éponyme~\cite{over_introduction_2001} destinée à évaluer la tâche de résumé automatique.
+Les articles proviennent de journaux américains tels qu'Associated Press, le Wall Street Journal, le Financial Times, etc.
+Les 308 articles qui composent le jeu de données DUC-2001 comportent en moyenne 8,1 mots-clés lecteurs. Leurs mots-clés ont été annotés manuellement par deux étudiants.
+Le calcul de l'accord inter-annotateur (kappa de Cohen) a montré un accord substantiel (0,7). Les conflits d'annotation ont été résolus par adjudication.
+
+
+\paragraph{KPCrowd~\cite{marujo_supervised_2012}}
+Ce jeu de données est composé de 500 articles journalistiques en anglais provenant de sources multiples peu documentées. Ces articles comportent en moyenne 46,2 mots-clés lecteurs.
+L'annotation en mots-clés a été effectuée par des travailleurs de la plateforme de micro-travail Mechanical Turk\footnote{\url{https://www.mturk.com}} d'Amazon qui permet la rémunération des annotateurs: \SI{0.02}[\$]{} par document.
+Chacun des 500 documents a été annoté par 20 annotateurs différents.
+\`A la fin de la phase d'annotation, et pour garantir une certaine qualité dans l'annotation, seuls les mots-clés choisis par \npercent{90} des annotateurs sont conservés.
+
+
+%\paragraph{Wikinews~\cite{bougouin_topicrank:_2013}}
+%Ce jeu de données est composé 100 articles journalistiques en français provenant du site Wikinews \footnote{\url{https://fr.wikinews.org}}, une plateforme de journalisme collaboratif où les articles sont disponibles en accès libre.
+%Ces articles comportent en moyenne 9,7 mots-clés lecteurs.
+%L'annotation a été effectuée par au moins trois étudiants par document. 
+%Le calcul de l'accord inter-annotateur ($\kappa$ de Fleiss~\cite{fleiss_measuring_1971}) montre qu'aucun accord n'a été obtenu.
+
+
+\paragraph{KPTimes~\cite{gallina_kptimes_2019}}
+Ce jeu de données est composé de \num{300 000} articles journalistiques en accès libre en anglais provenant du New York Times et du Japan Times.
+Ces articles comportent des mots-clés éditeur (5,2 en moyenne) proposés par un système automatique d'indexation contrôlée, puis validés par les éditeurs du journal. Ces derniers peuvent aussi ajouter des mots-clés qui n'ont pas été proposés par le système automatique. Ces mots-clés peuvent être associés à des variantes synonymiques telles que \foreign{Police Brutality}, \foreign{Police Misconduct} et \foreign{Police Shootings}.
+Ce jeu de données fait partie des ressources que nous avons développées. Le processus de construction de ce jeu de données est détaillé dans le chapitre~\ref{chap:kptimes}.
+
+\subsection{Autres jeux de données}\label{sub:framework_other}
+% jeux de données exhaustifs
+%1ere discussion: je n'ai pas utilisé tous les jeux de données existants
+
+Les ressources présentées précédemment sont celles que nous utilisons dans nos expériences. Il existe d'autres ressources que nous n'avons pas retenues, comme certains jeux de données présentés dans \citet{yuan_one_2020} et \citet{campos_yake_2020} qui n'ont pas ou peu été repris dans d'autres travaux. 
+Certains de ces jeux de données auraient pu être intéressants mais ne correspondaient pas à notre cadre expérimental: 
+\begin{itemize}
+    \item langues différentes de l'anglais ou du français;
+    \item genres de documents relevant d'autres types d'intentions communicatives comme les courriels ou regroupant de multiples genres de documents comme les pages web;
+    \item concepts de mots-clés interprétés différemment, par exemple dans le but d'identifier les tâches et outils mentionnés dans des articles scientifiques.
+\end{itemize}
+Nous présentons ci-dessous quelques-uns de ces jeux de données.
+
+%\paragraph{Langues des corpus}
+% Langues
+Bien que la majorité des jeux de données que nous avons présentés soient en anglais (dont un en français), nous notons l'existence de jeux de données dans d'autres langues. Par exemple, 110-PT-BN-KP~\cite{marujo_keyphrase_2011} contient 110 transcriptions de journaux télévisés en portugais associés à des mots-clés lecteurs ;
+PerKey~\cite{doostmohammadi_perkey_2018} contient \num{550 000} articles journalistiques en persan dont les mots-clés sont annotés par leurs auteurs.
+
+%\paragraph{Genre de documents}
+%Autres types: msmarco, mails, transcription
+Nous nous sommes focalisés sur les documents scientifiques et journalistiques mais d'autres genres de documents ont été étudiés par la communauté scientifique. Par exemple, \citet{turney_learning_2000} utilise des courriels et des pages web pour évaluer la tâche de production automatique de mots-clés. Plus récemment, \citet{xiong_open_2019} présente MS-Marco, un jeu de données de \num{150 000} pages web annotées par des employés entraînés à associer des mots-clés à des pages web.
+%Chaque page est annotée avec 3 mots-clés ordonnés en fonction de leur importance.
+%L'accord inter-annotateur a été calculé sur 50 documents avec 5 annotateurs, en comparant seulement le premier mot-clé annoté il est de \npercent{64.74}.
+%Les jeux de données StackExchange et TEXTWORLD ACG utilisé par \cite{yuan_generating_2018,yuan_one_2020} ne sont pas de la production de mots-clés, c'est de l'assignation de mots-clés à la limite et de l'extraction d'information structurée (à base de règle ce serait mieux).
+
+%\paragraph{Définition de mot-clés différente}
+%tache
+Le jeu de données SemEval-2010~\cite{augenstein_semeval_2017} est annoté en mots-clés mais ces derniers ne représentent pas le contenu du document; ils décrivent les tâches, outils et ressources mentionnées dans l'article. 
+
+%\paragraph{Taille de corpus}
+%taille
+OAGKX~\cite{cano_keyphrase_2019-1}, un très large ensemble de notices scientifiques (23 millions) avec mots-clés auteurs, a été construit dans le but de pouvoir augmenter des jeux de données existants, ou d'en fabriquer de nouveaux.
+Ce jeu de données n'a été utilisé à ce jour, à notre connaissance, que par ses auteurs.
+Il est constitué de notices scientifiques extraites à partir du Open Academic Graph (union de ArnetMiner et Microsoft Academic Graph) et il est peu documenté en termes de métadonnées, en particulier pour identifier les domaines des documents.
+
+
+% Repo de données
+%Les jeux de données présentés sont parfois disponible via une adresse web, 
+%La collecte et la mise a disposition de jeux de données n'est pas simple.
+%Les principaux entrepôts de données sont:
+%https://github.com/zelandiya/keyword-extraction-datasets
+%https://github.com/snkim/AutomaticKeyphraseExtraction
+%https://sites.google.com/site/sujathadas/home/datasets
+%https://github.com/LIAAD/KeywordExtractor-Datasets
+%https://github.com/boudinfl/ake-datasets
+
+\subsection{Discussion}
+\label{sec:framework_datasets_discussion}
+%le recouvrement des jeux de données
+De nombreux jeux de données ont été proposés par la communauté scientifique, et couvrent un large panel de genres de documents et de types d'annotation.
+Ce grand nombre de jeux de données traduit un intérêt pour la tâche de production automatique de mots-clés. Malgré cela, la majorité de ces jeux de données contiennent peu de documents et sont annotés de manière non-professionnelle.
+La petite taille de ces jeux de données ne comble pas le besoin en données d'entraînement des modèles neuronaux, aujourd'hui incontournables.
+La faible disponibilité d'annotations professionnelles est aussi à déplorer car elle impacte négativement l'évaluation des méthodes ainsi que leur apprentissage (voir section~\ref{sec:large_eval_results}).
+Cette faible disponibilité s'explique par le coût financier de telles annotations ainsi que par la difficulté de mobiliser des indexeurs professionnels.
+
+De plus, du fait de la rareté des documents scientifiques annotés en mots-clés, les jeux de données sont généralement construits en utilisant les mêmes sources de documents. Le choix des documents est donc restreint.
+Par exemple, les jeux de données KP20k, ACM, KDD et WWW ont été en partie construits grâce à la même source de document: l'ACM\;DL. Il en résulte que ces jeux de données différents contiennent des documents communs. Autrement dit, ils ont une intersection non nulle.
+Cette intersection non nulle pose problème dans le cas où des documents sont communs à des ensembles de test et à des ensembles d'entraînement.
+Dans ce cas, l'évaluation de méthodes entraînées sur de tels ensembles d'entraînement est faussée.
+Pour mesurer l'ampleur de ce phénomène, nous calculons le nombre de documents communs aux différents jeux de données scientifiques.\footnote{Nous considérons deux documents égaux si leurs titres sont égaux. Les titres ont été mis en minuscules et les caractères de ponctuation ont été supprimés.}
+Ainsi nous constatons que \npercent{12} des documents de test d'Inspec apparaissent dans l'ensemble d'entraînement de KP20k, ce chiffre est de \npercent{68} pour KDD, \npercent{63} pour WWW, \npercent{6} pour KP20k, \npercent{1} pour PubMed, \npercent{44} pour ACM et \npercent{84} pour SemEval-2010.
+Pour KP20k, ce phénomène est mentionné pour la première fois dans les travaux de \citet{chen_integrated_2019} et \citet{chan_neural_2019} qui explicitent leurs manières de résoudre ce problème en supprimant de l'ensemble d'entraînement les documents qui apparaissent dans des ensembles de test.
+
+
+\section{\'Evaluation}\label{sec:framework_evaluation}
+
+L'évaluation d'un ensemble de mots-clés prédits s'effectue classiquement de manière intrinsèque.
+L'évaluation intrinsèque s'intéresse à la pertinence des mots-clés prédits par rapport à des mots-clés de référence.
+L'évaluation extrinsèque est un autre type d'évaluation et vise à démontrer l'intérêt des mots-clés dans une tâche applicative. Cette évaluation sera présentée dans le chapitre~\ref{chap:ri}. Nous nous concentrons dans cette section sur l'évaluation intrinsèque.
+
+L'évaluation intrinsèque peut être effectuée de manière manuelle ou automatique. Elle vise à déterminer si l'ensemble de mots-clés prédits associés à un document présente bien les caractéristiques requises: non redondance et couverture (voir section~\ref{sec:caracterisation_keywords}).
+% représentativité, spécificité ??
+Dans la réalité, comme nous l'avons vu précédemment, les mots-clés de référence sont annotés par des annotateurs professionnels: les indexeurs, ou par des non professionnels: les auteurs, les lecteurs ou les éditeurs.
+Les annotateurs professionnels respectent mieux les caractéristiques des mots-clés que les annotateurs non professionnels.
+
+L'évaluation d'une liste ordonnée de mots-clés associée à un document s'effectue en deux étapes: la validation ou le rejet de chaque mot-clé prédit; puis le calcul d'un score selon ce jugement.
+Nous présentons dans cette section la première étape qui consiste à comparer les mots-clés prédits à une liste de mots-clés de référence, c'est l'étape d'appariement.
+Nous présentons ensuite la seconde étape, le calcul du score, qui s'effectue grâce aux métriques classiques de TALN que sont la précision, le rappel et la \fmesure{}.
+Enfin, nous présentons une manière de rendre l'évaluation plus robuste: l'expansion de référence.
+
+%\todo{Ajouter le nombre moyen d'assignation des MC par document ? cf.redaction\_script/df\_keywords.py}
+
+\subsection{Appariement}\label{sub:framework_pairing}
+La méthode communément admise pour appairer les mots-clés prédits et les mots-clés de référence est de les mettre en correspondance de manière exacte. Cet appariement, bien que simple à mettre en place, ne permet pas de prendre en compte certaines variantes telles que:
+\begin{itemize}
+    \item les variantes flexionnelles: \textit{réseau de neurones} et \textit{réseaux de neurones};
+    \item les variantes morpho-syntaxiques: \textit{réseau de neurones} et \textit{réseau neuronal};
+    \item les synonymes: \textit{rite funéraire} et \textit{pratiques funéraires};
+    \item les acronymes: \textit{SVM} et \textit{support vector machines}.
+\end{itemize}
+
+Le traitement de ces variantes peut être complexe à mettre en \oe{}uvre. C'est pourquoi seule la racinisation~\cite{porter_algorithm_1980} est couramment employée: elle permet de traiter une partie des variantes flexionnelles et morphologiques.
+Ce traitement est bien adapté à l'anglais mais moins au français où le phénomène d'allomorphie est courant.
+En français, la racinisation peut créer de fausses correspondances entre deux mots-clés n'ayant pas de rapport s'ils contiennent des allomorphes.
+Les allomorphes sont des mots qui ont une racine commune mais qui ne partagent pas de sens.
+Par exemple \textit{empirique} et \textit{empire} seront racinisés en \emph{empir}: ils partagent une racine mais pas de sens.
+
+\todo{Il faut parler des travaux de \cite{zesch_approximate_2009} sur la correspondance floue.}
+
+\subsection{Métriques}\label{sub:framework_metrics}
+
+% Chapeau
+Les appariements obtenus précédemment sont utilisés par des métriques pour calculer des scores.
+Les métriques les plus utilisées sont la précision, le rappel et la \fmesure{} qui sont calculées grâce aux $n$ meilleurs mots-clés (cf. équations~\ref{eq:precision}, \ref{eq:rappel} et \ref{eq:fmesure}). 
+La précision évalue le nombre de mots-clés corrects par rapport au nombre de mots-clés prédits par la méthode, tandis que le rappel évalue le nombre de mots-clés corrects par rapport au nombre de mots-clés de référence. La \fmesure{} correspond à la moyenne harmonique de ces deux valeurs.
+Dans les équations de cette section nous utiliserons $Y$ pour désigner les mots-clés de référence, $\hat{Y}$ pour les mots-clés prédits, $\hat{Y}_{:n}$ pour les $n$ meilleurs mots-clés prédits et $\hat{Y}_{:n} \bigcap Y$ représente l'intersection entre les mots-clés prédits et les mots-clés de référence.
+
+\begin{align}\label{eq:precision}
+  P@n & = \frac{|\hat{Y}_{:n} \bigcap Y|}{|\hat{Y}_{:n}|} \\\label{eq:rappel}
+  R@n & = \frac{|\hat{Y}_{:n} \bigcap Y|}{|Y|} \\\label{eq:fmesure}
+  F@n & = \frac{2 * P@n * R@n}{P@n + R@n}
+\end{align}
+%rajouter la signification des Y
+
+D'autres métriques, qui permettent de prendre en compte la qualité de l'ordonnancement des mots-clés, sont aussi utilisées.
+La \map{} (mean Average Precision) représente la moyenne des précisions à chaque rang. Nous présentons sa formule dans l'équation~\ref{eq:map}. Elle rend compte de la capacité de la méthode à proposer les mots-clés corrects dans les premiers rangs. Cette mesure est utilisée entre autre par \citet{basaldella_evaluating_2016,boudin_unsupervised_2018,gallina_large-scale_2020}.
+
+\begin{equation}\label{eq:map}
+    \text{\map}(d) = \frac{1}{|M_d|} \sum_{i=1}^{|M_d|} \frac{|R_{d[:i]}|}{|M_{d[:i]}|}
+\end{equation}
+
+Ensuite, la MRR (Mean Reciprocal Rank) calcule le rang du premier mot-clé correct. Dans l'équation~\ref{eq:mrr},  $rank_r$ représente le rang du mot-clé $r$. Cette mesure est utilisée par \citet{liu_automatic_2010}.
+
+\begin{equation}\label{eq:mrr}
+    \text{MRR}(d) = \frac{1}{min \{rank_r, r\in{R_d}\}}
+\end{equation}
+
+La Bpref (Binary Preference) pénalise les mots-clés corrects classés après des mots-clés incorrects. Dans l'équation~\ref{eq:bpref}, $R_d$ représente l'ensemble des mots-clés corrects pour le document $d$ et $M_d$ l'ensemble des mots-clés prédits. Cette mesure est utilisée par \citet{liu_automatic_2010}.
+
+\begin{equation}\label{eq:bpref}
+    \text{Bpref}(d) = \frac{1}{|R_d|}\sum_{r\in{}R_d} 1 - \frac{|n \text{ mieux classés que } r|}{|M_d|}
+\end{equation}
+
+Le NDCG (Normalized Discounted Cumulative Gain) calcule l'\say{importance} des mots-clés corrects en fonction de leur rang. Dans l'équation~\ref{eq:ndcg}, $\text{DCG}_i$ est le DCG optimal, c'est-à-dire l'ordonnancement qui positionne tous les mots-clés corrects avant les mots-clés incorrects. Cette mesure est utilisée par \citet{marujo_supervised_2012,chen_keyphrase_2018}.
+% A preciser la différence avec la mAP
+\begin{align}
+\begin{split}\label{eq:ndcg}
+    \text{DCG}(d) = & \frac{1}{|R_d|}\sum_{r\in{}R_d} \frac{1}{log_2(rank_r+1)} \\
+    \text{NDCG}(d) = & \frac{\text{DCG}(d)}{\text{DCG}_i(d)}
+\end{split}
+\end{align}
+
+%Discuter le n: méthodes, données et moyens de garantir 
+Toutes ces métriques, même les métriques ensemblistes, ne considèrent qu'un sous-ensemble de mots-clés prédits: les $n$ meilleurs.
+Se restreindre aux $n$ meilleurs mots-clés permet de comparer des méthodes qui peuvent proposer un nombre de mots-clés différent. Par exemple, les méthodes extractives sont sensibles à la longueur du document: elles proposent un nombre de mots-clés limité dans le cadre de notices scientifiques ou un nombre très important pour des articles scientifiques.
+%Lorsque le nombre de mots-clés prédits est inférieur à $n$, le calcul des métrique peut être faussé selon l'implémentation, \cite{chen_exclusive_2020} identifie et met en garde contre ce problème.
+Le choix de ce $n$ n'est pas un problème résolu~\ref{choisir-le-sous-ensemble}, il est généralement fixé de manière arbitraire.
+Pour éviter de le choisir, \cite{yuan_one_2020} propose deux nouvelles métriques: 
+\begin{itemize}
+    \item la F@M (Modèle) qui remplace $n$ par le nombre de mots-clés produits par la méthode ($|\hat{Y}|$). La F@M évalue donc la capacité d'une méthode à produire le nombre de mots-clés prédits qui correspond au nombre de mots-clés de référence; 
+    \item la F@O (Oracle) qui remplace $n$ par le nombre de mots-clés de référence ($|Y|$). La F@O évalue donc la capacité de la méthode à bien classer les mots-clés prédits. 
+\end{itemize}
+
+En pratique, le nombre $n$ de mots-clés adoptés pour évaluer les méthodes est généralement de 5 ou 10, ce qui correspond au nombre moyen de mots-clés annotés respectivement par les auteurs et les indexeurs.
+%Un nombre $n$ de mots-clés calculé en fonction de la tache applicative a été peu étudié à notre connaissance.
+Nous montrons dans notre évaluation extrinsèque (cf. chapitre~\ref{chap:ri}), qu'un nombre de 4 ou 5 mots-clés prédits est un bon compromis pour la tâche de recherche d'informations.
+
+\todo{Faire 2 exemples avec 5 mots-clés bien classé et mal classé et réference, et calculer pour chacun les métriques.}
+
+\subsection{Expansion de référence}\label{sub:framework_expansion}
+
+Pour rendre l'évaluation plus robuste aux différentes variantes de mots-clés, décrites dans la section~\ref{sub:framework_pairing}, des techniques sont proposées pour compléter les mots-clés de référence de manière automatique.
+%
+\citet{chan_neural_2019} propose d'augmenter la référence en ajoutant des variantes de mots-clés: acronymes et synonymes.
+Leur étude des mots-clés de référence montre que certains mots-clés de référence contiennent un acronyme, par exemple \foreign{support vector machine (svm)}. Pour extraire ces acronymes entre parenthèses et les ajouter à la référence, ils utilisent des expressions régulières.
+Pour trouver des synonymes de mots-clés, ils exploitent la fonction de redirection automatique de Wikipédia:
+\begin{itemize}
+    \item si la recherche du mot-clé \foreign{solid state disk} mène sur l'article \foreign{solid state drive}; alors \foreign{solid state disk} est considéré comme un synonyme de \foreign{solid state drive}.
+    \item Si la recherche du mot-clé \foreign{ssd} mène sur une page de désambiguïsation qui propose pour chaque sens de cet acronyme une forme étendue, et qu'une de ces formes étendues apparaît dans le document (par exemple  \foreign{solid state disk}) ; alors cette forme étendue est considérée comme un synonyme de \foreign{ssd}.
+\end{itemize}
+Leurs expériences montrent que ces heuristiques ajoutent au moins une variante pour \npercent{14.1} des mots-clés de référence et qu'elles sont à l'origine d'une augmentation de 0,1 de F@M lors de l'évaluation de méthodes de génération de mots-clés.
+
+Nous pouvons encore citer~\citet{kim_semeval-2010_2010} qui ajoutent des variantes syntaxiques aux mots-clés.
+Ils se concentrent sur les mots-clés sous forme génitive. Par exemple \foreign{policy of school} est la version génitive de \foreign{school policy}.
+Ainsi, ils génèrent et ajoutent comme variante d'une forme génitive, la forme canonique correspondante.
+
+Dans le jeu de données KPTimes, certains mots-clés sont associés à des variantes.
+En effet, les mots-clés de référence proviennent d'un vocabulaire contrôlé, dans lequel certains mots-clés sont associés à des termes apparentés.
+Par exemple, des acronymes sont associés à leurs formes expansées; pour les artistes le nom d'usage est associé à leur nom de scène (\say{Abel Tesfaye} et \say{The Weeknd}); ou encore une appellation populaire est associée à son appellation officielle (\say{Obamacare} et \say{Affordable Care Act}).
+
+\section{Conclusion}
+
+%3.1 Jeux de données
+Nous avons présenté le cadre expérimental de la tâche de production automatique de mots-clés: d'abord, les jeux de données utilisés dans nos expérimentations, présentées dans les prochains chapitres ; ensuite le processus d'évaluation des méthodes de production automatique de mots-clés.
+
+%3.1.1 Notices
+%3.1.2 Articles sci
+%3.1.3 Article Journa
+Ainsi, les jeux de données que nous utilisons couvrent un large spectre de genres, de types et de tailles de documents ainsi que de types d'annotation.
+Ces jeux de données sont aussi les plus utilisés par la communauté scientifique.
+Cet ensemble de jeux de données comporte principalement des documents scientifiques, qui sont notre objet d'étude mais il comporte aussi des articles journalistiques qui nous servent à étudier la généralisation des méthodes.
+%
+Ces jeux de données contiennent des documents longs: les articles scientifiques complets qui comportent en moyenne $\simeq 8500$ mots; et des documents courts: les notices scientifiques qui contiennent $\simeq 150$ mots en moyenne.
+Ces jeux de données sont annotés par différents annotateurs, non-professionnels pour la plupart.
+Nous avons souligné l'hétérogénéité des processus d'annotation en mots-clés, en particulier pour les mots-clés lecteurs.
+La qualité de ces annotations non-professionnelles est donc très variable.
+Il est à noter que la majorité de ces jeux de données est en anglais, même s'il existe quelques initiatives en français et dans d'autres langues.
+Cette prépondérance de l'anglais s'explique par la place centrale de cette langue dans la communauté scientifique et par son nombre de locuteurs.
+%3.1.4 Autres
+Les documents disponibles librement et annotés en mots-clés sont rares et proviennent généralement des mêmes sources.
+C'est pourquoi certains documents apparaissent dans plusieurs jeux de données (SemEval-2010 est composé à \npercent{84} de document de KP20k).
+
+% 3.2 Évaluation
+Nous avons également présenté le processus d'évaluation des méthodes de production automatique de mots-clés. Ce processus apparie les mots-clés prédits à une référence puis calcule un score.
+L'appariement entre les mots-clés prédits et les mots-clés de référence s'effectue grâce à une comparaison exacte qui ne permet pas de prendre en compte les variantes des mots-clés. Pour assouplir cette comparaison, un algorithme de racinisation est systématiquement utilisé.
+Avec ces appariements, des scores sont calculés grâce aux métriques ensemblistes classiques (précision, rappel, \fmesure{}) et aux métriques d'ordonnancement de la recherche d'informations (\map{}). Les métriques les plus rapportées dans les travaux sont le rappel et la \fmesure{}.
+%3.2.3 Expansion de réference
+Pour compléter les références et rendre plus robuste l'appariement entre les mots-clés de référence et les mots-clés prédits, certains jeux de données incluent des variantes de mots-clés de référence telles que la version expansée d'un acronyme ou un synonyme.
+Cet ajout de variantes s'effectue de manière manuelle grâce à une expertise linguistique ou de manière automatique avec des ressources externes.

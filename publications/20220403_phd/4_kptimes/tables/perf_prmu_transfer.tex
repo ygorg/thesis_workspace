@@ -1,0 +1,23 @@
+\begin{table}[htpb!]
+    \centering
+    \begin{tabular}{llSSSS}
+    \toprule
+        & & \multicolumn{2}{l}{KP20k} & \multicolumn{2}{l}{KPTimes} \\
+        & & \small{F@10} & \small{mAP} & \small{F@10} & \small{mAP} \\
+    \midrule
+    \multirow{5}{*}{Sci}
+        & P & 27.86 & 21.55 &  16.79 & 12.17 \\
+        & R &  0.80 &  0.50 &   0.02 &  0.01 \\
+        & M &  0.68 &  0.44 &   0.02 &  0.01 \\
+        & U &  0.43 &  0.27 &   0.02 &  0.01 \\
+    \cline{1-6}
+    \multirow{5}{*}{News}
+        & P &  7.63 &  4.46 &  31.40 & 23.66 \\
+        & R &  0.01 &  0.01 &   5.92 &  3.94 \\
+        & M &  0.02 &  0.01 &   6.85 &  4.72 \\
+        & U &  0.01 &  0.01 &   3.59 &  2.29 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Performances du modèle CopyRNN entraîné sur KPTimes (News) et KP20k (Sci) pour chaque catégorie de mots-clés sur ces deux jeux de données.}
+    \label{tab:perf_prmu_tranfer}
+\end{table}

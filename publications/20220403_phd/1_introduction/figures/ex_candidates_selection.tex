@@ -1,0 +1,37 @@
+%\definecolor{mycolor0}{rgb}{0.9677975592919913, 0.44127456009157356, 0.5358103155058701}
+\definecolor{mycolor0}{rgb}{0, 0, 0}
+\definecolor{mycolor1}{rgb}{0.3126890019504329, 0.6928754610296064, 0.1923704830330379}
+%\definecolor{mycolor2}{rgb}{0.23299120924703914, 0.639586552066035, 0.9260706093977744}
+\definecolor{mycolor2}{rgb}{0, 0, 0}
+
+
+\begin{figure*}
+    \centering
+    
+    \resizebox{\textwidth}{!}{
+    \setlength{\tabcolsep}{2pt}
+    
+    \begin{tabular}{ccccc ccccc cc}
+
+    %\multicolumn{12}{c}{filtered n-gram selection} \\
+
+    \cmidrule(lr){8-9}
+
+    \cmidrule(lr){7-8} \cmidrule(lr){11-12}
+    
+    \cmidrule(lr){2-2} \cmidrule(lr){5-5} \cmidrule(lr){7-7} \cmidrule(lr){8-8} \cmidrule(lr){9-9} \cmidrule(lr){11-11} \cmidrule(lr){12-12}
+    
+    [...] & developping & a & new & framework & for & \textcolor{mycolor0}{acquiring} & medical & \textcolor{mycolor1}{knowledge} & from & \textcolor{mycolor2}{encyclopedic} & text.\\
+
+    \cmidrule(lr){5-5} \cmidrule(lr){8-9} \cmidrule(lr){11-12} \\
+    
+    %\multicolumn{11}{c}{noun phrase selection} \\
+    \end{tabular}
+    }
+    \begin{tabular}{lp{0.7\textwidth}}
+    Mots-clés auteurs: & \textcolor{mycolor1}{knowledge}~\textcolor{mycolor0}{acquisition}; \textcolor{mycolor1}{knowledge}~compilation; io-model; \\
+    & \textcolor{mycolor2}{encyclopedia}~of~china; high-level~conceptual~language \\
+    \end{tabular}
+    \caption{Exemple de sélection de mot-clés candidats. Les mots surlignés ont été sélectionnés par la méthode n-grammes, les mots soulignés ont été sélectionné par un patron grammatical dénotant les syntagmes nominaux anglais.}
+    \label{fig:ex_selection}
+\end{figure*}

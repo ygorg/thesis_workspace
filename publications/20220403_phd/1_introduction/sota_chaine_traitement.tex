@@ -1,0 +1,255 @@
+\section{Méthodes en chaîne de traitement}\label{sec:methode-en-chaine-de-traitement}
+Dans cette section, nous présentons les méthodes d'extraction automatique de mots-clés en chaîne de traitement.
+Ces méthodes sont dites en \say{chaîne de traitement} car elles s'exécutent en trois étapes:
+\begin{enumerate}
+    \item l'identification d'unités textuelles que l'on va considérer comme candidates à être des mots-clés;
+    \item la pondération de ces mots-clés candidats, à l'aide de différentes méthodes: statistiques, de classification, utilisant des graphes, etc.~;
+    \item la sélection d'un sous-ensemble de candidats qui représente le document.
+\end{enumerate}
+La figure~\ref{fig:chaine_traitement} illustre le déroulement en trois étapes des méthodes en chaîne de traitement.
+
+
+\begin{figure}[htbp]
+    \centering
+
+    \begin{tikzpicture}[scale=1.5, transform shape]
+    \tikzstyle{label}=[text width=3 cm, align=center, scale=.75]
+    
+    \pic[local bounding box=doc1] {doc={scale 2}};
+    \node[above=.25 of doc1, label] (label1) {Pré-traitements linguistiques};
+
+    \pic[local bounding box=doc2, right=1.5 of doc1] {dockw={scale 2}};
+    \node[above=.25 of doc2, label] (label2) {Identification des candidats};
+
+    \pic[local bounding box=weighted, right=1.5 of doc2] {weighted={scale 1}};
+    \node[above=.35 of weighted, inner xsep=-.125cm, label] (label3) {Pondération des candidats};
+
+    \pic[local bounding box=kws, right=1.5 of weighted] {kws={scale 1}};
+    \node[above=.45 of kws, inner xsep=-.1cm,label] (label4) {Sélection du sous-ensemble};
+    
+    \node[below=.1 of doc2, inner xsep=-.125cm, label, scale=.75] (step1) {\'Etape 1};
+    \node[inner xsep=-.125cm, label, scale=.75] (step2) at (step1 -| weighted) {\'Etape 2};
+    \node[inner xsep=-.125cm, label, scale=.75] (step3) at (step1 -| kws){\'Etape 3};
+
+    \draw[->, thick] (doc1) -- (doc2);
+    \draw[->, thick] (doc2) -- (weighted);
+    \draw[->, thick] (weighted) -- (kws);
+
+    \end{tikzpicture}
+    
+    \caption{Étapes principales des méthodes d'extraction de mots-clés en chaîne de traitement.}
+    \label{fig:chaine_traitement}
+\end{figure}
+
+
+
+\subsection{Identification des mots-clés candidats}\label{selection-des-mots-cles-candidats}
+
+% le filtrage de la redondance et autre? peut se faire soit à cette étape soit quand on choisis le sou-ensemble
+L'identification des mots-clés candidats est la première étape de l'extraction de mots-clés. Elle consiste à identifier certaines unités textuelles du document qui peuvent être des mots-clés.
+Cette identification met en \oe{}uvre des heuristiques exploitant certaines caractéristiques des mots-clés (fréquence, position, patron morphosyntaxique, \ldots).
+Le choix de la méthode de sélection des mots-clés candidats influe grandement sur la tâche d'extraction car elle pose une hypothèse forte sur les propriétés que doivent respecter les mots-clés.
+Sélectionner un grand nombre de candidats complexifie l'étape suivante de pondération. En sélectionner trop peu risque de limiter les performances de l'extraction de mots-clés en occultant certains mots-clés pertinents.
+%En effet si aucun mots-clés de référence n'est sélectionné à cette étape, la méthode ne pourra les pondérer et aura un score de 0.
+% entre nombre de cand et rappel max, bruit
+% enlever les redondants 
+Cette étape doit donc trouver un compromis entre minimiser le bruit (le nombre de candidats non pertinents) et maximiser le rappel (le nombre de candidats pertinents).
+
+
+Deux  méthodes principales sont employées pour la sélection de mots-clés~: les n-grammes et les patrons morphosyntaxiques.
+Les n-grammes (séquences continues de $n$ mots) sélectionnés sont  généralement des unigrammes, bigrammes et trigrammes~\cite{witten_kea:_1999,campos_yake_2020}. Cette méthode produit un nombre conséquent de mots-clés candidats mais elle garantie une couverture de l'ensemble du document.
+Les n-grammes candidats sont ensuite filtrés pour éliminer les séquences peu susceptibles d'être des mots-clés, comme celles qui commencent et finissent par des catégories grammaticales fonctionnelles ou encore celles qui ne contiennent ni nom ni adjectif.
+
+% (N|A)+
+Les méthodes les plus populaires sélectionnent des séquences d'étiquettes morphosyntaxiques à l'aide de patrons morphosyntaxiques. 
+Nous avons vu dans la section~\ref{sub:nature_linguistique} que les mots-clés sont en grande majorité composés de noms et d'adjectifs.
+Le patron générique le plus populaire est \texttt{/(NOUN|ADJ)+/}~\cite[\textit{inter alia}]{mihalcea_textrank:_2004,wan_collabrank:_2008,bougouin_topicrank:_2013}. %, un patron plus précis que l'on retrouve dans la figure~\ref{fig:patron_syntaxique_kp20k} est \texttt{/ADJ? NOUN+/}.
+Construire des patrons morphosyntaxiques plus précis, décrivant des mots-clés, requiert soit l'expertise linguistique de spécialistes de la langue, soit l'acquisition automatique de patrons à partir d'un ensemble d'apprentissage annoté en mots-clés.
+Dans cette direction, \citet{hulth_improved_2003} considère comme patrons acceptables tous les patrons apparaissant au moins 10 fois dans les mots-clés des documents d'entraînement.
+Les outils d'étiquetage morphosyntaxique sont aujourd'hui des outils de traitement linguistique de base pour de nombreuses langues à l'exception de certaines langues peu dotées.
+En terme de performances, l'étiqueteur morphosyntaxique de l'outil \texttt{spacy}\footnote{\url{https://spacy.io/models}} atteint une précision de \npercent{97} pour l'anglais et \npercent{93} pour le français.
+Ces bonnes performances globales cachent néanmoins des problèmes récurrents :
+en anglais, un problème d'étiquetage des extensions du nom de tête des composés anglais par exemple dans \say{\foreign{ant colony optimization}}, \foreign{ant} est catégorisé comme adjectif au lieu de nom ;
+en français, la confusion de noms en verbes dès que la forme du nom est aussi une forme flexionnelle acceptable du verbe, par exemple le nom \say{défigement} fini par \say{ent} et est catégorisé comme verbe.
+Pour le français, par exemple, les mots-clés peuvent contenir des prépositions comme \say{langue \textit{de} spécialité}; le patron \texttt{(NOUN|ADJ)+} ne permet pas la sélection de ces composés nominaux pourtant très fréquents~\cite{daille_term_2017}.
+% neural network / réseau de neurone
+
+%Il est aussi possible d'identifier les candidats en utilisant un vocabulaire contrôlé provenant d'un thésaurus ou autre référentiel. Cette méthode assure des candidats de qualité et cohérents entre les documents mais ne permet pas d'avoir une couverture exhaustive~\cite{willis_2013_bs}.
+
+La figure~\ref{fig:ex_selection} donne un exemple de candidats sélectionnés par la méthode n-grammes et selon le patron \texttt{/(NOUN|ADJ)+/}. Le nombre de candidats identifiés en conservant les n-grammes de 1 à 3 (12 candidats) est très supérieur à ceux identifiés par le patron \texttt{/(NOUN|ADJ)+/} (2 candidats).
+La plupart des candidats identifiés par la méthode n-gramme n'apporte que peu d'informations quant aux sujets du document.
+
+\begin{figure}[!htbp]
+    \centering
+    \begin{tabular}{ll}
+        \multirow{2}{*}{1-grammes} & indexation ; libre ; ensemble ; unités ;\\
+         & descriptives ; utilisés ; connu ; priori\\
+         \cmidrule(lr){1-2}
+        2-grammes & indexation libre ; unités descriptives\\
+         \cmidrule(lr){1-2}
+        3-grammes & ensemble des unités ; connu a priori\\
+         \cmidrule(lr){1-2}
+        Patron \texttt{(N|A)+} & indexation libre ; unités descriptives \\
+    \end{tabular}
+    \caption{Mots-clés candidats identifiés par la méthode n-grammes et selon le patron \texttt{(NOUN|ADJ)+} dans la phrase \say{\textit{Dans l'indexation libre, l'ensemble des unités descriptives qui peut être utilisé n’est pas connu a priori.}} provenant de \citet{neveol_automatisation_2005}.}
+    \label{fig:ex_selection}
+\end{figure}
+
+
+
+\subsection{Pondération des mots-clés candidats}\label{ponderation}
+L'étape de pondération des mots-clés candidats consiste à leur assigner un score évaluant leur potentialité à être un mot-clé.
+Nous présentons les méthodes de l'état de l'art en les regroupant par catégories: les méthodes statistiques qui utilisent des statistiques descriptives, les méthodes utilisant des graphes pour représenter les documents, les méthodes de classification supervisées et d'autres méthodes ne rentrant pas dans ces catégories.
+
+\subsubsection{Méthodes statistiques}\label{statistique}
+
+La méthode statistique la plus utilisée est le \tfidf{}~\cite{jones_statistical_1972}.
+C'est une méthode de référence très populaire dans la plupart des tâches de traitement automatique de la langue. Le \tfidf{} est un schéma de pondération qui exploite la fréquence des mots dans une collection de documents.
+Sa formule est décrite dans l'équation~\ref{eq:tfidf} avec $N$ le nombre de documents de la collection, $\textsc{Df}(w)$ le nombre de documents comportant le mot $w$, $\textsc{Tf}_d(w)$ le nombre d'occurrences du mot $w$ dans le document $d$.
+L'idée étant que la fréquence élevée d'un mot ou sa spécificité à un document sont des indicateurs d'importance de ce mot. 
+
+\begin{align}
+    \tfidf(d, w) = & \textsc{Tf}_d(w) * log\left( \frac{N}{\textsc{Df}(w)} \right) \label{eq:tfidf}
+\end{align}
+
+%Avec $N$ le nombre de documents de la collection, $\textsc{Df}(w)$ le nombre de documents comportant le mot $w$, $\textsc{Tf}_d(w)$ le nombre d'occurrences du mot $w$ dans le document $d$.%, $|d|$ le nombre de mots du document $d$ et $avgdl$ le nombre moyen de mots par documents dans la collection. $b$ et $k_1$ sont des constantes permettant de modifier l'importance de la longueur du document ($b$ est généralement fixé à \num{0.75}).
+
+%L'idée étant qu'un mot ayant une fréquence élevée ou qu'il soit spécifique à un document sont des indicateurs d'importance du mot. 
+%L'intérêt de \bm{} par rapport a \tfidf{} est d'augmenter l'importance d'un mot dans un document si le document est plus court.
+
+Outre la fréquence, la position d'un candidat dans le document est un indicateur fort de sa propension à être un mot-clé. La position est utilisée dans plusieurs méthodes~\cite[\textit{inter alia}]{witten_kea:_1999,goh_keyphrase_2007,campos_yake_2020} que nous décrivons ensuite.
+C'est en effet au début d'un article scientifique, dans son titre et son résumé, que l'on va mentionner les concepts décrits dans l'article.
+Dans la tâche de résumé automatique, la méthode de base, à laquelle se comparer, utilise les premières phrases du document qui sont utilisées comme résumé~\cite{brandow_automatic_1995}.
+La méthode \say{FirstPhrases}~\cite{gallina_large-scale_2020} s'inspire de cette méthode et ordonne les candidats selon leur position dans le document.
+
+\iffalse
+\begin{align}
+    \text{score}(d, w) = & \frac{pos(w)}{|d|}) \label{eq:firstphrases}
+\end{align}
+\fi
+
+La méthode YAKE!~\cite{campos_yake_2020} est une méthode qui calcule le score des candidats à l'aide de plusieurs descripteurs statistiques.
+L'intérêt de ces descripteurs est qu'ils sont indépendants de la langue et -- à l'inverse de \tfidf{} -- ne nécessitent pas de collection de documents.
+En plus de la fréquence et de la position, la casse et les coocurrences sont aussi utilisées.
+
+%Tous ces descripteurs sont ici utilisé de manière non supervisés mais peuvent être inclus dans des méthodes supervisés.
+
+
+\subsubsection{Méthodes de classification}\label{classification}
+
+L'extraction de mots-clés peut être reformulée comme une tâche de classification binaire. Chaque candidat est classé comme mot-clé ou non mot-clé. La confiance du classifieur dans sa prédiction peut être utilisée pour donner un score aux candidats et donc pour les classer.
+%Ces méthodes ont été peu développées à cause de la faible disponibilités d'ensemble d'apprentissage dans les jeux de données distribués, mais les quelques 
+
+
+La méthode historique Kea~\cite{witten_kea:_1999} combine seulement deux descripteurs pour classifier les mots-clés candidats: le \tfidf{} et la position de la première occurrence.
+Cette méthode bien que simple est aujourd'hui toujours compétitive, elle exploite la fréquence et la position qui sont deux caractéristiques fortement liées à l'importance d'un mot.
+
+Certaines méthodes se concentrent sur l'extraction de mots-clés dans les articles scientifiques et peuvent ainsi tirer parti de leur structure.
+Dans leurs travaux \citet{goh_keyphrase_2007} remarquent que les mots-clés n'apparaissent pas de manière équiprobable dans toutes les sections des articles scientifiques.
+Pour prendre en compte cette information, un classifieur détecte l'apparition d'un mot-clé candidat dans 14 types de sections avec une précision de \npercent{92}.
+Parmi ces 14 types de sections se trouvent: le résumé, l'introduction, la conclusion, les travaux connexes, les références, etc.
+Cette information est ensuite utilisée comme trait supplémentaire pour classifier les mots-clés candidats.
+%En plus du \tfidf{}, de la position) et de descripteurs morphologiques (le patron morphosyntaxique, le suffixe et si le mot est un acronyme), un vecteur indiquant les sections du document dans lesquelles apparaît le candidat est ajouté pour l'entraînement d'un classifieur NaiveBayes.
+
+%Une des premières méthode à utiliser un réseau de neurones est \cite{sarkar_new_2010}. Les descripteurs utilisés sont la fréquence, la position et la longueur du candidats.
+
+\subsubsection{Méthodes fondées sur les graphes}\label{graphe}
+
+Les méthodes fondées sur les graphes sont très populaires pour l'extraction de mots-clés. Les graphes permettent de calculer des mesures de centralité des n\oe{}uds qui dénotent leur importance.
+%Les graphes peuvent être utilisés pour modéliser les unités textuelles au sein d'un document ou d'une collection de documents.
+Dans le cadre de l'extraction de mots-clés, le graphe $G=(V, E)$ est composé de noeuds $V$, qui représentent les mots d'un document, et d'arêtes $E$, qui représentent les relations de cooccurrence entre les mots selon une fenêtre glissante de $n$ mots.
+
+%Les noeuds sont pondérés grâce à un algorithme de marche aléatoire qui calcule leur popularité, en fonction de la popularité des noeuds voisins.
+
+La méthode pionnière utilisant des graphes est TextRank~\cite{mihalcea_textrank:_2004}.
+Cette méthode applique l'algorithme PageRank~\cite{page_pagerank_1999} pour pondérer les noeuds et donc les mots du document.
+L'idée de cet algorithme est qu'un mot est important s'il cooccurre avec un grand nombre de mots, et si les mots avec lesquels il cooccurre sont eux aussi importants.
+Ensuite, les candidats sont pondérés en sommant les scores des mots qui les composent.
+Cette méthode, bien que précurseure, obtient généralement des performances assez basses. D'autres méthodes ont été présentées pour l'améliorer.
+
+%L'algorithme PageRank est un algorithme de marche aléatoire dans un graphe qui calcule le score des noeuds de manière itérative selon l'équation~\ref{eq:textrank}.
+%Cet algorithme a été créé pour le référencement des pages du web et modélise le parcours de navigation d'un·e internaute.
+%Les arêtes représentent les liens entre les pages web, la partie droite de l'équation modélise la probabilité d'arriver à la page $V_i$ à partir de la page $V_j$ sachant son importance $S(V_j)$. La partie gauche $d$ (\emph{damping factor}) -- fixé a 0.85~\cite{brin_anatomy_1998} -- représente la probabilité de changer de page sans cliquer sur un lien.
+%
+%Dans l'équation~\ref{eq:textrank} $S$ est un vecteur de longueur $|V|$ qui représente le poids de chacun des noeuds. $\textsc{In}(V_i)$ et $\textsc{Out}(V_i)$ représentent respectivement les noeuds possédant des arcs entrants ou sortant vers $V_i$. \todo{Je rajouterai un exemple de simulation de cet algo.}
+
+%\begin{align}
+%S(V_i) = & (1 - d) + d * \sum_{j\in\textsc{In}(V_i)} \frac{W_{ji}}{\sum_{k\in\textsc{Out}(V_j)} W_{jk}} S(V_j) \label{eq:textrank}
+%\end{align}
+
+Les méthodes CollabRank~\cite{wan_collabrank:_2008}\footnote{Parfois nommée ExpandRank.} et CiteTextRank~\cite{gollapalli_extracting_2014} s'inspirent de TextRank et améliorent la représentation sous forme de graphe grâce à des données supplémentaires.
+CollabRank crée le graphe à partir du document et de documents proches identifiés grâce à un algorithme de regroupement (\textit{clustering}), tandis que CiteTextRank traite les articles scientifiques et ajoute au graphe les contextes de citations de l'article.
+CiteTextRank semble obtenir de meilleures performances que CollabRank mais nécessite d'avoir accès à des articles scientifiques ainsi qu'à leurs contextes de citation. Malheureusement, ces informations sont peu disponibles et difficilement accessibles.
+
+%\todo{Ajouter un graphe avec des mots et des poids pour les noeuds ?}
+% Il faudrait prendre un doc, et avec pke afficher le poids de chacun des mots, ensuite pour l'afficher avec graphviz
+% La figure~\ref{aaa} présente le graphe d'un document après exécution de l'algorithme TextRank. Les mots a, b et c sont les plus centraux.
+
+Les méthodes TopicalPageRank~\cite{liu_automatic_2010}, TopicRank~\cite{bougouin_topicrank:_2013} et son amélioration MultipartiteRank~\cite{boudin_unsupervised_2018} améliorent TextRank en regroupant par sujets les mots du document ou les candidats.
+TopicalPageRank utilise le LDA pour calculer les sujets auxquels appartiennent les mots. Le LDA~\cite{blei_latent_2003} (\foreign{Latent Dirichlet Allocation}) est une technique de modélisation en sujets qui s'inscrit dans les techniques de réduction de dimensionalité. Le LDA est un modèle statistique génératif qui permet de représenter un document en une mixture de sujets, à leur tour représentés par une mixture de mots.
+L'algorithme PageRank est biaisé pour prendre en compte l'apport des mots dans chacun des sujets.
+Les méthodes TopicRank et MultipartiteRank quand à elles, regroupent les mots-clés candidats sur la base du nombre de mots communs. Cette technique est plus simple que LDA mais ne requiert pas d'entraînement.
+Ces deux méthodes, contrairement à TextRank et à la majorité des autres méthodes, modélisent les candidats plutôt que les mots et forment un graphe complet en pondérant les arêtes par la distance entre les candidats dans le document.
+
+
+Parmi les méthodes proposées, certaines modifient TextRank en biaisant l'algorithme PageRank pour prendre en compte une caractéristique importante des mots-clés. Par exemple PositionRank~\cite{florescu_positionrank:_2017} biaise PageRank en fonction des positions des mots dans le document.
+Ce seul changement apporte un gain de performance important par rapport à TextRank qui montre l'intérêt de cette caractéristique pour l'identification de mots-clés.
+
+Dans la grande majorité des méthodes présentées, la construction du graphe et la pondération des arêtes sont basée sur les relations de cooccurrences. Pour tenter de capturer les relations sémantiques entre les mots,  \citet{mothe_automatic_2018} étudie l'utilisation de la similarité sémantique pour pondérer les arêtes du graphe à l'aide de plongements de mots statiques.
+Leurs expériences montrent que l'utilisation des plongements de mots seul ou leur combinaison avec la coocurence n'apportent pas de gain de performances significatif.
+%\begin{align}
+%S(V_i) = & \sum_{j\in\textsc{In}(V_i)} \frac{W_{ji}}{\sum_{k\in\textsc{Out}(V_j)} W_{jk}} S(V_j) * d + P(V_i) * (1 - d) \label{eq:positionrank} \\[.5em]
+%P(V_i) = & \frac{\Tilde{P}(V_i)}{\sum_{j\in \Tilde{P}} \Tilde{P}(V_j)}
+%\end{align}
+
+%Où $\Tilde{P}$ est un vecteur de dimension $|V|$ qui représente la position du mot. $\Tilde{P}(V_i)$ est la somme de l'inverse des positions de ses occurrences.
+%Si un mot apparaît en 2\textsuperscript{d}, 5\textsuperscript{e} et 32\textsuperscript{e} position dans le document, alors $\Tilde{P}(V_i) = \frac{1}{2} + \frac{1}{5} + \frac{1}{32}$. $P$ est la version normalisée de $\Tilde{P}$.
+
+\subsubsection{Autres méthodes}
+
+Une des premières méthodes à exploiter les représentations denses de mots pour l'extraction de mots-clés non supervisée est  EmbedRank~\cite{bennani-smires_simple_2018}.
+Cette méthode pondère les mots-clés candidats en fonction de leur distance sémantique au document.
+Pour calculer cette distance sémantique, le document et les mots-clés candidats sont d'abord représentés sous forme vectorielle grâce à une technique de plongements de phrases ~\cite{pagliardini_unsupervised_2018}. Enfin, le poids est calculé par la distance cosinus entre le vecteur du document et les vecteurs des candidats.
+
+
+La méthode TopicCoRank~\cite{bougouin_indexation_2015} est une méthode fondée sur les graphes qui utilise l'ensemble des mots-clés de référence pour pouvoir prédire des mots-clés n'apparaissant pas dans le document.
+Pour cela, l'ensemble des mots-clés de référence d'un jeu de données sont représentés dans un \say{graphe du domaine} dans lequel deux mots-clés sont connectés s'il apparaissent dans les mêmes ensembles de référence.
+Ce graphe du domaine est connecté au graphe du document\footnote{Construit de la même manière que pour TopicRank.} par les mots-clés communs aux deux graphes.
+De manière similaire aux autres méthodes fondées sur les graphes, l'algorithme PageRank pondère les n\oe{}uds (dont ceux du graphe du domaine).
+La pondération du graphe du domaine permet donc à cette méthode de retourner des mots-clés absents du document, c'est une des rares méthodes en chaîne de traitement à permettre cela.
+
+%\subsubsection{Assignation de mots-clés}\label{autre}
+% plus proche de classification
+%La tâche d'assigner des mots-clés à un document peut être vue comme une tâche de classification multi-étiquettes, où les étiquettes sont les mots-clés.
+%Cette formulation de la tâche implique qu'il existe un nombre fini de mots-clés, par exemple dans le domaine médical avec le thésaurus MeSH.
+%La tâche partagée proposée par BioASQ 2013~\cite{partalas_results_2013} est d'associer les mots-clés du MeSH à des articles scientifiques médicaux.
+%Certaines méthodes proposées entraînent des classifieurs à calculer une probabilité pour chaque mot-clé d'être associé à un document.
+
+%\cite{tomokiyo_language_2003} Language model difference
+%\cite{liu_automatic_2011} modèle de généartion précurseur
+
+\subsection{Sélection du sous-ensemble de mots-clés}\label{choisir-le-sous-ensemble}
+
+% pas ou peu exploré
+Une fois les mots-clés candidats pondérés, il est nécessaire de sélectionner un sous-ensemble de candidats que l'on va considérer comme mots-clés.
+L'approche la plus simple consiste à sélectionner les $n$ candidats ayant les meilleurs scores.
+Le choix du $n$ peut être lié entre autre à la longueur du document ou l'utilisation qui sera faite des mots-clés. % peu de travaux ont travaillé
+Ce sont, le plus souvent, les 5 ou 10 premiers mots-clés qui sont choisis, ces chiffres correspondent au nombre moyen de mots-clés annotés par les auteurs et les indexeurs professionnels (cf. section~\ref{sec:framework_datasets}).
+La problématique du choix du nombre de mots-clés à associer à un document n'est pas résolue.
+Certaines méthodes proposent de choisir ce nombre en fonction de la longueur du document~\cite{mihalcea_textrank:_2004}, ou d'entraîner un modèle à produire le bon nombre de mot-clés~\cite[\textit{inter alia}]{yuan_generating_2018, chen_exclusive_2020}.
+
+Lors du choix des mots-clés une étape de filtrage peut être exécutée pour supprimer les mots-clés redondants~\cite{hasan_automatic_2014}.
+Les mots-clés qui sont contenu dans un mot-clé mieux classé sont généralement redondants. Par exemple si le mot-clé \say{indexation libre} est mieux classé que \say{indexation}, ce dernier sera considéré comme redondant.
+
+\section{Conclusion}
+
+Nous avons présenté dans ce chapitre les concepts importants posant le contexte de cette thèse ainsi que les méthodes de production automatique de mots-clés en chaîne de traitement.
+
+L'annotation de mots-clés, pour être effectuée manuellement, requiert de nombreuses ressources en terme d'indexeurs professionnels, de temps et de moyens financiers.
+C'est pourquoi la production automatique de ces mots-clés est un enjeu important pour les bibliothèques numériques scientifiques.
+
+Les méthodes précurseures de cette tâche sont dites \say{en chaîne de traitement} car elles consistent en trois étapes: l'identification de mots-clés candidats, leur pondération puis la sélection d'un ensemble de mots-clés.
+Chacune de ces étapes est cruciale pour la suivante, si les mots-clés candidats sélectionnés sont peu qualitatifs alors les mots-clés en sortie le seront aussi.
+La communauté scientifique propose de nombreuses méthodes qui exploitent des caractéristiques telles que la fréquence, la position et la centralité des mots pour extraire les mots-clés des documents.
+Malgré les avancées de ces méthodes, les performances sont limités par la propagation des erreurs, inhérente aux méthodes en chaîne de traitement, ainsi que le choix des traits utilisé, issus de connaissance expertes.
+C'est pourquoi des méthodes de bout-en-bout, que nous décrivons dans le chapitre~\ref{chap:kw_production}, ont été développées.

@@ -1,0 +1,171 @@
+\chapter{Concepts et méthodes de base}
+\label{chap:concepts}
+
+Ce chapitre présente les concepts qui sont importants pour comprendre le contexte dans lequel s'inscrit cette thèse.
+Nous décrivons tout d'abord l'indexation de documents scientifiques, qu'elle soit manuelle ou automatique.
+Nous nous intéressons ensuite aux mots-clés et à leurs principales caractéristiques.
+Enfin, nous présentons un état de l'art des méthodes d'extraction de mots-clés en chaîne de traitement, en commençant par décrire les trois étapes de cette chaîne: l'identification de candidats, leur pondération, puis la sélection d'un ensemble de mots-clés parmi ces candidats. Nous présenterons dans le chapitre suivant un état de l'art des méthodes neuronales de bout-en-bout.
+
+
+
+\section{Indexation de documents scientifiques}
+
+
+L'indexation est un processus qui vise à identifier les éléments notables d'un document dans le but de le caractériser~\cite{khemiri_manual_2020}.
+L'indexation par mots-clés, ou association de mots-clés à des documents, est à l'origine un processus manuel, effectué par des indexeurs professionnels ou des bibliothécaires formés à cette problématique.
+Dans les bibliothèques, les documents sont généralement associés à des mots-clés qui proviennent de vocabulaires contrôlés.
+Par exemple, les bibliothèques universitaires indexent leurs documents grâce au langage documentaire RAMEAU~\cite{centre_national_rameau_guide_2017} qui permet de décrire les sujets des documents grâce à des descripteurs.
+Dans ce langage documentaire, un document intitulé \say{Les événements de mai 68 racontés par un étudiant} sera indexé avec les descripteurs suivants: France -- 1968 (Journées de mai) -- Récits personnels; ou encore le document \say{Les conditions de travail des enseignants en Bretagne} sera indexé de la manière suivante: Enseignants -- France -- Bretagne (France) -- Conditions de travail.\footnote{Exemples extraits de \url{https://rameau.bnf.fr/sites/default/files/formation/pdf/ex2corr.pdf}}
+
+\subsection{Indexation manuelle}
+\label{sub:concepts_indexation_manuelle}
+
+L'indexation manuelle par mots-clés, appelée aussi annotation manuelle de documents en mots-clés, peut s'effectuer de manière contrôlée ou non contrôlée.
+De manière contrôlée, les mots-clés sont à choisir dans un référentiel (ontologie, thésaurus, base de données terminologiques, etc.). De manière non contrôlée, le choix des mots-clés est à la discrétion de l'annotateur.
+Pour illustrer cette indexation par mots-clés, nous présentons dans la figure~\ref{fig:ex_termith} un exemple de notice scientifique annotée en mots-clés par des indexeurs professionnels.
+
+\input{1_introduction/figures/ex_termith}
+
+L'annotation contrôlée permet d'assurer une cohérence dans le choix des termes mais limite le nombre de concepts. Elle nécessite aussi une connaissance experte du référentiel utilisé, par exemple le MeSH dans le domaine médical, c'est pourquoi des indexeurs professionnels sont formés à leur utilisation. Le MeSH contient \num{25 186} termes\footnote{\url{https://www.nlm.nih.gov/databases/download/mesh.html}} organisés hiérarchiquement avec quatre niveaux de profondeur en moyenne.
+%
+%Pour l'annotation des documents des consignes sont généralement fournies par les bibliothèques. Par exemple, la National Library of Medicine\footnote{\url{https://www.nlm.nih.gov/bsd/indexing/training/TIP_010.html}} qui gère PubMed recommande d'identifier les mots-clés des documents en ne prenant en compte que certaines parties des documents~: le résumé, l'introduction, les résultats, la conclusion et les mots mis en emphase.
+%
+Pour faciliter cette annotation contrôlée, des outils d'annotation semi-automatique, tels que le Medical Text Indexer~\cite{mork_nlm_2013} pour PubMed, suggèrent aux indexeurs les mots-clés du référentiel qui apparaissent dans les documents.
+Les indexeurs procèdent ensuite à un examen manuel des mots-clés suggérés pour valider ou ajouter des mots-clés du référentiel qui n'ont pas été détectés par ces outils.
+%
+En contrepartie de la qualité de ces référentiels, leur mise à jour et leur construction sont de lourds processus qui doivent toujours prendre en compte l'intégralité du référentiel pour garantir sa cohérence. %Le maintien des référentiels nécessite l'ajout et la suppression permanente de nouveaux termes, la modification des termes préférés en fonction des usages, etc.
+
+L'indexation non contrôlée, contrairement à l'indexation contrôlée, n'est soumise à aucune contrainte. Elle permet une annotation réalisable sans connaissances préalables mais impacte négativement la cohérence de l'annotation d'un document à l'autre. Cette incohérence est montrée dans la figure~\ref{tab:variants} qui regroupe les variantes du concept de \foreign{neural network} dans des documents scientifiques annotés par leurs auteurs.
+L'indexation non contrôlée permet aussi, contrairement à l'indexation contrôlée, d'indexer des concepts émergeant et n'est pas limitée aux termes déjà identifiés par un référentiel.
+Cette indexation non contrôlée est principalement utilisée dans les bibliothèques numériques scientifiques, car les documents qui comportent des mots-clés sont pour la plupart annotés par leurs auteurs lors de l'écriture ou de la soumission des articles.
+
+\input{4_kptimes/tables/variants}
+
+
+L'annotation en mots-clés, qu'elle soit contrôlée ou non, est généralement effectuée par des auteurs, des lecteurs ou des indexeurs professionnels.\\
+Les \textbf{auteurs} fournissent des mots-clés pour les documents qu'ils ont écrits, ils ont donc une connaissance experte du domaine et du contenu du document.
+Les mots-clés qu'ils choisissent décrivent les concepts importants de leur point de vue et peuvent omettre certains concepts abordés.
+De plus, le choix des mots-clés peut être biaisé par les thématiques populaires du moment dans le but d'augmenter la visibilité de l'article.
+L'annotation par les auteurs est très peu cohérente car il n'y a pas de guide d'annotation, et chaque document est annoté par une personne différente.
+La figure~\ref{tab:variants} présente des variantes du concept de \foreign{neural network} (\say{réseau de neurone} en français) annotés par des auteurs.\\
+Les \textbf{lecteurs}, quant à eux, ne sont pas des experts de l'annotation mais peuvent être experts du domaine du document. Au contraire des auteurs, leur but n'est pas la visibilité du document mais plutôt l'identification des concepts des documents qui leur sont personnellement utiles dans leur recherche documentaire.
+Les annotations lecteurs -- dans le cadre de documents scientifiques -- proviennent généralement de plateformes de partage de bibliographies dans lesquels les utilisateurs peuvent associer des mots-clés à des documents.
+Dans un cadre de création de jeux de données pour la production automatique de mots-clés, les données des utilisateurs sont compilées et filtrées pour obtenir un ensemble de mots-clés associé à chaque document retenu.
+% Les annotations lecteurs peuvent être constituée en exploitant la folksonomie, c'est-à-dire une annotation des documents par plusieurs lecteurs suivie de règles pour ne conserver qu'une partie de ces mots-clés (souvent les plus assignés).
+%Ce type d'annotation est mis en place sur des sites de partage de signets, dans lesquels les utilisateurs assignent des mots-clés à des ressources internets qui sont ensuite partagé aux autres utilisateurs.
+%L'annotation en mots-clés par des lecteurs s'effectue majoritairement dans le cadre de création de jeux de données.
+Cette annotation lecteur permet, par exemple, d'offrir une annotation alternative à une annotation déjà présente ou tout simplement d'obtenir une annotation en mots-clés moins coûteuse qu'une annotation professionnelle.\\
+Les \textbf{indexeurs professionnels}, pour leur part, sont formés à l'indexation et à l'utilisation de langages documentaires.
+Ils peuvent avoir une expertise dans le domaine des documents à annoter et ont pour objectif d'affecter des mots-clés qui facilitent la recherche documentaire pour les utilisateurs.
+%L'annotation des jeux de données par des lecteurs s'effectue selon des protocoles très différents allants d'une simple annotation humaine sans vérification à des protocoles exigeants en termes de qualité. Il est facile d'imaginer que dans le premier cas, les extractions seront privilégiées.
+
+
+Pour illustrer la différence d'annotation entre les auteurs et les indexeurs professionnels, nous comparons le nombre de mots-clés assigné aux documents par ces deux types d'annotateurs. Ainsi, la figure~\ref{fig:kw_per_doc_abstract} présente la fréquence de documents par nombre de mots-clés pour trois jeux de données de notices scientifiques: Inspec et KP20k en anglais; TermITH-Eval en français.
+La différence entre l'annotation indexeur et l'annotation auteur est flagrante. En effet, les auteurs assignent le plus souvent cinq mots-clés par document, ce qui correspond au nombre maximal de mots-clés autorisés par les éditeurs de documents scientifiques, alors que les indexeurs, qui ne sont pas contraints par un seuil maximal, annotent en majorité de 6 à 10 mots-clés par document, sans différence entre le français et l'anglais.
+\input{1_introduction/figures/nb_mc_document_abstract}
+
+%intro du chapitre
+\subsection{Indexation automatique par mots-clés}
+
+%1. c'est quoi l'indexation automatique
+% pourquoi ça c'est imposé: plus de doc, cout d'indexation manuelle, temps de traitement
+%3. il y a de l'indexation automatique plein texte qui utilise tout les mots du doc comme termes d'indexe
+%4. pour compléter/améliorer l'index auto et faciliter l'indexation manuelle on fait de l'AKE, faire de la recherche à facette, créer des vocabulaire contrôlé pour ensuite annoter les documents, faire des résumé à utiliser au lieu de texte plein ?
+% Donc les mots-clés blablabla
+
+L'indexation automatique consiste à caractériser des documents de manière automatique, c'est-à-dire à choisir et à pondérer les descripteurs d'un document de manière automatique.
+L'indexation plein texte est un type d'indexation automatique qui considère chaque mot du document comme un descripteur potentiel, puis lui attribue un poids selon un schéma de pondération tel que \tfidf{}.
+
+Les techniques d'indexation automatique ont été développées pour simplifier et accélérer le travail d'indexation jusque-là manuel. Ce travail nécessite la disponibilité d'experts ainsi que des budgets conséquents: l'annotation manuelle d'un article de PubMed coûte une dizaine de dollars\footnote{\href{https://lhncbc.nlm.nih.gov/ii/information/about.html}{lhncbc.nlm.nih.gov/ii/information/about.html}}; en 2020, 1,5 million d'articles ont été ajoutés à PubMed ce qui représente un budget de 10,5 millions de dollars pour cette seule année.
+Ce processus est aussi coûteux en temps: il faut compter entre 2 et 3 mois entre la soumission d'un document et son indexation. Ce délai d'attente découle de la masse de documents à indexer. 
+
+%Par rapport à une indexation manuelle qui permet le prise en compte de variantes telles que les synonymes, l'indexation plein texte elle ne comprend que les mots apparaissant dans le document.
+
+Nous nous intéressons ici à l'indexation automatique par mots-clés que nous considérons comme un type d'indexation libre. Et plus particulièrement, nous nous intéressons à la production automatique de mots-clés.
+Les mots-clés sont des unités textuelles qui représentent les sujets importants d'un document. Nous les présenterons en détail dans la section~\ref{sec:caracterisation_keywords}.
+Les mots-clés ont de multiples intérêts pour l'indexation automatique de documents: ils peuvent aider à la création de thésaurus~\cite{kosovac_use_2002} ou autre référentiel; ils peuvent aussi aider à la création de résumés automatiques~\cite{litvak_graph-based_2008,qazvinian_citation_2010}. Par ailleurs, ils peuvent enrichir l'indexation plein texte ou encore être utilisés pour de la recherche à facette~\cite{gutwin_improving_1999}. % intérêt direct, indirect
+
+La tâche qui consiste à associer automatiquement des mots-clés à des documents est généralement nommée \say{extraction de mots-clés} (\foreign{keyphrase extraction}) \cite{hasan_automatic_2014, meng_deep_2017}.
+La grande majorité des méthodes de production automatique de mots-clés proposée avant 2017 sont extractives, c'est-à-dire qu'elles produisent des mots-clés présents dans le document.
+En 2017, \citet{meng_deep_2017} introduit une méthode supervisée générative qui génère des mots-clés mot-à-mot à partir d'un vocabulaire. Cette méthode permet donc non seulement de produire des mots-clés présents mais aussi des mots-clés absents du document.
+%Les mots-clés absents qui jusque là attiraient peu d'attention car difficile à produire connaissent maintenant un intérêt grandissant.
+
+Le terme \say{extraction de mots-clés} est ambigu: il peut désigner la seule production de mots-clés présents, ou bien la production de mots-clés indifféremment présents ou absents. Dans ce travail de thèse, nous réservons le terme d'extraction de mots-clés à la seule extraction de mots-clés apparaissant dans le document. Pour l'affectation de mots-clés à un document, qu'ils soient présents ou absents du document, nous emploierons \say{assignation de mots-clés} si les mots-clés proviennent d'un vocabulaire contrôlé et \say{génération de mots-clés} si les mots-clés sont générés par des modèles supervisés ou semi-supervisés. 
+Le terme \say{production de mots-clés} désignera indifféremment l'extraction, l'assignation ou la génération de mots-clés.
+
+%Les mots-clés ne sont en pratique que peu utilisé pour l'indexation automatique. D'une part car ils sont peu disponible, et comme nous l'avons vu, nécessitent soit des indexeurs professionnels soit la mise en \oe{}vre d'outils automatique de production de mots-clés.
+%Notons leur utilisation dans les bibliothèques en accès libre ISTEX pour l'indexation et dans Microsoft Academics et ArnetMiner comme facettes.
+
+\section{Définition et caractéristiques des mots-clés} \label{sec:caracterisation_keywords}
+
+Dans cette section nous examinons deux propriétés des mots-clés: les catégories grammaticales de leurs composants et leur longueur. Nous illustrons ces propriétés à l'aide de deux jeux de données: KP20k pour l'anglais et TermITH-Eval pour le français.
+
+Dans la littérature, \say{mots-clés} et \say{termes-clés} sont utilisés de manière interchangeable pour désigner les concepts importants d'un document.
+\footnote{\say{descripteurs} peut aussi être utilisé dans le contexte de la recherche d'informations.}
+% aussi descripteurs
+Ces deux appellations peuvent parfois être utilisées afin de différencier les mots-clés comprenant plusieurs mots (termes-clés) des unigrammes (mots-clés) mais cette utilisation n'est pas systématique.
+Dans ce travail de thèse, nous choisissons d'employer \say{mot-clé} pour désigner ces concepts importants sans rapport avec le nombre de mots qui les composent, ni le fait que les \say{mots-clés} soient des termes (d'un point de vue terminologique).\footnote{Les travaux de \cite{bougouin_indexation_2015} portent sur les domaines de spécialité d'où son utilisation de \say{terme-clé}.}
+
+L'indexation des documents se fait toujours en leur associant des ensembles de mots-clés. Ces ensembles doivent respecter les propriétés de non-redondance et de couverture, c'est-à-dire que les mots-clés qui les composent doivent être sémantiquement disjoints, et couvrir le plus de concepts importants du document~\cite{firoozeh_keyword_2020}.
+Au niveau d'une collection de documents, les mots-clés peuvent être plus ou moins cohérents, c'est-à-dire qu'un concept est représenté par un nombre plus ou moins grand de variantes. L'exemple du concept de \foreign{neural network} dans la figure~\ref{tab:variants} met en lumière ce phénomène.
+% \cite{harpring_introduction_2010} à propos des controlled lists: In a well-constructed controlled list, the following is true: each term is unique; terms are not overlapping in meaning; terms are all members of the same class (i.e., having the same level of rank in a classifica tion system); terms are equal in granularity or specificity; and terms are arranged alphabetically or in another logical order
+
+\subsection{Nature linguistique des mots-clés}
+\label{sub:nature_linguistique}
+
+Dans cette section, nous définissons les caractéristiques linguistiques des mots-clés.
+Selon l'étude de \citet{hulth_improved_2003} les mots-clés sont majoritairement des noms et des expressions nominales, et sont donc composés de noms et d'adjectifs.
+% présente les 5 patrons morphosyntaxiques les plus fréquents dans le jeu de données anglais Inspec sont du plus au mois fréquent:  \texttt{ADJ~NOUN}; \texttt{NOUN~NOUN}; \texttt{NOUN}. Ces 5 patrons peuvent se réduire à trois si les flexions du noms sont ôtées.
+
+\input{1_introduction/tables/patron_mc}
+
+Pour confirmer ce résultat sur les différents jeux de données disponibles, nous avons calculé la fréquence des patrons morphosyntaxiques des mots-clés sur le jeu de données anglais KP20k et le jeu de données français TermITH-Eval.
+La figure~\ref{fig:patron_syntaxique} présente les 5 patrons morphosyntaxiques les plus fréquents. % Pour l'anglais, nous avons les cinq patrons suivant du plus au mois fréquents: NOUN; NOUN NOUN; ADJ NOUN; VERB et ADJ NOUN NOUN. Pour le français, nous avons NOUN, NOUN ADJ, ADJ, PROPN et NOUN ADP NOUN.
+Ces 5 patrons couvrent respectivement \npercent{62} et \npercent{70} des mots-clés de KP20k et de TermITH-Eval. 
+Dans les deux langues, quatre des cinq patrons sont exclusivement composés de noms et d'adjectifs, ce sont donc des syntagmes nominaux.
+En anglais, \npercent{4.5} des mots-clés sont des verbes; en français les noms propres (assimilables à des noms) représentent \npercent{4.5} des mots-clés. La faible proportion du patron \texttt{NOUN ADP NOUN} en français est surprenante compte tenu de sa prépondérance dans les domaines de spécialités~\cite{daille_term_2017}.
+%
+%Ces chiffres sont à prendre avec circonspection car l'étiqueteur morphosyntaxique de Spacy que nous utilisons obtient un score de précision de \npercent{96}\footnote{Nous utilisons la version 3.1.0 des modèles français et anglais de Spacy.}. Par exemple, en français la majorité de mots étiquetés comme des verbes sont soit des noms, soit des noms propres. 
+
+Les mots-clés doivent être précis et concis: ils sont donc généralement assez courts. La figure~\ref{fig:tok_per_kw_abstract} présente le nombre moyen de constituants par mot-clé dans deux jeux de données annotés par des indexeurs professionnels (Inspec en anglais et TermITH-Eval en français) et un par des auteurs (KP20k en anglais). Ces jeux de données sont présentés en détail dans la section~\ref{chap:framework}.
+%
+Nous observons que les mots-clés sont en très grande majorité composés de 1 à 3 mots, $\simeq$\npercent{90} pour les trois jeux de données.
+La seule différence notable entre ces trois jeux de données est le nombre de mots-clés unigrammes qui sont beaucoup plus nombreux en français qu'en anglais.
+\todo{pourquoi}
+%
+Notons que quelques mots-clés contiennent plus de 10 constituants. Ce sont généralement soit des expansions d'acronymes \say{samovar (système d'analyse et de modélisation des validations et des automobiles renault)}, soit des mots-clés exprimant des notions très spécifiques comme \say{iterative regularized least-mean mixed-norm image restoration}, soit des noms d'entités comme les noms de molécules \say{benzènesulfonique acide(méthyl-4) [méthyl-«5p» isoxazolyl-«3p»] amide}.
+
+\input{1_introduction/figures/nb_token_mc_abstract}
+
+Pour aider les auteurs à choisir les mots-clés de leurs articles, \citet{gbur_key_1995} donnent des recommandations pour l'anglais.
+Par exemple, ils recommandent de ne pas répéter les mots-clés des titres, de ne pas choisir de mots-clés trop communs (\say{regression} dans le domaine des statistiques) et de choisir des syntagmes nominaux simples et spécifiques qui évitent les composés syntagmatiques avec groupe prépositionnel (\say{reliability} plutôt que \say{theory of reliability}) etc.
+
+
+%TermITH-Eval:
+%-9; benzènesulfonique acide(méthyl-4) [méthyl-«5p» isoxazolyl-«3p»] amide
+%-12; samovar (système d'analyse et de modélisation des validations et des automobiles renault)
+%-6; grammaire syntagmatique menée par la tête
+%KP20k:
+%-16; low n/d n / d ratio n/d n / d n/d n / d n / d
+%-9; decision support system for construction and retrofit projects (dss-crp)
+%-11; large-scale nonlinear least-squares problems subject to dynamical system constraints
+%Inspec:
+%-9; iterative regularized least-mean mixed-norm image restoration
+%-7; automatic teller machine computer-based voting system
+
+
+\subsection{Mots-clés présents et mots-clés absents}
+\label{sub:mots-cles-present-et-absent}
+
+La notion d'absence d'un mot-clé a été introduite et formalisée par~\citet{meng_deep_2017} dans les termes suivants:
+\say{[...] nous dénotons les mots-clés qui ne correspondent à aucune sous-séquence continue du texte source comme des mots-clés absents, et ceux qui correspondent à une partie du texte comme des mots-clés présents}.\footnote{\say{\foreign{[...] we denote phrases that do not match any contiguous subsequence of source text as absent keyphrases, and the ones that fully match a part of the text as present keyphrases.}}}
+Cette définition est implémentée en cherchant si la séquence de mots du mot-clé apparaît dans le même ordre que dans la séquence de mots du texte source.\footnote{\href{https://github.com/memray/seq2seq-keyphrase/blob/9145c63ebdc4c3bc431f8091dc52547a46804012/keyphrase/keyphrase\_utils.py\#L96}{\texttt{github.com/memray/seq2seq-keyphrase/keyphrase/keyphrase\_utils.py\#L96}}}
+Ce découpage permet de différencier les mots-clés pouvant être extraits du document (mots-clés présents) de ceux devant être générés (mots-clés absents).
+Cette différenciation est généralement utilisée pour filtrer la référence et pour évaluer une méthode sur sa seule capacité à extraire ou à générer des mots-clés.
+Les méthodes extractives ont historiquement été évaluées à l'aide de la référence entière. Aujourd'hui il est commun d'évaluer séparément les mots-clés présents et les mots-clés absents~\cite{meng_deep_2017, sun_divgraphpointer_2019}.
+%
+%En effet, les méthodes de génération de mots-clés sont bien meilleures pour produire des mots-clés présents que pour produire des mots-clés absents.
+%De plus, les méthodes extractives neuronales sont évaluées sur les seuls mots-clés présents.
+
+
+\input{1_introduction/sota_chaine_traitement}

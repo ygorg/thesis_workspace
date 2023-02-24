@@ -1,0 +1,15 @@
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{l|cc}
+        \toprule
+        Méthode & E & H \\
+        \midrule
+        MPRank & 13,2 & 21,1 \\
+        Kea (KP20k) & 14,3 & 22,8 \\
+        CorrRNN & 20,5 & 24,6 \\
+        CopyRNN & \best{22,0} & \best{27,5} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performances de production de mots-clés évalués grâce à la F@5 pour les documents \emph{en} et \emph{hors-domaine} de NTCIR-2. Un documents est hors-domaine s'il est pertinent pour une requête hors-domaine.}
+    \label{tab:kg_intrinsic_domain}
+\end{table}

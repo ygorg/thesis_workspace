@@ -1,0 +1,42 @@
+\begin{table}[ht!]
+    \centering
+    \setlength{\tabcolsep}{4pt}
+    \resizebox{.6\textwidth}{!}{%
+    % in -> 1, 2, 5, 6
+    % out -> 3, 4, 7, 8
+    
+    % Header 8 colonnes
+    \begin{tabular}{l|c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r|c@{\hspace*{0mm}}r c@{\hspace*{0mm}}r}
+        % BM25+RM3 version redefining-absent-keyphrases
+        \toprule
+        \multirow{2}{*}{\textbf{Méthode}} & \multicolumn{4}{c|}{\tr} & \multicolumn{4}{c}{\trm}\\
+        ~ & \multicolumn{2}{c}{\textbf{E}} & \multicolumn{2}{c|}{\textbf{H}} & \multicolumn{2}{c}{\textbf{E}} & \multicolumn{2}{c}{\textbf{H}} \\
+        \midrule
+        - & \multicolumn{2}{c}{33,1} & \multicolumn{2}{c|}{32,5} & \multicolumn{2}{c}{36,1} & \multicolumn{2}{c}{34,7} \\
+        \addlinespace
+        MPRank & 33,3 & \ddiff{0,2} & 32,6 & \ddiff{0,1} & 36,8 & \ddiff{0,7} & 34,4 & \ddiff{-0,3} \\
+        Kea (KP20k) & 34,1 & \ddiff{1,0} & 33,7 & \ddiff{1,2} & 37,3 & \ddiff{1,2} & 34,4 & \ddiff{-0,3} \\
+        \addlinespace
+        CorrRNN & 34,8 & \ddiff{1,7} & \bests{35,2} & \ddiff{2,7} & 37,3 & \ddiff{1,2} & \best{36,4} & \ddiff{1,7} \\
+        CopyRNN & \bests{35,5} & \ddiff{2,4} & 34,0 & \ddiff{1,5} & \bests{37,9} & \ddiff{1,8} & 36,1 & \ddiff{1,4} \\
+        \bottomrule
+        
+        \iffalse
+        % BM25
+        \toprule
+        \multirow{2}{*}{\textbf{Méthode}} & \multicolumn{4}{c|}{\tr} & \multicolumn{4}{c}{\trm}\\
+        BM25 & \multicolumn{2}{c}{\textbf{E}} & \multicolumn{2}{c|}{\textbf{H}} & \multicolumn{2}{c}{\textbf{E}} & \multicolumn{2}{c}{\textbf{H}} \\
+        \midrule
+        -           & \multicolumn{2}{c}{29,5} & \multicolumn{2}{c}{29,6} & \multicolumn{2}{c}{32,9} & \multicolumn{2}{c}{30,8} \\
+        MPRank      & 29,7 & \ddiff{0,1} & 29,7 & \ddiff{0,1} & 32,8 & \ddiff{-0,1} & 31,1 & \ddiff{0,3} \\
+        Kea (KP20k) & \sign{31,1} & \ddiff{1,5} & 29,3 & \ddiff{-0,3} & 33,4 & \ddiff{0,6} & 30,5 & \ddiff{-0,3} \\
+        CorrRNN     & \bests{32,3} & \ddiff{2,7} & \best{30,8} & \ddiff{1,3} & \best{33,7} & \ddiff{0,9} & 30,7 & \ddiff{-0,1} \\
+        CopyRNN     & \sign{32,0} & \ddiff{2,4} & 30,7 & \ddiff{1,2} & 33,3 & \ddiff{0,5} & \best{31,4} & \ddiff{0,6} \\
+        \bottomrule
+        \fi
+
+    \end{tabular}
+    }
+    \caption{Scores de \map{} sur la collection NTCIR-2 pour \textsc{Bm25}+RM3 sur les requêtes \textit{en-domaine}~(E) et \textit{hors-domaine}~(H). La différence de score avec la configuration sans mot-clés prédits est affiché en gris. Le symbole \da{} indique une amélioration significative par rapport à une indexation sans mots-clés produits automatiquement.}
+    \label{tab:ir_per_domain}
+\end{table}

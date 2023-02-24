@@ -1,0 +1,32 @@
+\begin{table}[!hbt]
+    \centering
+    \begin{tabular}{l|R[2.1]R[2.1]R[2.1]R[2.1]}
+    %\cline{4-5}
+    %\multicolumn{3}{c}{~} &
+    %\multicolumn{2}{|c|}{~\hfill {\scriptsize doc. expansion} \hfill~}
+    %\multicolumn{2}{@{}c@{}}{\small{$\lceil$ \hfill {\scriptsize doc. expansion} \hfill $\rceil$}}
+    %\\ %[+.1cm]
+    %\cline{3-5}
+    \multicolumn{2}{c}{~} &
+    \multicolumn{3}{c}{\small{$\lceil$ \hfill {\scriptsize mots-clés absent} \hfill $\rceil$}}
+    \\
+    %\multicolumn{1}{c}{~} &
+    %\multicolumn{2}{c@{}}{\small{$\lceil$ \hfill {\scriptsize term-weighting} \hfill $\rceil$}} &
+    %\multicolumn{2}{c}{\small{$\lceil$ \hfill {\scriptsize doc. expansion} \hfill $\rceil$}} \\
+    \toprule
+    \textbf{Dataset}  & \textbf{\%P} & \textbf{\%R} & \textbf{\%S} & \textbf{\%E} \\
+    \midrule
+     NTCIR-2 & 61.2 &  8.2 & 16.6 & 14.1 \\
+     %ACM-IR  & 53.6 & 11.7 & 19.3 & 15.4 \\
+     KP20k   & 60.2 &  9.5 & 15.4 & 15.0 \\
+     KDD     & 50.7 &  9.4 & 20.7 & 19.2 \\
+     WWW     & 46.6 &  9.6 & 20.9 & 23.0 \\
+    \bottomrule
+    %\multicolumn{1}{c}{~} &
+    %\multicolumn{2}{c@{}}{\small{$\lfloor$ \hfill {\scriptsize term-weighting} \hfill $\rfloor$}} &
+    %\multicolumn{2}{c}{\small{$\lfloor$ \hfill {\scriptsize doc. expansion} \hfill $\rfloor$}}
+    \end{tabular}
+    \caption{Proportion de mots-clés de référence \underline{P}résent, \underline{R}éodonnés, \underline{S}emi-présent et absent \underline{E}xclusivement dans les jeux de données.}
+    \label{tab:prmu_dist_ref}
+\end{table}
+%|      102411 |      70734 | 53.6 | 11.7 | 19.3 | 15.4 | 13.4 |  4.5 |

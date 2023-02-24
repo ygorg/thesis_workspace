@@ -1,0 +1,42 @@
+\begin{table}[htbp!]
+\centering
+\resizebox{0.98\textwidth}{!}{
+    \begin{tabular}{lcrrrr
+    S[table-format=2.1,table-number-alignment=right] S[table-format=2.1,table-number-alignment=right] S[table-format=5.0,table-number-alignment=right] S[table-format=1.1,table-number-alignment=right]}
+    
+     & & \multicolumn{3}{c}{Corpus} & 
+    \multicolumn{3}{c}{Document} & 
+    \multicolumn{2}{c}{Mots-clés} \\
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8} \cmidrule(lr){9-10} \\[-1.2em]
+    
+    \textbf{Corpus} &
+    \textbf{Ann.} &
+    \textbf{\#Entr.} &
+    \textbf{\#Val.} &
+    \textbf{\#Test} &
+
+    \textbf{\#mots} &
+    \textbf{\#mc} &
+    \textbf{\%abs} &
+    
+    \textbf{\#uniq.} &
+    \textbf{\#ass.} \\
+
+    \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8} \cmidrule(lr){9-10}
+
+    \textbf{KPTimes}       & $E$ &260\,K&20\,K &  20\,K & 738 &   5.0 & 38.4 & 20535 & 5.0 \\ % 1.03
+    \quad \textbf{JPTimes} & $E$ &    - &     - &  10\,K & 570 &   5.0 & 24.2 &  8611 & 5.9 \\ % 0.86
+    \quad \textbf{NYTimes} & $E$ &260\,K&20\,K &  10\,K & 905 &   5.0 & 52.5 & 13387 & 3.8 \\ % 1.34
+    \addlinespace
+    KPCrowd       & $L$ &  450 &     - &     50 & 465 &  46.2 &  8.1 &  1937 & 1.2 \\ % 38.74
+    DUC-2001      & $L$ &    - &     - &    308 & 847 &   8.1 &  3.1 &  1800 & 1.4 \\ % 5.84
+    \addlinespace
+    KP20k         & $A$ &530\,K& 20\,K &  20\,K & 176 &   5.3 & 42.4 & 53489 & 2.0 \\ % 2.67
+
+    \bottomrule
+
+    \end{tabular}
+}
+\caption{Comparaison des statistiques de KPTimes et ses sous-ensembles de test JPTimes et NYTimes avec les jeux de données d'articles journalistiques et KP20k. Les mots-clés de référence sont annotés par des \underline{$L$}ecteurs, des \underline{$E$}diteurs ou des \underline{$A$}uteurs. La table présente le nombre de documents dans les corpus d'entraînement (\#Entr.), de validation (\#Val.) et de test (\#Test) ainsi que le nombre moyen de mots (\#mots), de mots-clés (\#mc) et le ratio de mots-clés absents (\%abs) par document. Les colonnes \#uniq. et \#ass. montrent le nombre de mots-clés uniques et le nombre moyen d'assignation d'un mot-clé.}
+\label{tab:kptimes_stats}
+\end{table}

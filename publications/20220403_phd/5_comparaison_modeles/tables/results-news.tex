@@ -1,0 +1,112 @@
+\begin{table}[ht!]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{r c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c}
+        %\toprule
+        ~ & 
+        \multicolumn{2}{c}{\textbf{DUC-2001}} &
+        \multicolumn{2}{c}{\textbf{110-PT}} &
+        \multicolumn{2}{c}{\textbf{KPCrowd}} &
+        \multicolumn{2}{c}{\textbf{Wikinews}} \\ %[-.2em]
+        \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \\[-1.5em]
+        
+        ~ & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} \\[-.2em]
+        
+        \midrule
+        FirstPhrases &
+        \best{24,6} & \best{22,3} &
+        18,9 & 21,7 &
+        \best{17,1} & \best{16,5} &
+        33,7 & 33,3 \\
+
+        TextRank &
+        21,5 & 19,4 &
+        22,1 & 21,2 &
+        \phantom{0}7,1 & \phantom{0}9,5 &
+        12,6 & 11,7 \\
+
+        % TopicRank &
+        % 23,5 & 19,8 &
+        % 25,3 & 26,2 &
+        % \cellcolor{bestmodel} 17,4 & 14,6 &
+        % 33,9 & 28,1 \\
+        
+        TF$\times$IDF &
+        23,3 & 21,6 &
+        \best{34,5} & \best{32,2} &
+        16,9 & 15,8 &
+        \best{35,8} & \best{34,0} \\
+
+        \midrule
+        
+        PositionRank &
+        \sign{28,6} & \bests{28,0} &
+        23,1 & 23,8 &
+        13,4 & 12,7 &
+        33,8 & 28,5 \\
+        
+        MultipartiteRank &
+        25,6 & \sign{24,9} &
+        \best{26,6} & \best{26,7} &
+        \best{18,2} & \best{17,0} &
+        \best{36,3} & \best{31,7} \\
+        
+        EmbedRank &
+        \bests{29,5} & \sign{27,5} &
+        n/a & n/a &
+        12,4 & 12,4  &
+        n/a & n/a \\
+        
+        \midrule
+        
+        Kea &
+        \sign{26,5} & \sign{24,5} &
+        30,0 & 29,1 &
+        17,3 & 16,7 &
+        \bests{38,3} & \bests{36,3} \\
+        
+        TopicCoRank &
+        \bests{34,1} & \bests{31,7} &
+        \best{34,1} & \best{34,1} &
+        \best{18,0} & \best{16,4} &
+        28,9 & 24,2 \\
+        
+        %CopyRNN &
+        %12.7 & \phantom{0}9,7 &
+        %n/a & n/a &
+        %15.5 & 11,1 &
+        %12.8 & \phantom{0}6,7 \\
+        
+        CopyRNN &
+        16,2 & 12,6 &
+        n/a & n/a &
+        15,2 & 11,6 &
+        n/a & n/a \\
+        
+        \midrule
+        
+        Kea (KP20k) &
+        \bests{28,1} & \bests{25,6} &
+        n/a & n/a &
+        \best{17,5} & \best{16,7} &
+        n/a & n/a \\
+        
+        %CopyRNN (extr.) &
+        % 13,4 & 10,1 &
+        % n/a & n/a &
+        % 16,5 & 11,9 &
+        % n/a & n/a \\
+        
+        CopyRNN (extr.) &
+        16,8 & 12,9 &
+        n/a & n/a &
+        15,6 & 12,0 &
+        n/a & n/a \\
+        
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Performances des méthodes sur les jeux de données d'articles journalistiques. 
+    $^\dagger$ et $^\ddagger$ indiquent la significativité au niveau 0,05 avec le t-test de Student avec, respectivement, les méthodes de bases et tout les modèles.}
+    \label{tab:results-news}
+\end{table}

@@ -1,0 +1,144 @@
+\begin{table}[ht!]
+    \centering
+    \resizebox{\textwidth}{!}{
+
+    \begin{tabular}{r c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c c@{\hspace*{2mm}}c  c@{\hspace*{2mm}}c}
+        %\toprule
+        ~ & 
+        \multicolumn{2}{c}{\textbf{CSTR}} &
+        \multicolumn{2}{c}{\textbf{NUS}} &
+        \multicolumn{2}{c}{\textbf{PubMed}} &
+        \multicolumn{2}{c}{\textbf{ACM}} &
+        \multicolumn{2}{c}{\textbf{Citeulike}} &
+        \multicolumn{2}{c}{\textbf{SemEval}} \\
+        \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}\\[-1.5em]
+        
+        ~ & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} & \small{$\text{F}@10$} & \small{\map} \\[-.2em] % originally -.2em but for testings sake
+        
+        \midrule
+        FirstPhrases &
+        \phantom{0}7,7 & \phantom{0}8,4 &
+        16,5 & 14,0 &
+        15,4 & 14,7 &
+        \best{13,6} & \best{13,5} &
+        \phantom{0}4,5 & \phantom{0}4,5 &
+        13,8 & 10,5 \\
+
+        TextRank &
+        \phantom{0}2,1 & \phantom{0}1,9 &
+        \phantom{0}3,4 & \phantom{0}2,6 &
+        \phantom{0}1,8 & \phantom{0}1,8 &
+        \phantom{0}2,5 & \phantom{0}2,4 &
+        \phantom{0}0,5 & \phantom{0}0,7 &
+        \phantom{0}3,5 & \phantom{0}2,3 \\
+
+        %TopicRank &
+        % 9,4 & 7,4 &
+        % 15,0 & 10,7 &
+        % 13,3 & 12,0 &
+        % 10,1 & 8,7 &
+        % \cellcolor{bestmodel} 11,9 & \cellcolor{bestmodel} 10,9 &
+        % 12,6 & 7,2 \\
+        
+        TF$\times$IDF & 
+        \best{10,6} & \best{\phantom{0}9,5} &
+        \best{20,2} & \best{17,1} &
+        \best{16,7} & \best{16,9} &
+        12,1 & 11,4 &
+        \best{\phantom{0}8,6} & \best{\phantom{0}8,3} &
+        \best{17,7} & \best{12,7} \\
+
+        \midrule
+        
+        PositionRank &
+        \phantom{0}5,3 & \phantom{0}4,3 &
+        \phantom{0}6,4 & \phantom{0}5,1 &
+        \phantom{0}4,9 & \phantom{0}4,6 &
+        \phantom{0}5,7 & \phantom{0}4,9 &
+        \phantom{0}1,5 & \phantom{0}1,7 &
+        \phantom{0}6,8 & \phantom{0}4,1 \\
+        
+        MultipartiteRank &
+        \best{10,9} & \best{10,0} &
+        \best{17,5} & \best{14,5} &
+        \best{15,8} & \best{15,0} &
+        \best{11,6} & \best{11,0} &
+        \bests{14,5}  & \bests{13,6}  &
+        \best{14,3} & \best{10,6} \\
+        
+        EmbedRank &
+        \phantom{0}1,7 & \phantom{0}1,5 &
+        \phantom{0}3,2 & \phantom{0}2,5 &
+        \phantom{0}3,7 & \phantom{0}3,2 &
+        \phantom{0}2,1 & \phantom{0}2,1 &
+        \phantom{0}1,1 & \phantom{0}1,1 &
+        \phantom{0}2,5 & \phantom{0}2,0 \\
+        
+        \midrule
+        
+        Kea &
+        \bests{12,9} & \bests{11,1} &
+        \sign{22,4} & \sign{19,2} &
+        \sign{18,6} & \sign{18,6} &
+        \sign{14,2} & 13,3 &
+        \sign{10,6} & \sign{\phantom{0}9,5} &
+        \sign{19,5} & \bests{14,7} \\
+        
+        TopicCoRank &
+        10,3 & \phantom{0}9,7 &
+        14,8 & 11,5 &
+        14,8 & 13,2 &
+        13,2 & 12,5 &
+        \bests{23,1}  & \bests{23,9}  &
+        13,2 & \phantom{0}8,3 \\
+        
+        %CopyRNN &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{30,5} & \best{28,1} &
+        %\best{24,2} & \best{25,4} &
+        %\best{24,4} & \best{26,3} &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{20,3} & 13,8  \\
+        
+        CopyRNN &
+        n/a$^*$ & n/a$^*$ &
+        \bests{29,4} & \bests{27,2} &
+        \bests{24,5} & \bests{26,1} &
+        \bests{22,8} & \bests{24,2} &
+        n/a$^*$ & n/a$^*$ &
+        \bests{21,4} & 14,4  \\
+        
+        \midrule
+        
+        Kea (KP20k) &
+        \bests{12,2} & \bests{10,4} &
+        \sign{21,9} & 17,5 &
+        \sign{18,9} & \sign{18,5} &
+        13,1 & 11,8 &
+        \bests{13,7} & \bests{13,1} &
+        \sign{19,1} & \sign{14,1} \\
+        
+        
+        %CopyRNN (extr.) &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{30,6} & \best{28,1} &
+        %\best{24,2} & \best{25,4} &
+        %\best{24,8} & \best{26,6} &
+        %n/a$^*$ & n/a$^*$ &
+        %\best{21,0} & \best{14,2} \\
+        
+        CopyRNN (extr.) &
+        n/a$^*$ & n/a$^*$ &
+        \bests{29,4} & \bests{27,2} &
+        \bests{24,6} & \bests{26,2} &
+        \bests{23,0} & \bests{24,3} &
+        n/a$^*$ & n/a$^*$ &
+        \bests{21,7} & \best{14,7} \\
+        
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Performances des méthodes sur les jeux de données d'articles scientifiques. 
+    $^\dagger$ et $^\ddagger$ indiquent la significativité au niveau 0,05 avec le t-test de Student avec, respectivement, les méthodes de bases et tout les modèles.}
+    \label{tab:results-papers}
+\end{table}

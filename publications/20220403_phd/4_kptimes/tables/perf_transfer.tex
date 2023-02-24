@@ -1,0 +1,16 @@
+\begin{table}[htbp!]
+    \centering
+    %\resizebox{\textwidth}{!}{
+\begin{tabular}{l c@{\hspace*{1mm}}c c@{\hspace*{1mm}}c}
+ & \multicolumn{2}{c}{\textbf{KPTimes}} & \multicolumn{2}{c}{\textbf{KP20k}} \\
+ \cmidrule(lr){2-3} \cmidrule(lr){4-5} \\[-1.5em]
+ &    \small{$\text{F}@10$} &   \small{\map} &  \small{$\text{F}@10$} &   \small{\map} \\
+\midrule
+CopyNews &\best{31,9}&\best{38,7}&\pad{0}6,6 & \pad{0}5,1 \\
+CopySci  &    14,9 &  15,2 &\best{25,5}&\best{28,9}\\
+\bottomrule
+\end{tabular}
+    %}
+    \caption{Performances de généralisation du modèle CopyRNN entraîné sur KPTimes et KP20k.}
+    \label{tab:kptimes_perf_generalisation}
+\end{table}

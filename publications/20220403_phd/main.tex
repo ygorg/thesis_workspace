@@ -1,0 +1,58 @@
+\documentclass[twoside,12pt,a4paper]{report}
+% To account for accented letter height in header 
+\setlength\headheight{14.62pt}  % original : 14.5pt
+
+\input{setup}
+\input{Couverture-these/setup_ed}
+
+\begin{document} 
+
+\frontmatter
+\input{Couverture-these/pagedegarde} \newpage
+\newgeometry{inner=30mm,outer=20mm,top=40mm,bottom=20mm}
+%\currentpdfbookmark{\contentsname}{toc}
+% https://texblog.org/2013/07/16/how-to-add-extra-space-to-the-table-of-contents-list-of-figures-and-tables/
+
+\cleardoublepage
+\input{1_introduction/thanks}
+
+\cleardoublepage
+\setcounter{tocdepth}{2}		% define depth of toc
+\tableofcontents				% display table of contents
+\listoftodos{}
+
+\mainmatter
+\cleardoublepage
+\input{1_introduction/main}
+\cleardoublepage
+\input{1_introduction/concepts}
+\cleardoublepage
+\input{2_production_mots_cles/main}
+\cleardoublepage
+\input{3_cadre_experimental/main}
+\cleardoublepage
+\input{4_kptimes/main}
+\cleardoublepage
+\input{5_comparaison_modeles/main}
+\cleardoublepage
+\input{6_impact_ri/main}
+
+\backmatter
+\cleardoublepage
+\input{7_conclusion/main}
+
+\cleardoublepage
+\input{7_conclusion/publication_list}
+
+\cleardoublepage
+\renewcommand{\baselinestretch}{1.0}
+\bibliographystyle{acl_natbib}
+
+\phantomsection % To have a correct link in the table of contents
+\addcontentsline{toc}{chapter}{Bibliographie}
+\bibliography{biblio}
+
+
+\input{Couverture-these/resume}
+
+\end{document}

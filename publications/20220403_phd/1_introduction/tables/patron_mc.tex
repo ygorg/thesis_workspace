@@ -1,0 +1,31 @@
+\begin{figure}[htbp!]
+    \begin{subtable}[h]{\textwidth}
+        \centering
+        \begin{tabular}{S|ccc|l}
+            {Fréquence} & \multicolumn{3}{c}{Patron} & Exemple\\
+            21.2 & NOUN &      &      & graphs\\
+            17.2 & NOUN & NOUN &      & similarity measure\\
+            14.7 & ADJ  & NOUN &      & empirical study \\
+             4.5 & VERB &      &      & denoising\\
+             4.1 & ADJ  & NOUN & NOUN & ant colony optimization\\
+        \end{tabular}
+        \caption{Mots-clés anglais (KP20k)}
+        \label{fig:patron_syntaxique_kp20k}
+    \end{subtable}
+
+    \begin{subtable}[h]{\textwidth}
+        \centering
+        \begin{tabular}{S|ccc|l}
+            {Fréquence} & \multicolumn{3}{c}{Patron} & Exemple\\
+            31.7 & NOUN &     &      & internet\\
+            19.7 & NOUN & ADJ &      & paléolithique moyen\\
+             9.8 & ADJ  &     &      & historique\\
+             4.5 & PROPN&     &      & europe\\
+             4.2 & NOUN & ADP & NOUN & langue de spécialité\pad{ion}\\
+        \end{tabular}
+        \caption{Mots-clés français (TermITH-Eval)}
+        \label{fig:patron_syntaxique_termith}
+    \end{subtable}
+    \caption{Patrons syntaxiques de mots-clés ordonnés par fréquence. Les mots-clés ont été étiquetés à l'aide de la bibliothèque \texttt{spacy} (version 3.1 des modèles français et anglais). Le jeu d'étiquettes utilisés est l'Universal Dependencies POS-tags~\cite{petrov_universal_2012}.}
+    \label{fig:patron_syntaxique}
+\end{figure}
